@@ -51,6 +51,8 @@ app.post('/api/register/company', (req, res) => {
 app.listen(port, () => {
   connectDB();
   console.log(`Server running on http://localhost:${port}`);
+
+  
 });
 
 // BKGVK2jsHYsaPHJ9
