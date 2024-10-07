@@ -14,35 +14,34 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 }); 
 
-app.post('/api/register/user', (req, res) => {
+
+
+app.post('/api/register/user', async (req, res) => {
   const user = req.body;
 
-  
-  const newUser = new User(user);
-
-
-
   try {
-    newUser.save();
+    const newUser = new User(user);
+    await newUser.save();
     res.status(201).send(newUser);
-  }catch{
-    res.status(500).send({message: 'Error in registering user.'});
+  } catch (error) {
+    error.name === 'ValidationError' ? res.status(400).send({ message: 'Validation Error', errors: error.errors }) : res.status(500).send({ message: 'Error in registering user.' });
   }
 });
 
 
 
 
-app.post('/api/register/company', (req, res) => {
+app.post('/api/register/company', async (req, res) => {
   const company = req.body;
-  const newCompany = new Company(company);
-
+  
   try {
-    newCompany.save();
+    const newCompany = new Company(company);
+    await newCompany.save();
     res.status(201).send(newCompany);
-  }catch{
-    res.status(500).send({message: 'Error in registering company.'});
+  } catch (error) {
+    error.name === 'ValidationError' ? res.status(400).send({ message: 'Validation Error', errors: error.errors }) : res.status(500).send({ message: 'Error in registering company.' });
   }
+  
 });
 
 
@@ -51,8 +50,6 @@ app.post('/api/register/company', (req, res) => {
 app.listen(port, () => {
   connectDB();
   console.log(`Server running on http://localhost:${port}`);
-
-  
 });
 
 // BKGVK2jsHYsaPHJ9

@@ -1,0 +1,28 @@
+export default function Button({ children, type }) {
+    let classList = '';
+  
+    switch (type) {
+        case 'gray-default':
+            classList = 'bg-white text-custom_gray border-custom_gray hover:bg-custom_gray hover:text-white';
+            break;
+        case 'gray-hover':
+            classList = 'bg-custom_gray border-white text-white hover:bg-white hover:text-custom_gray hover:border-custom_gray';
+            break;
+        case 'red-default':
+            classList = 'bg-white text-custom_red border-custom_red hover:bg-custom_red hover:text-white';
+            break;
+        case 'red-hover':
+            classList = 'bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red';
+            break;
+    default:
+        classList = 'bg-blue-500 hover:bg-blue-700 text-white'; // Default to primary style
+        break;
+    }
+  
+    return (
+      <button className={`border-2 ${classList} font-bold py-2 px-4 rounded`}>
+        {children}
+      </button>
+    );
+  }
+  
