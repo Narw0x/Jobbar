@@ -4,46 +4,17 @@ const app = express();
 const port = 4000;
 
 import {connectDB} from "./config/db.js";
-import User from './models/user.model.js';
-import Company from './models/company.model.js';
 
 dotenv.config();
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-}); 
+// Import routes
+const loginRouter = require("./routes/login");
+const registerRouter = require("./routes/register");
 
-
-
-app.post('/api/register/user', async (req, res) => {
-  const user = req.body;
-
-  try {
-    const newUser = new User(user);
-    await newUser.save();
-    res.status(201).send(newUser);
-  } catch (error) {
-    error.name === 'ValidationError' ? res.status(400).send({ message: 'Validation Error', errors: error.errors }) : res.status(500).send({ message: 'Error in registering user.' });
-  }
-});
-
-
-
-
-app.post('/api/register/company', async (req, res) => {
-  const company = req.body;
-  
-  try {
-    const newCompany = new Company(company);
-    await newCompany.save();
-    res.status(201).send(newCompany);
-  } catch (error) {
-    error.name === 'ValidationError' ? res.status(400).send({ message: 'Validation Error', errors: error.errors }) : res.status(500).send({ message: 'Error in registering company.' });
-  }
-  
-});
-
+// Setup all the routes
+app.use("/api/login", loginRouter);
+app.use("/api/register", registerRouter);
 
 
 

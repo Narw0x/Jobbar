@@ -14,13 +14,10 @@ export default function Button({ children, type }) {
         case 'red-hover':
             classList = 'bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red';
             break;
-    default:
-        classList = 'bg-blue-500 hover:bg-blue-700 text-white'; // Default to primary style
-        break;
     }
   
     return (
-      <button className={`border-2 ${classList} font-bold py-2 px-4 rounded`}>
+      <button className={`border-2 ${classList} py-2 px-4 rounded transition-all duration-300 ease-in-out`}>
         {children}
       </button>
     );
