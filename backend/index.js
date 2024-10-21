@@ -9,12 +9,16 @@ dotenv.config();
 app.use(express.json());
 
 // Import routes
-const loginRouter = require("./routes/login");
-const registerRouter = require("./routes/register");
+import loginRouter from './routes/login.js';
+import registerRouter from './routes/register.js';
+import editRouter from './routes/edit.js';
+
 
 // Setup all the routes
 app.use("/api/login", loginRouter);
 app.use("/api/register", registerRouter);
+app.use("/api/edit", editRouter);
+
 
 
 

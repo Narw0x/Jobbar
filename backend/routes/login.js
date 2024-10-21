@@ -1,9 +1,8 @@
 import bcrypt from 'bcryptjs';
-const express = require('express');
-
+import express from 'express';
+import User from '../models/user.model.js';
+import Company from '../models/company.model.js';
 const router = express.Router();
-const User = require('../models/user.model');
-const Company = require('../models/company.model');
 
 router.post('/user', async (req, res) => {
   const { email, password } = req.body;
@@ -20,7 +19,7 @@ router.post('/user', async (req, res) => {
   }
 });
 
-app.post('/company', async (req, res) => {
+router.post('/company', async (req, res) => {
     const { email, password } = req.body;
     try {
       const company = await Company.findOne({ email });
@@ -35,4 +34,4 @@ app.post('/company', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
