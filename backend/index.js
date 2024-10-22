@@ -12,12 +12,14 @@ app.use(express.json());
 import loginRouter from './routes/login.js';
 import registerRouter from './routes/register.js';
 import editRouter from './routes/edit.js';
+import deleteRouter from './routes/delete.js';
 
 
 // Setup all the routes
 app.use("/api/login", loginRouter);
 app.use("/api/register", registerRouter);
 app.use("/api/edit", editRouter);
+app.use("/api/delete", deleteRouter);
 
 
 
