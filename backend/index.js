@@ -9,17 +9,13 @@ dotenv.config();
 app.use(express.json());
 
 // Import routes
-import loginRouter from './routes/login.js';
-import registerRouter from './routes/register.js';
-import editRouter from './routes/edit.js';
-import deleteRouter from './routes/delete.js';
+import userRoutes from "./routes/user.js";
+import companyRoutes from "./routes/company.js";
 
 
 // Setup all the routes
-app.use("/api/login", loginRouter);
-app.use("/api/register", registerRouter);
-app.use("/api/edit", editRouter);
-app.use("/api/delete", deleteRouter);
+app.use('/api', userRoutes);
+app.use('/api', companyRoutes);
 
 
 

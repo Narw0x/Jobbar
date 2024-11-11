@@ -6,7 +6,7 @@ export default function Button({ children, type }) {
             classList = 'bg-white text-custom_gray border-custom_gray hover:bg-custom_gray hover:text-white';
             break;
         case 'gray-hover':
-            classList = 'bg-custom_gray border-white text-white hover:bg-white hover:text-custom_gray hover:border-custom_gray';
+            classList = 'bg-custom_gray border-custom_gray text-white hover:bg-white hover:text-custom_gray';
             break;
         case 'red-default':
             classList = 'bg-white text-custom_red border-custom_red hover:bg-custom_red hover:text-white';
@@ -17,7 +17,7 @@ export default function Button({ children, type }) {
     }
   
     return (
-      <button className={`border-2 ${classList} py-2 px-4 rounded transition-all duration-300 ease-in-out`}>
+      <button className={`border-[1px] ${classList} py-2 px-4 rounded transition-all duration-300 ease-in-out`}>
         {children}
       </button>
     );
