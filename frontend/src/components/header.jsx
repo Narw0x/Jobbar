@@ -1,5 +1,7 @@
-const path = "/jobbar_logo.svg";
 import Button from "./button";
+
+const path = "/jobbar_logo.svg";
+
 
 
 export default function Header({  }) {
