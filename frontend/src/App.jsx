@@ -2,6 +2,9 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { RootLayout } from './pages/Root';
 import { tokenLoader } from './util/auth';
 
+import HomePage from './pages/Home';
+import AboutPage from './pages/About';
+
 
 
 
@@ -13,7 +16,12 @@ const router = createBrowserRouter([
     id: 'root',
     loader: tokenLoader,
     children: [
-      {index: true, element: <div>Home</div>},
+      {index: true, element: <HomePage />},
+      {path: 'about', element: <AboutPage />},
+      {path: 'login/user', element: <div>Login</div>},
+      {path: 'login/company', element: <div>Login</div>},
+      {path: 'register/user', element: <div>Register</div>},
+      {path: 'register/company', element: <div>Register</div>},
     ]
   },
 ]);

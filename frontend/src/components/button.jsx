@@ -14,6 +14,8 @@ export default function Button({ children, type }) {
         case 'red-hover':
             classList = 'bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red';
             break;
+        default:
+          break;
     }
   
     return (
