@@ -16,12 +16,14 @@ export default function HomePage(){
                     <div className="flex flex-col justify-end flex-wrap">
                         <img src={pathManAtTable} alt="Man at the desk" /> 
                         <p className="text-right mt-[-2rem]">Designed by 
-                            <Link
-                                to=""
-                                className="text-custom_red p-2"
-                            >
-                                Freepik
-                            </Link>
+                        <a 
+                            href="https://www.freepik.com" 
+                            className="text-custom_red p-2" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                        >
+                            Freepik
+                        </a>
                         </p>
                     </div>
                     <div className="flex flex-col justify-center text-custom_gray gap-4 max-w-[55%]">
@@ -76,7 +78,7 @@ export default function HomePage(){
                     </Link>
                 </p>
             </section>
-            
+            {/* <img src="./fabko.jpeg" className="w-full" alt="" /> */}
         </>
     )
 }
