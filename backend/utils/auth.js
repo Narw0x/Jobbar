@@ -22,6 +22,8 @@ export function checkAuth(req, res, next) {
   }
   if (!req.headers.authorization) {
     console.log('NOT AUTH. AUTH HEADER MISSING.');
+    console.log(req.headers);
+    
     return next(new NotAuthError('Not authenticated.1'));
   }
   const authFragments = req.headers.authorization.split(' ');

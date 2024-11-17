@@ -18,7 +18,7 @@ router.post('/user/login', async (req, res) => {
 
         // If email and password match
         const token = createJSONToken(email);
-        res.status(200).json({ message: 'Login successful', user, token });
+        res.status(200).json({ message: 'Login successful', payload: user, token, type: 'user' });
     } catch (error) {
         res.status(500).send({ message: 'Error in logging in user.' });
     }
