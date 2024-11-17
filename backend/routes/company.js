@@ -25,7 +25,7 @@ router.post('/company/login', async (req, res) => {
 
 
 router.post('/company/register', async (req, res) => {
-    const { companyName, email, password, address, phoneNumber, website, description, logo, jobOffers, socialMedia } = req.body;
+    const { companyName, email, password, address, phoneNumber } = req.body;
     try {
       // Check if company already exists
       const existingCompany = await Company.findOne({ email });
@@ -39,16 +39,11 @@ router.post('/company/register', async (req, res) => {
         password: hashedPassword, // store hashed password
         address,
         phoneNumber,
-        website,
-        description,
-        logo,
-        jobOffers,
-        socialMedia
       });
       await newCompany.save();
       res.status(201).json({ message: 'Company registered successfully', company: newCompany });
     } catch (error) {
-      res.status(500).send({ message: 'Error in registering company.' });
+      res.status(500).send({ message: {error} });
     }
 });
 
