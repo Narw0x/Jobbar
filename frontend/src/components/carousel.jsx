@@ -44,11 +44,11 @@ export default function Carousel() {
     };
 
     return (
-        <div className="carousel">
+        <div className="carousel ">
             <h2 className="text-5xl font-bold text-custom_gray text-center">
                 What people say about us?
             </h2>
-            <div className="border border-black w-[70%] max-w-[1440px] flex m-auto rounded-lg my-8 justify-between p-8">
+            <div className="border border-black w-[70%] max-w-[1440px] flex m-auto rounded-lg my-8 justify-between p-8 bg-white">
                 <button
                     onClick={handlePrev}
                     className="text-3xl text-custom_gray font-bold"

@@ -1,11 +1,48 @@
 import Button from "./button";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useRouteLoaderData, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from "../store/AuthContext";
 
 const path_logo = "/jobbar_logo.svg";
 
 
 
 export default function Header() {
+    const navigate = useNavigate();
+    const {authState, logout} = useAuth();
+    const token = useRouteLoaderData('root');
+    
+
+    if(authState.token) {
+
+        axios.post(`http://localhost:4000/api/${authState.type}/profile`, {
+            id: authState.userId, 
+        }, {
+            headers: {
+                authorization: `Bearer ${authState.token}`
+            }
+        })
+        .then((response) => {
+            const data = response.data;
+            const profileName = document.getElementById('profileName');
+            if(authState.type === 'user'){
+                profileName.innerHTML = data.user.firstName + " " + data.user.lastName;
+            }else{
+                profileName.innerHTML = data.company.companyName;
+            }
+            
+        })
+        .catch((error) => {
+            console.error('Error fetching profile:', error);
+        });
+
+    }
+
+    function handleClick() {
+        logout();
+        navigate('/')
+    }
+
     return (
         <header className="flex flex-col bg-white w-[100%]">
             <div className="flex max-w-[1440px] w-[70%] m-auto mt-2 mb-2 gap-4 justify-between">
@@ -45,17 +82,39 @@ export default function Header() {
                         </NavLink>
                     </div>
                     <div className="flex gap-4">
-                        <NavLink
-                            to="/login/user"
-                            >
-                            <Button type="gray-hover">Login</Button>
-                        </NavLink>
-                        <NavLink 
-                            to="/register/user"
-                            >
-                            <Button type="gray-default">Register</Button>
-                        </NavLink>
-                        
+                        {authState.token ? (
+                            <div className="flex gap-4">
+                                <Button onClick={handleClick} style="gray-default">Logout</Button>
+                                <NavLink
+                                    to={`/profile/${authState.type}`}
+                                    className={({isActive}) => isActive ? "flex items-center gap-1 cursor-pointer text-custom_red": "flex items-center gap-1 cursor-pointer hover:text-custom_red transition-colors duration-300"}
+                                >
+                                    <div className="flex ">
+                                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" stroke="currentColor" />
+                                            <path d="M15 34C19.6634 29.1156 28.2864 28.8856 33 34M28.9902 19C28.9902 21.7614 26.7484 24 23.983 24C21.2178 24 18.9759 21.7614 18.9759 19C18.9759 16.2386 21.2178 14 23.983 14C26.7484 14 28.9902 16.2386 28.9902 19Z" stroke="currentColor"/>
+                                        </svg>
+                                        <p id="profileName" className="items-center justify-center m-auto">
+                                            "profileName"
+                                        </p>
+                                    </div>
+                                    
+                                </NavLink>
+                            </div>
+                        ) : (
+                            <>
+                                <NavLink
+                                    to="/login/user"
+                                    >
+                                    <Button style="gray-hover">Login</Button>
+                                </NavLink>
+                                <NavLink 
+                                    to="/register/user"
+                                    >
+                                    <Button style="gray-default">Register</Button>
+                                </NavLink>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

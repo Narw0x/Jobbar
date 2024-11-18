@@ -29,15 +29,15 @@ export default function HomePage(){
                     <div className="flex flex-col justify-center text-custom_gray gap-4 max-w-[55%]">
                         <h1 className="text-5xl font-bold">We connect Jobs Seekers and Companies</h1>
                         <p className="text-custom_red">Find your dream job</p>
-                        <Link
-
-                        >
+                        <div>
                             <Button
-                                type="red-default"
+                                style="red-default"
+                                redirectPath={"/search"}
                                 >
                                 Search
                             </Button>
-                        </Link>
+                        </div>
+                        
                     </div>
                 </div>
             </section>
@@ -70,7 +70,6 @@ export default function HomePage(){
                 <p className="text-center text-custom_gray text-xl">You can find out more about us 
                     <Link
                         to={"/about"}
-                        end 
                         className="text-custom_red ps-2"
                         
                     >
@@ -78,7 +77,7 @@ export default function HomePage(){
                     </Link>
                 </p>
             </section>
-            {/* <img src="./fabko.jpeg" className="w-full" alt="" /> */}
+            {/* <img src="./fabko.jpg" className="w-full" alt="" /> */}
         </>
     )
 }

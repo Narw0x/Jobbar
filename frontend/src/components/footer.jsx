@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-const path_logo = "./jobbar_logo.svg";
+const path_logo = "/jobbar_logo.svg";
 
 export default function Footer() {
     return (

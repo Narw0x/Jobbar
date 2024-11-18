@@ -1,7 +1,13 @@
-export default function Button({ children, type }) {
+import { useNavigate } from 'react-router-dom';
+
+export default function Button({ children, style, redirectPath = undefined, onClick = undefined }) {
+    const navigate = useNavigate();
+
+    
+
     let classList = '';
-  
-    switch (type) {
+
+    switch (style) {
         case 'gray-default':
             classList = 'bg-white text-custom_gray border-custom_gray hover:bg-custom_gray hover:text-white';
             break;
@@ -15,13 +21,20 @@ export default function Button({ children, type }) {
             classList = 'bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red';
             break;
         default:
-          break;
+            break;
     }
-  
+
+    const handleClick = () => {
+        if (redirectPath) navigate(redirectPath);
+        if (onClick) onClick();
+    };
+
     return (
-      <button className={`border-[1px] ${classList} py-2 px-4 rounded transition-all duration-300 ease-in-out`}>
-        {children}
-      </button>
+        <button
+            className={`border-[1px] ${classList} py-2 px-4 rounded transition-all duration-300 ease-in-out`}
+            onClick={handleClick}
+        >
+            {children}
+        </button>
     );
-  }
-  
+}
