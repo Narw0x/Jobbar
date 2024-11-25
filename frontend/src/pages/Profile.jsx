@@ -11,7 +11,7 @@ export default function ProfilePage() {
                     <img className="w-full max-h-[250px]" src="/default_bg.png" alt="" />
                 </div>
                 <div className="flex items-center">
-                    <div className="w-40 h-40 rounded-lg border border-custom_gray mx-8">
+                    <div className="w-40 h-40 rounded-lg border border-custom_gray m-8">
                         <img className="object-cover rounded-lg" src="/fabko.jpg" alt="" />
                     </div>
                     <div className="ml-4 flex-1">
@@ -36,18 +36,32 @@ export default function ProfilePage() {
                 
             </div>
             <div>
-                <div className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white mt-4 p-8">
+                {authState.user.about && <div className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white mt-4 p-8">
                     <h2 className="text-lg font-semibold">About</h2>
                     <p className="text-sm text-gray-500">
-                        A little bit about the user
+                        {authState.user.about}
                     </p>
-                </div>
-                <div className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white mt-4 p-8">
+                </div>}
+                {authState.user.experience && <div className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white mt-4 p-8">
                     <h2 className="text-lg font-semibold">Experience</h2>
                     <p className="text-sm text-gray-500">
-                        The user's experience
+                    {Array.isArray(authState.user.experience) && authState.user.experience.length === 0 && "No experience"}
                     </p>
-                </div>
+                </div>}
+                {authState.user.education && <div className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white mt-4 p-8">
+                    <h2 className="text-lg font-semibold">Education</h2>
+                    <p className="text-sm text-gray-500">
+                    {Array.isArray(authState.user.education) && authState.user.education.length === 0 && "No education"}
+                    </p>
+                </div>}
+                {(authState.user.phoneNumber || authState.user.email)&& <div className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white mt-4 p-8">
+                    <h2 className="text-lg font-semibold">Contact</h2>
+                    <p className="text-sm text-gray-500">
+                        {authState.user.phoneNumber && <p>Phone number: <span className="text-custom_red">{authState.user.phoneNumber}</span></p>}
+                        {authState.user.email && <p>Email: <span className="text-custom_red">{authState.user.email}</span></p>}
+                    </p>
+                </div>}
+                
             </div>
         </section>
     )
