@@ -1,45 +1,19 @@
 import Button from "./button";
-import { NavLink, useRouteLoaderData, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from "../store/AuthContext";
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store/slices/authSlice';
 
 const path_logo = "/jobbar_logo.svg";
 
-
-
 export default function Header() {
     const navigate = useNavigate();
-    const {authState, logout} = useAuth();
-    const token = useRouteLoaderData('root');
-    
+    const dispatch = useDispatch();
 
-    if(authState.token) {
+    const authState = useSelector((state) => state.auth);
 
-        axios.post(`http://localhost:4000/api/${authState.type}/profile`, {
-            id: authState.userId, 
-        }, {
-            headers: {
-                authorization: `Bearer ${authState.token}`
-            }
-        })
-        .then((response) => {
-            const data = response.data;
-            const profileName = document.getElementById('profileName');
-            if(authState.type === 'user'){
-                profileName.innerHTML = data.user.firstName + " " + data.user.lastName;
-            }else{
-                profileName.innerHTML = data.company.companyName;
-            }
-            
-        })
-        .catch((error) => {
-            console.error('Error fetching profile:', error);
-        });
-
-    }
 
     function handleClick() {
-        logout();
+        dispatch(logout());
         navigate('/')
     }
 
@@ -86,7 +60,7 @@ export default function Header() {
                             <div className="flex gap-4">
                                 <Button onClick={handleClick} style="gray-default">Logout</Button>
                                 <NavLink
-                                    to={`/profile/${authState.type}`}
+                                    to={`/profile/${authState.user._id}`}
                                     className={({isActive}) => isActive ? "flex items-center gap-1 cursor-pointer text-custom_red": "flex items-center gap-1 cursor-pointer hover:text-custom_red transition-colors duration-300"}
                                 >
                                     <div className="flex ">
@@ -95,7 +69,7 @@ export default function Header() {
                                             <path d="M15 34C19.6634 29.1156 28.2864 28.8856 33 34M28.9902 19C28.9902 21.7614 26.7484 24 23.983 24C21.2178 24 18.9759 21.7614 18.9759 19C18.9759 16.2386 21.2178 14 23.983 14C26.7484 14 28.9902 16.2386 28.9902 19Z" stroke="currentColor"/>
                                         </svg>
                                         <p id="profileName" className="items-center justify-center m-auto">
-                                            "profileName"
+                                            {authState.user?.firstName || authState.user?.companyName}
                                         </p>
                                     </div>
                                     
@@ -118,7 +92,7 @@ export default function Header() {
                     </div>
                 </div>
             </div>
-            <hr className="h-1 bg-custom_gray"/>
+            <hr className="border border-custom_gray"/>
         </header>
     )
 

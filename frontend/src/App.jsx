@@ -1,15 +1,16 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { RootLayout } from './pages/Root';
-import { tokenLoader } from './util/auth';
-import { AuthProvider } from './store/AuthContext';
 
 import HomePage from './pages/Home';
 import AboutPage from './pages/About';
-import Login from './pages/Login';
-import RegisterCompany from './pages/RegisterCompany';
-import RegisterUser from './pages/RegisterUser';
-import UserProfile from './pages/UserProfile';
-import CompanyProfile from './pages/CompanyProfile';
+import LoginPage from './pages/Login';
+import RegisterCompanyPage from './pages/RegisterCompany';
+import RegisterUserPage from './pages/RegisterUser';
+import ProfilePage from './pages/Profile';
+import EditUserProfilePage from './pages/EditUserProfile';
+import { checkAuthLoader } from './util/auth';
+
+
 
 
 
@@ -25,23 +26,26 @@ const router = createBrowserRouter([
       {
         path: 'login',
         children: [
-          {path: 'user', element: <Login type='User'/>},
-          {path: 'company', element: <Login type='Company'/>}
+          {path: 'user', element: <LoginPage type='User'/>},
+          {path: 'company', element: <LoginPage type='Company'/>}
         ]
       },
       {
         path: 'register',
         children: [
-          {path: 'user', element: <RegisterUser />},
-          {path: 'company', element: <RegisterCompany/>}
+          {path: 'user', element: <RegisterUserPage />},
+          {path: 'company', element: <RegisterCompanyPage />}
         ]
       },
       {
-        path: 'profile',
-        children: [
-          {path: 'user', element: <UserProfile />},
-          {path: 'company', element: <CompanyProfile />}
-      ]},
+        path: 'profile/:id',
+        loader: checkAuthLoader,
+        element: <ProfilePage />,
+      },
+      {
+        path: 'profile/:id/edit',
+        element: <EditUserProfilePage />
+      },
     ]
   },
 ]);
@@ -50,7 +54,7 @@ const router = createBrowserRouter([
 
 
 function App() {
-  return <AuthProvider><RouterProvider router={router} /></AuthProvider>;
+  return <RouterProvider router={router} />;
 }
 
 export default App;

@@ -14,8 +14,8 @@ export function getAuthToken() {
 
     if(!token) return null;
 
-    const tokenDuration = getTokenDuration();
-    if(tokenDuration <= 0) return "EXPIRED";
+    // const tokenDuration = getTokenDuration();
+    // if(tokenDuration <= 0) return "EXPIRED";
     
     return token;
 }
@@ -28,7 +28,7 @@ export function checkAuthLoader(){
     const token = getAuthToken();
 
     if(!token){
-        return redirect('/auth');
+        return redirect('/');
     }
 
     return null;

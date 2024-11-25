@@ -3,14 +3,19 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { useAuth } from '../store/AuthContext';
 
-export default function Login({type = 'user'}) {
+import { useDispatch } from 'react-redux';
+import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
+
+export default function LoginPage({type = 'user'}) {
     const [error, setError] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
     let message = location.state?.message || null;
-    const { login } = useAuth();
+
+    const dispatch = useDispatch();
+
+
     function handleSubmit(e) {
         e.preventDefault(); 
         
@@ -22,17 +27,15 @@ export default function Login({type = 'user'}) {
         };
     
         // Send a POST request
+        dispatch(loginStart());
         axios
             .post(`http://localhost:4000/api/${type.toLowerCase()}/login`, data)
             .then((response) => {
-
-                const { token, payload, type } = response.data;
-                login(token, payload._id, type);
-                
-                navigate('/profile/' + type.toLowerCase());
+                dispatch(loginSuccess(response.data.payload));
+                navigate('/profile/' + response.data.payload.user._id);
             })
             .catch((error) => {
-                console.error('Error:', error.response?.data || error.message); // Handle error
+                dispatch(loginFailure());
                 setError('An error occurred during registration. Please try again.');
             });
     }

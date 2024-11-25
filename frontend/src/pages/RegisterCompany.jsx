@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { isValidText, isValidEmail, isValidPassword, isValidPhoneNumber } from "../util/validation";
 
-export default function RegisterCompany() {
+export default function RegisterCompanyPage() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 

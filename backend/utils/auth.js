@@ -5,7 +5,7 @@ import { NotAuthError } from './errors.js';
 
 
 export function createJSONToken(email) {
-  return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '24h' });
 }
 
 export function validateJSONToken(token) {

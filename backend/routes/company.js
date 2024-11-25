@@ -30,7 +30,7 @@ router.post('/company/register', async (req, res) => {
       const existingCompany = await Company.findOne({ email });
       if (existingCompany) return res.status(400).json({ message: 'Company already exists' });
       // Hash the password before saving the company
-      const hashedPassword = await bcrypt.hash(password, 16);
+      const hashedPassword = await bcrypt.hash(password, 12);
       // Create new company
       const newCompany = new Company({
         companyName,

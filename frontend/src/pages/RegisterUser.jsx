@@ -7,7 +7,7 @@ import { isValidText, isValidEmail, isValidPassword, isValidPhoneNumber } from "
 
 
 
-export default function RegisterUser() {
+export default function RegisterUserPage() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 

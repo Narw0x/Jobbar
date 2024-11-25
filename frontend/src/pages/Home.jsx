@@ -27,7 +27,7 @@ export default function HomePage(){
                         </p>
                     </div>
                     <div className="flex flex-col justify-center text-custom_gray gap-4 max-w-[55%]">
-                        <h1 className="text-5xl font-bold">We connect Jobs Seekers and Companies</h1>
+                        <h1  className="text-5xl font-bold">We connect Jobs Seekers and Companies</h1>
                         <p className="text-custom_red">Find your dream job</p>
                         <div>
                             <Button
