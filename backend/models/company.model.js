@@ -26,18 +26,23 @@ const companySchema = new mongoose.Schema({
     },
     website: {
         type: String,
+        trim: true
     },
     description: {
         type: String,
+        trim: true
     },
-    logo: {
+    avatar: {
         type: String,
+        default: "fabko.jpg"
     },
-    jobOffers: {
-        type: Array,
+    bgImage: {
+        type: String,
+        default: "default_bg.png"
     },
     socialMedia: {
         type: Array,
+        default: []
     },
 }, {
     timestamps: true

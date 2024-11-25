@@ -28,6 +28,22 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    about: {
+        type: String,
+        trim: true
+    },
+    experience: {
+        type: Array,
+        default: []
+    },
+    avatar: {
+        type: String,
+        default: "fabko.jpg"
+    },
+    bgImage: {
+        type: String,
+        default: "default_bg.png"
+    },
 }, {
     timestamps: true
 });
