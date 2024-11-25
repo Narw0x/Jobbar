@@ -30,9 +30,14 @@ const userSchema = new mongoose.Schema({
     },
     about: {
         type: String,
+        default: "A little about me...",
         trim: true
     },
     experience: {
+        type: Array,
+        default: []
+    },
+    education: {
         type: Array,
         default: []
     },
@@ -45,7 +50,8 @@ const userSchema = new mongoose.Schema({
         default: "default_bg.png"
     },
 }, {
-    timestamps: true
+    timestamps: true,
+    collection: 'user'
 });
 
 const User = mongoose.model('User', userSchema);

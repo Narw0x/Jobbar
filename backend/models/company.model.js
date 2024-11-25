@@ -45,7 +45,8 @@ const companySchema = new mongoose.Schema({
         default: []
     },
 }, {
-    timestamps: true
+    timestamps: true,
+    collection: 'company'
 });
 
 const Company = mongoose.model('Company', companySchema);
