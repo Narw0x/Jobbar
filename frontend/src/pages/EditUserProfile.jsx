@@ -28,6 +28,7 @@ export default function EditUserProfilePage() {
             </div>
             <div>
                 <p>Haolo</p>
+                
             </div>
         </section>
     )
