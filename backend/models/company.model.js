@@ -26,10 +26,12 @@ const companySchema = new mongoose.Schema({
     },
     website: {
         type: String,
-        trim: true
+        trim: true,
+        default: "https://www.example.com"
     },
-    description: {
+    about: {
         type: String,
+        default: "A little about us...",
         trim: true
     },
     avatar: {
@@ -41,6 +43,18 @@ const companySchema = new mongoose.Schema({
         default: "default_bg.png"
     },
     socialMedia: {
+        type: Array,
+        default: []
+    },
+    followers: {
+        type: Array,
+        default: []
+    },
+    following: {
+        type: Array,
+        default: []
+    },
+    jobOffers: {
         type: Array,
         default: []
     },

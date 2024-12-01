@@ -5,20 +5,6 @@ const router = express.Router();
 
 import { validateJSONToken, isValidPassword } from '../utils/auth.js';
 
-router.post('/user/profile', async (req, res) => {
-    const {id}  = req.body;
-    console.log(req.body);
-    
-    try {
-        const user = await User.findById(id);
-        if (!user) return res.status(404).json({ message: 'User not found' });
-        res.status(200).json({ message: 'User profile', user});
-    } catch (error) {
-        res.status(500).send({ message: 'Error in fetching user profile.' });
-    }  
-
-});
-
 router.put('/user/edit/:id', async (req, res) => {
     const { id } = req.params;
     const { email, firstName, lastName, phoneNumber, password } = req.body;

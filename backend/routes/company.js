@@ -11,13 +11,20 @@ router.post('/company/login', async (req, res) => {
     try {
       const company = await Company.findOne({ email });
       if (!company) return res.status(400).json({ message: 'Company not found' });
-      // Compare hashed passwords
+
       const isMatch = await bcrypt.compare(password, company.password);
       if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
-      // If email and password match
+
       const token = createJSONToken(email);
-      res.status(200).json({ message: 'Login successful', payload: company, token, type: 'company'});
+      const { password: _, ...companyWithoutPassword } = company.toObject();
+      const exp = new Date().getTime() + 86400000;
+      
+      res.status(200).json({
+        message: 'Login successful',
+        payload: { user: companyWithoutPassword, token, exp },
+      });
     } catch (error) {
+      console.log(error);
       res.status(500).send({ message: 'Error in logging in company.', error: error });
     }
 });

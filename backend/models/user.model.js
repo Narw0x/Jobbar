@@ -49,6 +49,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "default_bg.png"
     },
+    socialMedia: {
+        type: Array,
+        default: []
+    },
+    website: {
+        type: String,
+        trim: true,
+        default: "https://www.example.com"
+    },
+    followers: {
+        type: Array,
+        default: []
+    },
+    following: {
+        type: Array,
+        default: []
+    },
 }, {
     timestamps: true,
     collection: 'user'

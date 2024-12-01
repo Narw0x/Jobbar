@@ -6,19 +6,6 @@ import { validateJSONToken, isValidPassword} from '../utils/auth.js';
 
 const router = express.Router();
 
-router.post('/company/profile', async (req, res) => {
-    const {id}  = req.body;
-    console.log(req.body);
-    
-    try {
-        const company = await Company.findById(id);
-        if (!company) return res.status(404).json({ message: 'Company not found' });
-        res.status(200).json({ message: 'Company profile', company });
-    } catch (error) {
-        res.status(500).send({ message: 'Error in fetching company profile.' });
-    }  
-
-});
 
 router.put('/company/edit/:id', async (req, res) => {
     const { id } = req.params;
