@@ -36,7 +36,7 @@ export default function LoginPage({type = 'user'}) {
             })
             .catch((error) => {
                 dispatch(loginFailure());
-                setError('An error occurred during registration. Please try again.');
+                setError(error.response.data.message);
             });
     }
 

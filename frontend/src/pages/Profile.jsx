@@ -59,7 +59,7 @@ export default function ProfilePage() {
         <section className="bg-custom_bg_gray py-8">
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white">
                 <div className="w-full object-fill">
-                    <img className="w-full max-h-[250px]" src="/default_bg.png" alt="" />
+                    <img className="w-full max-h-[250px]" src={`/${profileData?.bgImage}`} alt="" />
                 </div>
                 <div className="flex items-center">
                     <div className="w-40 h-40 rounded-lg border border-custom_gray m-8">

@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
-import { isValidText, isValidEmail, isValidPassword, isValidPhoneNumber } from "../util/validation";
+import { isValidText, isValidEmail, isValidPassword, isValidPhoneNumber, isValidAddress } from "../util/validation";
+import Autocomplete from "../components/autocomplete";
 
 export default function RegisterCompanyPage() {
     const [error, setError] = useState(null);
@@ -11,8 +12,9 @@ export default function RegisterCompanyPage() {
 
     function handleSubmit(e) {
         e.preventDefault(); 
+        
         const formData = new FormData(e.target);
-
+        
         // Validate company name
         if (!isValidText(formData.get('companyName'))) {
             setError('Company name is invalid');
@@ -38,7 +40,7 @@ export default function RegisterCompanyPage() {
         }
 
         // Validate address
-        if (!isValidText(formData.get('address'))) {
+        if (!isValidAddress(formData.get('address'))) {
             setError('Address is invalid');
             return;
         }
@@ -61,6 +63,7 @@ export default function RegisterCompanyPage() {
         };
 
         console.log(data);
+
         
     
         // Send a POST request
@@ -76,6 +79,13 @@ export default function RegisterCompanyPage() {
     }
 
 
+    if (error) {
+        return(
+            <>
+                <p>{error}</p>
+            </>
+        )
+    }
 
     return(
         <section className="bg-custom_bg_gray p-16">
@@ -105,7 +115,7 @@ export default function RegisterCompanyPage() {
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="address">Address</label>
-                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="address" name="address" id="address" />
+                        <Autocomplete />
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="phone">Phone</label>
