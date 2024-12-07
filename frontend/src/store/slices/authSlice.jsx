@@ -1,16 +1,40 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  user: JSON.parse(localStorage.getItem('user')) || null, 
-  token: localStorage.getItem('token') || null, 
-  exp: localStorage.getItem('exp') || null, 
-  isAuthenticated: !!localStorage.getItem('token'),
-  loading: false,
+const isTokenExpired = (exp) => {
+  if (!exp) return true; 
+  return Date.now() >= parseInt(exp, 10);
+};
+
+const getInitialState = () => {
+  const token = localStorage.getItem('token') || null;
+  const exp = localStorage.getItem('exp') || null;
+  const user = JSON.parse(localStorage.getItem('user')) || null;
+
+  if (isTokenExpired(exp)) {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('exp');
+    return {
+      user: null,
+      token: null,
+      exp: null,
+      isAuthenticated: false,
+      loading: false,
+    };
+  }
+
+  return {
+    user,
+    token,
+    exp,
+    isAuthenticated: !!token,
+    loading: false,
+  };
 };
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: getInitialState(),
   reducers: {
     loginStart: (state) => {
       state.loading = true;
@@ -41,6 +65,8 @@ const authSlice = createSlice({
       state.exp = null;
 
       // Clear localStorage
+      console.log('Logging out');
+      
       localStorage.removeItem('user');
       localStorage.removeItem('token');
       localStorage.removeItem('exp');

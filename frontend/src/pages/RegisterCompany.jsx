@@ -79,14 +79,6 @@ export default function RegisterCompanyPage() {
     }
 
 
-    if (error) {
-        return(
-            <>
-                <p>{error}</p>
-            </>
-        )
-    }
-
     return(
         <section className="bg-custom_bg_gray p-16">
             {error && 

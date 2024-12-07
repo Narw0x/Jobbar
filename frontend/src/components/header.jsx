@@ -1,3 +1,6 @@
+import axios from "axios";
+
+
 import Button from "./button";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,8 +16,21 @@ export default function Header() {
 
 
     function handleClick() {
-        dispatch(logout());
-        navigate('/')
+
+        axios.post('http://localhost:4000/api/profile/logout', {}, {
+            headers: {
+                Authorization: `Bearer ${authState.token}`,
+            }
+        })
+        .then((response) => {
+            console.log('Logout successful:', response.data);
+            dispatch(logout());
+        })
+        .catch((error) => {
+            console.error('Logout failed:', error.response || error.message); 
+        });
+
+        navigate('/');
     }
 
     return (
