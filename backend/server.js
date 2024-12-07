@@ -18,20 +18,13 @@ app.use(cors({
 // Import routes
 import userRoutes from "./routes/user.js";
 import companyRoutes from "./routes/company.js";
-import userAuthRoutes from "./routes/userAuth.js";
-import companyAuthRoutes from "./routes/companyAuth.js";
 import profileAuthRoutes from "./routes/profileAuth.js";
-import { checkAuth } from './utils/auth.js';
 
+app.setMaxListeners(20);
 
 // Setup all the routes
 app.use('/api', userRoutes);
 app.use('/api', companyRoutes);
-
-app.use(checkAuth);
-
-app.use('/api', userAuthRoutes);
-app.use('/api', companyAuthRoutes);
 app.use('/api', profileAuthRoutes);
 
 

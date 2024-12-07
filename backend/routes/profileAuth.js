@@ -1,12 +1,37 @@
 import express from 'express';
 import User from '../models/user.model.js';
 import Company from '../models/company.model.js';
+import Blacklist from '../models/blackList.model.js';
+import jwt from 'jsonwebtoken';
+import { checkAuth } from '../utils/auth.js';
 
 
 const router = express.Router();
 
 
-router.get('/profile/:id', async (req, res) => {
+router.post('/profile/logout', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+  
+    if (!token) {
+      return res.status(400).json({ message: 'Token is required' });
+    }
+  
+    // Decode the token to get its expiration time
+    const decoded = jwt.decode(token);
+  
+    if (!decoded || !decoded.exp) {
+      return res.status(400).json({ message: 'Invalid token' });
+    }
+  
+    const expiryDate = new Date(decoded.exp * 1000); // Convert exp from seconds to milliseconds
+  
+    // Save token in the blacklist with expiration
+    await Blacklist.create({ token, createdAt: expiryDate });
+  
+    res.status(200).json({ message: 'Logged out successfully' });
+});
+
+router.get('/profile/:id', checkAuth, async (req, res) => {
     const { id } = req.params;
     try {
         let profile = await User.findById(id).select('-password');
