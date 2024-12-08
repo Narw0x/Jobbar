@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
+import { isValidEmail, isValidPassword } from "../util/validation";
 
 export default function LoginPage({type = 'user'}) {
     const [error, setError] = useState(null);
@@ -17,9 +18,25 @@ export default function LoginPage({type = 'user'}) {
 
 
     function handleSubmit(e) {
-        e.preventDefault(); 
+        e.preventDefault();
+
+        message = null;
+
+
         
         const formData = new FormData(e.target);
+
+        if(!isValidEmail(formData.get('email'))){
+            setError('Email is invalid');
+            return;
+        }
+
+        if(!isValidPassword(formData.get('password'))){
+            setError('Password is invalid');
+            return;
+        }
+
+
     
         const data = {
             email: formData.get('email'),
@@ -44,11 +61,8 @@ export default function LoginPage({type = 'user'}) {
 
     return (
         <section className="bg-custom_bg_gray p-16">
-            {(error && 
-                <div className="text-custom_red border border-custom_red max-w-[1000px] flex justify-center m-auto text-center bg-red-100 rounded-lg p-4">
-                    <p>{error}</p>
-                </div>)
-            || (message && <div className="bg-green-200 border border-green-600 text-center p-4 w-[1000px] justify-center m-auto rounded-lg text-green-800"><p>{message}</p></div>) }
+            {(error && <div className="text-custom_red border border-custom_red max-w-[1000px] flex justify-center m-auto text-center bg-red-100 rounded-lg p-4"><p>{error}</p></div>)}
+            {(message && <div className="bg-green-200 border border-green-600 text-center p-4 w-[1000px] justify-center m-auto rounded-lg text-green-800"><p>{message}</p></div>) }
             <div className="flex justify-center flex-col max-w-[1000px] w-[60%] m-auto border border-black rounded-lg bg-white p-16 mt-16">
                 <h1 className="text-center text-6xl text-custom_gray font-bold m-8">Sign in as {type.toLowerCase() === 'user' ? 'User' : 'Company'}</h1>
                 <form onSubmit={handleSubmit}>

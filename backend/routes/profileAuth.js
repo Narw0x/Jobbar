@@ -27,6 +27,8 @@ router.post('/profile/logout', async (req, res) => {
   
     // Save token in the blacklist with expiration
     await Blacklist.create({ token, createdAt: expiryDate });
+    await Blacklist.deleteMany({ createdAt: { $lte: new Date() } });
+
   
     res.status(200).json({ message: 'Logged out successfully' });
 });

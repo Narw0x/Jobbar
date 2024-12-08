@@ -4,19 +4,30 @@ export function isValidText(value, minLength = 1) {
     return value && value.trim().length >= minLength;
   }
 
-export function isValidEmail(value){
-    return value && value.trim().includes('@');
+  export function isValidEmail(value) {
+    if (!value || typeof value !== 'string') return false;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value.trim());
 }
 
 
-export function isValidPassword(value){
-    return value && value.trim().length >= 8;
+
+export function isValidPassword(value) {
+  if (!value || typeof value !== 'string') return false;
+  // Minimum 8 characters, at least one uppercase letter, one lowercase letter, and one number
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+  return passwordRegex.test(value.trim());
 }
 
-export function isValidPhoneNumber(value){
-    return value && value.trim().length >= 13 && value[0] === '+';
-    
+
+export function isValidPhoneNumber(value) {
+  if (!value || typeof value !== 'string') return false;
+  // Regex to match the phone number in the format +XXX XXXXXXXXXX
+  const phoneRegex = /^\+(\d{1,3})\s(\d{7,10})$/;
+  return phoneRegex.test(value.trim());
 }
+
+
 
 export const isValidAddress = async (inputValue) => {
     if (!inputValue.trim()) {

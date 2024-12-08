@@ -23,7 +23,6 @@ export default function Header() {
             }
         })
         .then((response) => {
-            console.log('Logout successful:', response.data);
             dispatch(logout());
         })
         .catch((error) => {

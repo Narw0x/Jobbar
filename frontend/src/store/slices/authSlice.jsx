@@ -65,8 +65,6 @@ const authSlice = createSlice({
       state.exp = null;
 
       // Clear localStorage
-      console.log('Logging out');
-      
       localStorage.removeItem('user');
       localStorage.removeItem('token');
       localStorage.removeItem('exp');
