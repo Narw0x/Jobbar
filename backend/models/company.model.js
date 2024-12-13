@@ -36,7 +36,7 @@ const companySchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        default: "fabko.jpg"
+        default: "default_profile.svg"
     },
     bgImage: {
         type: String,

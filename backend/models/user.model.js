@@ -40,10 +40,13 @@ const userSchema = new mongoose.Schema({
     education: {
         type: Array,
         default: []
+    },address: {
+        type: String,
+        trim: true
     },
     avatar: {
         type: String,
-        default: "fabko.jpg"
+        default: "default_profile.svg"
     },
     bgImage: {
         type: String,
