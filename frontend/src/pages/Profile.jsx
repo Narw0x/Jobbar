@@ -57,13 +57,13 @@ export default function ProfilePage() {
 
     return (
         <section className="bg-custom_bg_gray py-8">
-            <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white">
+            <div className="max-w-[1440px] w-[70%] mx-auto border rounded shadow-md bg-white">
                 <div className="w-full object-fill">
                     <img className="w-full max-h-[250px]" src={`/${profileData?.bgImage}`} alt="" />
                 </div>
                 <div className="flex items-center">
-                    <div className="w-40 h-40 rounded-lg border border-custom_gray m-8">
-                        <img className="object-cover rounded-lg" src="/fabko.jpg" alt="" />
+                    <div className="w-60 h-60 rounded  m-8">
+                        <img className="object-cover rounded-lg" src={`/${profileData?.avatar}`} alt="" />
                     </div>
                     <div className="ml-4 flex-1">
                         <h2 className="text-lg text-custom_gray font-semibold" id="UserName">

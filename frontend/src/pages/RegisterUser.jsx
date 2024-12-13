@@ -123,7 +123,7 @@ export default function RegisterUserPage() {
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="phone">Phone</label>
-                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="phone" name="phone" id="phone" placeholder="+421xxxxxxxxx"/>
+                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="phone" name="phone" id="phone" placeholder="+421 xxxxxxxxx"/>
                     </div>
 
                     <div className="flex flex-col text-xl">

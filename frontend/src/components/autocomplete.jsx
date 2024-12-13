@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
-const Autocomplete = () => {
+const Autocomplete = ({userAddress = undefined, handleChange = undefined}) => {
   const inputRef = useRef(null); // Ref for the input element
   const autocompleteRef = useRef(null); // Ref to store the autocomplete object
 
@@ -37,7 +37,9 @@ const Autocomplete = () => {
         type="text"
         placeholder="Enter a location"
         className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg w-full"
-        name="address" 
+        name="address"
+        value={userAddress}
+        onChange={handleChange}
         id="address"
       />
   );

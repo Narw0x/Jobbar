@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-export default function Button({ children, style, redirectPath = undefined, onClick = undefined }) {
+export default function Button({ children, style, redirectPath = undefined, onClick = undefined, type = 'submit' }) {
     const navigate = useNavigate();
 
     
@@ -33,6 +33,7 @@ export default function Button({ children, style, redirectPath = undefined, onCl
         <button
             className={`border-[1px] ${classList} py-2 px-4 rounded transition-all duration-300 ease-in-out`}
             onClick={handleClick}
+            type={type}
         >
             {children}
         </button>

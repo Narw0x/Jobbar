@@ -10,6 +10,7 @@ import ProfilePage from './pages/Profile';
 import EditUserProfilePage from './pages/EditUserProfile';
 import { checkAuthLoader } from './util/auth';
 
+import { PrimeReactProvider } from "primereact/api";
 
 
 
@@ -54,7 +55,19 @@ const router = createBrowserRouter([
 
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+  <PrimeReactProvider
+    value={{
+      pt: {
+        fileupload: {
+          chooseIcon: { className: 'mr-2' },
+        },
+      },
+    }}
+  >
+    <RouterProvider router={router} />
+  </PrimeReactProvider>
+  );
 }
 
 export default App;
