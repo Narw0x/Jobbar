@@ -7,11 +7,10 @@ router.get('/autocomplete', async (req, res) => {
     const { search } = req.query;
     try {
         setTimeout(async () => {  // Add async here
-            const apiKey = 'AIzaSyClnoR7Wk-TekGNlucZsAwWsyF5sMRhD2s';
             const baseUrl = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
             
             try {
-                const response = await fetch(`${baseUrl}?input=${encodeURIComponent(search)}&key=${apiKey}&includedPrimaryTypes=locality`, {
+                const response = await fetch(`${baseUrl}?input=${encodeURIComponent(search)}&key=${process.env.API_KEY_GOOGLE_PLACES}&includedPrimaryTypes=locality`, {
                     method: 'POST',
                     headers: {
                         'Access-Control-Allow-Origin': '*',
