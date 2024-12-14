@@ -1,13 +1,19 @@
 
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { updateUser } from "../store/slices/authSlice"
 import { useState, useEffect } from "react"
 
 import { FileUpload } from 'primereact/fileupload';
 
 import Autocomplete from "../components/autocomplete";
 import Button from "../components/button";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function EditUserProfilePage() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [error, setError] = useState(null);
 
     const authState = useSelector((state) => state.auth);
 
@@ -28,34 +34,28 @@ export default function EditUserProfilePage() {
 
     useEffect(() => {
         return () => {
-          if (bgImage.startsWith("blob:")) {
+          if (bgImage && bgImage.startsWith("blob:")) {
             URL.revokeObjectURL(bgImage);
           }
+          if (profileImage && profileImage.startsWith("blob:")) {
+            URL.revokeObjectURL(profileImage);
+          }
         };
-    }, [bgImage]);
+      }, [bgImage, profileImage]);
 
-
-      
 
     // Handle upload success
     const onSelectBg = (e) => {
         const uploadedFile = e.originalEvent.target.files[0]; // Access the file from the event
-        console.log(uploadedFile);
-
-
       
         if (uploadedFile) {
             const imageUrl = URL.createObjectURL(uploadedFile); 
             setBgImage(imageUrl); 
         }
-      
       };
 
-      const onSelectPf = (e) => {
+    const onSelectPf = (e) => {
         const uploadedFile = e.originalEvent.target.files[0]; // Access the file from the event
-        console.log(uploadedFile);
-
-
       
         if (uploadedFile) {
             const imageUrl = URL.createObjectURL(uploadedFile); 
@@ -64,26 +64,48 @@ export default function EditUserProfilePage() {
       
       };
 
-    const handleProfiledelete = () => {
-        setProfileImage(authState.user.avatar);
-    }
+    const handleEditForm = (e) => {
+        e.preventDefault();
 
-    const handleBgImage = () => {
-        setBgImage(authState.user.bgImage);
+        const data = {
+            ...userInfo,
+            bgImage,
+            avatar: profileImage,
+        };
+
+        axios.put(`http://localhost:4000/api/profile/edit/${authState.user._id}`, data, {
+            headers: {
+                Authorization: `Bearer ${authState.token}`,
+            },
+        })
+        .then((response) => {
+            dispatch(updateUser(response.data.payload.user));
+            navigate(`/profile/${authState.user._id}`);
+        }).catch((error) => {
+            console.error('Error updating user:', error);
+            setError(error.response.data.message);
+        });
     }
     
-
+    
     return (
         <section className="bg-custom_bg_gray py-8">
-            <form className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white">
+            <form className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white" onSubmit={handleEditForm}>
                 <div>
                     <div className="w-full object-fill flex end flex-col">
                         <img className="w-full max-h-[250px] rounded-t" src={bgImage === userInfo.bgImage ? `/${bgImage}`: bgImage} alt="" />
                         <hr className="bg-black"/>
                     </div>
                     <div className="flex m-4 ml-auto justify-end gap-4">
-                        <FileUpload mode="basic" name="demo[]" accept=".png, .jpg, .jpeg" auto maxFileSize={1000000} onSelect={onSelectBg} className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out" />
-                        {bgImage !== authState.user.bgImage ? <Button type="button" onClick={handleBgImage} style="red-default">Delete</Button>: null}
+                        <FileUpload
+                            mode="basic" 
+                            name="demo[]" 
+                            accept=".png, .jpg, .jpeg" 
+                            auto maxFileSize={1000000} 
+                            onSelect={onSelectBg} 
+                            className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out"
+                        />
+                        {bgImage !== authState.user.bgImage ? <Button type="button" onClick={() => {setBgImage(authState.user.bgImage)}} style="red-default">Delete</Button>: null}
                     </div>
                 </div>
                 <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Personal Information</h2>
@@ -98,28 +120,47 @@ export default function EditUserProfilePage() {
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="lastName">Last Name</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.lastName || ''} onChange={handleUserInfoChange}  type="text" name="lastName" id="lastName" />
                             </div>
-                        </div>
-                        <div className="flex flex-col mb-4">
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="email">Email</label>
-                            <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.email || ''} onChange={handleUserInfoChange}  type="email" name="email" id="email" />
+                            
                         </div>
                         <div className="flex flex-col mb-4">
                             <label className="text-custom_gray text-xl font-bold" htmlFor="address">Address</label>
-                            <Autocomplete value={userInfo.address || ''}  onChange={handleUserInfoChange} />                        
+                            <Autocomplete
+                                value={userInfo.address || ''}  
+                                onChange={handleUserInfoChange} 
+                            />                        
+                        </div>
+                        <div>
+                            <label className="text-custom_gray text-xl font-bold" htmlFor="about">About</label>
+                            <textarea className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray p-2 my-2 text-lg w-full resize-none rounded-lg"  onChange={handleUserInfoChange}  value={userInfo.about || ''} name="about" id="about"></textarea>
                         </div>
                     </div>
                     <div className="basis-1/3 m-8 flex flex-col gap-4 pt-8">
                         <img className="rounded-lg w-60 h-60 flex m-auto justify-center"  src={profileImage === userInfo.avatar ? `/${profileImage}`: profileImage} alt="" />
                         <div className="flex justify-center gap-4">
-                            <FileUpload mode="basic" name="demo[]" accept=".png, .jpg, .jpeg" auto maxFileSize={1000000} onSelect={onSelectPf} className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out" />
-                            {profileImage !== authState.user.avatar ? <Button type="button" onClick={handleProfiledelete} style="red-default">Delete</Button>: null}
+                            <FileUpload 
+                                mode="basic" 
+                                name="demo[]" 
+                                accept=".png, .jpg, .jpeg" 
+                                auto maxFileSize={1000000} 
+                                onSelect={onSelectPf} 
+                                className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out" 
+                            />
+                            {
+                            profileImage !== authState.user.avatar ?
+                                <Button 
+                                    type="button" 
+                                    onClick={() => {setProfileImage(authState.user.avatar);}} 
+                                    style="red-default"
+                                >
+                                    Delete
+                                </Button>
+                                    : 
+                                null
+                            }
                         </div>
                     </div>
                 </div>
-                <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">About</h2>
-                <div className="m-8 mt-4 ">
-                    <textarea className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray p-2 my-2 text-lg w-full resize-none rounded-lg"  onChange={handleUserInfoChange}  value={userInfo.about || ''} name="about" id="about"></textarea>
-                </div>
+                
                 <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Contact</h2>
                 <div className="flex rounded-lg border border-black m-8 justify-between mt-4 flex-col">
                     <div className="flex flex-row m-8 mb-4 justify-between">
@@ -147,6 +188,25 @@ export default function EditUserProfilePage() {
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserInfoChange}  value={userInfo.socialMedia.github || ''} type="text" name="github" id="github" />
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div>
+                    <div className="flex justify-center m-8 gap-4">
+                        <Button 
+                            style="red-hover"
+                            type="button"
+                            onClick={() => {
+                                navigate(`/profile/${authState.user._id}`);
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button 
+                            style="red-default"
+                            type="submit"
+                        >
+                            Save
+                        </Button>
                     </div>
                 </div>
             </form>

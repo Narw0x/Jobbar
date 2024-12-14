@@ -1,10 +1,11 @@
 // React example using Axios for Google Places Autocomplete API
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import axios from 'axios';
 
 const Autocomplete = ({ value = undefined, onChange = undefined }) => {
   const [suggestions, setSuggestions] = useState([]);
   const inputRef = useRef();
+  const timeoutRef = useRef();
 
   const fetchPlaceSuggestions = async (inputValue) => {
     try {
@@ -22,20 +23,38 @@ const Autocomplete = ({ value = undefined, onChange = undefined }) => {
   }
 
 
-  const handleChange = () => {
+  const handleChange = useCallback(() => {
     const inputValue = inputRef.current?.value || '';
+    
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Always trigger onChange immediately to update the controlled input
     if (onChange) {
-        const fakeEvent = { target: { name: 'autocomplete', value: inputValue } }; // Simulate `e.target`
-        onChange(fakeEvent); // Ensure consistency
+      const fakeEvent = { target: { name: 'address', value: inputValue } };
+      onChange(fakeEvent);
     }
 
-    if (inputValue) {
+    // Set a new timeout for the search functionality
+    timeoutRef.current = setTimeout(() => {
+      if (inputValue) {
         fetchPlaceSuggestions(inputValue);
-    } else {
+      } else {
         setSuggestions([]);
-    }
-};
+      }
+    }, 1000); // 1 second delay
+  }, [onChange, fetchPlaceSuggestions, setSuggestions]);
 
+  // Cleanup timeout on component unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div>
@@ -46,10 +65,21 @@ const Autocomplete = ({ value = undefined, onChange = undefined }) => {
         onChange={handleChange}
         placeholder="Enter a location"
         name='address'
+        className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg w-full"
       />
-      <ul>
+      <ul className="absolute z-50 mt-1 max-h-60 overflow-auto bg-white border rounded-md shadow-lg">
         {suggestions.map((suggestion) => (
-          <li key={suggestion.place_id}>{suggestion.description}</li>
+          <li className='p-3 border-b ' key={suggestion.place_id}>
+            <button 
+              onClick={() => {
+                if (onChange) {
+                  const fakeEvent = { target: { name: 'address', value: suggestion.description } };
+                  onChange(fakeEvent);
+                }
+                setSuggestions([]);
+              }}
+            >{suggestion.description}</button>
+          </li>
         ))}
       </ul>
     </div>
