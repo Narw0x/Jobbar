@@ -1,47 +1,58 @@
-import { useEffect, useRef } from "react";
+// React example using Axios for Google Places Autocomplete API
+import { useState, useRef } from 'react';
+import axios from 'axios';
 
-const Autocomplete = ({userAddress = undefined, handleChange = undefined}) => {
-  const inputRef = useRef(null); // Ref for the input element
-  const autocompleteRef = useRef(null); // Ref to store the autocomplete object
+const Autocomplete = ({ value = undefined, onChange = undefined }) => {
+  const [suggestions, setSuggestions] = useState([]);
+  const inputRef = useRef();
 
-  useEffect(() => {
-    if (!window.google) {
-      console.error("Google Maps API not loaded.");
-      return;
+  const fetchPlaceSuggestions = async (inputValue) => {
+    try {
+      axios.get('http://localhost:4000/api/autocomplete', {
+        params: {
+          search: inputValue,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          setSuggestions(response.data.payload.suggestions );
+        }
+      })} catch (error) {
+        console.error('Error fetching place suggestions:', error);
+      }
+  }
+
+
+  const handleChange = () => {
+    const inputValue = inputRef.current?.value || '';
+    if (onChange) {
+        const fakeEvent = { target: { name: 'autocomplete', value: inputValue } }; // Simulate `e.target`
+        onChange(fakeEvent); // Ensure consistency
     }
 
-    const autocompleteOptions = {
-      fields: ["place_id", "geometry", "name"], // Limit fields for optimization
-      types: ["address"], // Restrict results to addresses
-    };
-
-    autocompleteRef.current = new window.google.maps.places.Autocomplete(
-      inputRef.current,
-      autocompleteOptions
-    );
-
-    autocompleteRef.current.addListener("place_changed", handlePlaceSelect);
-  }, []);
-
-  // Handle place selection
-  const handlePlaceSelect = () => {
-    const place = autocompleteRef.current.getPlace();
-    if (place) {
-      console.log("Selected Place:", place);
+    if (inputValue) {
+        fetchPlaceSuggestions(inputValue);
+    } else {
+        setSuggestions([]);
     }
-  };
+};
+
 
   return (
+    <div>
       <input
         ref={inputRef}
         type="text"
-        placeholder="Enter a location"
-        className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg w-full"
-        name="address"
-        value={userAddress}
+        value={value}
         onChange={handleChange}
-        id="address"
+        placeholder="Enter a location"
+        name='address'
       />
+      <ul>
+        {suggestions.map((suggestion) => (
+          <li key={suggestion.place_id}>{suggestion.description}</li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

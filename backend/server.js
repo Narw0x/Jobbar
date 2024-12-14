@@ -19,6 +19,7 @@ app.use(cors({
 import userRoutes from "./routes/user.js";
 import companyRoutes from "./routes/company.js";
 import profileAuthRoutes from "./routes/profileAuth.js";
+import Autocomplete from './routes/autocomplete.js';
 
 app.setMaxListeners(20);
 
@@ -26,6 +27,7 @@ app.setMaxListeners(20);
 app.use('/api', userRoutes);
 app.use('/api', companyRoutes);
 app.use('/api', profileAuthRoutes);
+app.use('/api', Autocomplete);
 
 
 
