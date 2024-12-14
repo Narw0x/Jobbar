@@ -1,11 +1,8 @@
-import Button from "../components/button"
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-
 import { isValidText, isValidEmail, isValidPassword, isValidPhoneNumber } from "../util/validation";
-
-
+import Button from "../components/button"
 
 export default function RegisterUserPage() {
     const [error, setError] = useState(null);
@@ -15,40 +12,31 @@ export default function RegisterUserPage() {
         e.preventDefault(); // Prevent default form submission behavior
         const formData = new FormData(e.target);
 
-        console.log(formData);
-        
-
         // Validate first name
         if (!isValidText(formData.get('firstName') || !isValidText(formData.get('lastName')))) {
             setError('First name or Last name is invalid');
             return;
         }
-
         // Validate email
         if (!isValidEmail(formData.get('email'))) {
             setError('Email is invalid');
             return;
         }
-
         // Validate password
         if (!isValidPassword(formData.get('password'))) {
             setError('Password is invalid');
             return;
         }
-
         // Validate phone number
         if (!isValidPhoneNumber(formData.get('phone'))) {
             setError('Phone number is invalid');
             return;
         }
-
-    
         // Validate password match
         if (formData.get('password') !== formData.get('password_2')) {
             setError('Passwords do not match');
             return;
         }
-    
         // Create the data object
         const data = {
             firstName: formData.get('firstName'),
@@ -58,10 +46,6 @@ export default function RegisterUserPage() {
             gender: formData.get('gender'),
             phoneNumber: formData.get('phone'),
         };
-
-        console.log(data);
-        
-    
         // Send a POST request
         axios
             .post('http://localhost:4000/api/user/register', data)
@@ -154,7 +138,6 @@ export default function RegisterUserPage() {
                     </Button>
                 </div>
             </div>
-            
         </section>
     )
 };

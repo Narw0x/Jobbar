@@ -1,5 +1,5 @@
 import CarouselItem from './carousel-item.jsx';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const CAROUSEL_USERS = [
     {
@@ -58,7 +58,6 @@ export default function Carousel() {
                         <path d="M25 1C25 1 1 18.6756 1 25C1 31.3248 25 49 25 49" stroke="#555555"/>
                     </svg>
                 </button>
-
                 <div className="carousel-container relative overflow-hidden w-full">
                     <div
                         className={`carousel-inner flex transition-transform duration-500 ease-in-out transform ${
@@ -82,7 +81,6 @@ export default function Carousel() {
                         ))}
                     </div>
                 </div>
-
                 <button
                     onClick={handleNext}
                     className="text-3xl text-custom_gray font-bold"
@@ -93,7 +91,6 @@ export default function Carousel() {
                     </svg>
                 </button>
             </div>
-
             <div className="dots flex justify-center gap-4 mt-4">
                 {CAROUSEL_USERS.map((_, index) => (
                     <div

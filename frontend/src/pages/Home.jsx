@@ -1,8 +1,6 @@
 import { Link  } from "react-router-dom";
-
 import Button from "../components/button";
 import Features from "../components/features";
-
 
 const pathManAtTable = "./Man_at_table.svg";
 
@@ -77,7 +75,6 @@ export default function HomePage(){
                     </Link>
                 </p>
             </section>
-            {/* <img src="./fabko.jpg" className="w-full" alt="" /> */}
         </>
     )
 }

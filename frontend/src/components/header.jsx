@@ -1,22 +1,17 @@
 import axios from "axios";
-
-
-import Button from "./button";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
+import Button from "./button";
 
 const path_logo = "/jobbar_logo.svg";
 
 export default function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
     const authState = useSelector((state) => state.auth);
 
-
     function handleClick() {
-
         axios.post('http://localhost:4000/api/profile/logout', {}, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
@@ -28,7 +23,6 @@ export default function Header() {
         .catch((error) => {
             console.error('Logout failed:', error.response || error.message); 
         });
-
         navigate('/');
     }
 

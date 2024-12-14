@@ -1,12 +1,12 @@
-import Button from "../components/button"
-import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useLocation} from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 import { isValidEmail, isValidPassword } from "../util/validation";
+
+import Button from "../components/button"
 
 export default function LoginPage({type = 'user'}) {
     const [error, setError] = useState(null);
@@ -19,11 +19,7 @@ export default function LoginPage({type = 'user'}) {
 
     function handleSubmit(e) {
         e.preventDefault();
-
         message = null;
-
-
-        
         const formData = new FormData(e.target);
 
         if(!isValidEmail(formData.get('email'))){
@@ -35,8 +31,6 @@ export default function LoginPage({type = 'user'}) {
             setError('Password is invalid');
             return;
         }
-
-
     
         const data = {
             email: formData.get('email'),
@@ -56,8 +50,6 @@ export default function LoginPage({type = 'user'}) {
                 setError(error.response.data.message);
             });
     }
-
-
 
     return (
         <section className="bg-custom_bg_gray p-16">
@@ -87,14 +79,12 @@ export default function LoginPage({type = 'user'}) {
                     <hr className="w-[47%] border border-custom_gray"/>
                 </div>
                 <div className="flex flex-col text-xl gap-4"> 
-                    
                     <Button 
                         style={'red-default'}
                         redirectPath={`/login/${type.toLowerCase() === 'user' ? 'company' : 'user'}`}
                     >
                         Sign in as {type.toLowerCase() === 'user' ? 'Company' : 'User'}
                     </Button>
-
                     <Button 
                         style={'red-default'}
                         redirectPath={`/register/${type.toLowerCase()}`}
@@ -103,8 +93,6 @@ export default function LoginPage({type = 'user'}) {
                     </Button>
                 </div>
             </div>
-            
         </section>
-        
     )
 }

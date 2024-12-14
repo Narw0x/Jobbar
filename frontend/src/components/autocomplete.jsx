@@ -1,4 +1,3 @@
-// React example using Axios for Google Places Autocomplete API
 import { useState, useRef, useCallback, useEffect } from 'react';
 import axios from 'axios';
 

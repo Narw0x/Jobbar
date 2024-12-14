@@ -1,14 +1,12 @@
-
 import { useDispatch, useSelector } from "react-redux"
 import { updateUser } from "../store/slices/authSlice"
 import { useState, useEffect } from "react"
-
 import { FileUpload } from 'primereact/fileupload';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import Autocomplete from "../components/autocomplete";
 import Button from "../components/button";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 export default function EditUserProfilePage() {
     const navigate = useNavigate();
@@ -47,7 +45,6 @@ export default function EditUserProfilePage() {
     // Handle upload success
     const onSelectBg = (e) => {
         const uploadedFile = e.originalEvent.target.files[0]; // Access the file from the event
-      
         if (uploadedFile) {
             const imageUrl = URL.createObjectURL(uploadedFile); 
             setBgImage(imageUrl); 
@@ -56,17 +53,14 @@ export default function EditUserProfilePage() {
 
     const onSelectPf = (e) => {
         const uploadedFile = e.originalEvent.target.files[0]; // Access the file from the event
-      
         if (uploadedFile) {
             const imageUrl = URL.createObjectURL(uploadedFile); 
             setProfileImage(imageUrl); 
         }
-      
       };
 
     const handleEditForm = (e) => {
         e.preventDefault();
-
         const data = {
             ...userInfo,
             bgImage,
@@ -160,7 +154,6 @@ export default function EditUserProfilePage() {
                         </div>
                     </div>
                 </div>
-                
                 <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Contact</h2>
                 <div className="flex rounded-lg border border-black m-8 justify-between mt-4 flex-col">
                     <div className="flex flex-row m-8 mb-4 justify-between">
@@ -210,9 +203,6 @@ export default function EditUserProfilePage() {
                     </div>
                 </div>
             </form>
-            <div>
-                
-            </div>
         </section>
     )
 }

@@ -45,6 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'profile/:id/edit',
+        loader: checkAuthLoader,
         element: <EditUserProfilePage />
       },
     ]

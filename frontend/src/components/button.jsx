@@ -2,11 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Button({ children, style, redirectPath = undefined, onClick = undefined, type = 'submit' }) {
     const navigate = useNavigate();
-
-    
-
     let classList = '';
-
     switch (style) {
         case 'gray-default':
             classList = 'bg-white text-custom_gray border-custom_gray hover:bg-custom_gray hover:text-white';
@@ -23,12 +19,10 @@ export default function Button({ children, style, redirectPath = undefined, onCl
         default:
             break;
     }
-
     const handleClick = () => {
         if (redirectPath) navigate(redirectPath);
         if (onClick) onClick();
     };
-
     return (
         <button
             className={`border-[1px] ${classList} py-2 px-4 rounded transition-all duration-300 ease-in-out`}

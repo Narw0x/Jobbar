@@ -1,10 +1,11 @@
-import Button from "../components/button"
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import { isValidText, isValidEmail, isValidPassword, isValidPhoneNumber, isValidAddress } from "../util/validation";
 import Autocomplete from "../components/autocomplete";
+import Button from "../components/button"
+
 
 export default function RegisterCompanyPage() {
     const [error, setError] = useState(null);
@@ -12,7 +13,6 @@ export default function RegisterCompanyPage() {
 
     function handleSubmit(e) {
         e.preventDefault(); 
-        
         const formData = new FormData(e.target);
         
         // Validate company name
@@ -20,39 +20,31 @@ export default function RegisterCompanyPage() {
             setError('Company name is invalid');
             return;
         }
-
         // Validate email
         if (!isValidEmail(formData.get('email'))) {
             setError('Email is invalid');
             return;
         }
-
         // Validate password
         if (!isValidPassword(formData.get('password'))) {
             setError('Password is invalid');
             return;
         }
-
         // Validate password match
         if (formData.get('password') !== formData.get('password_2')) {
             setError('Passwords do not match');
             return;
         }
-
         // Validate address
         if (!isValidAddress(formData.get('address'))) {
             setError('Address is invalid');
             return;
         }
-
         // Validate phone number
         if (!isValidPhoneNumber(formData.get('phone'))) {
             setError('Phone number is invalid');
             return;
         }
-
-        
-    
         // Create the data object
         const data = {
             companyName: formData.get('companyName'),
@@ -61,11 +53,6 @@ export default function RegisterCompanyPage() {
             address: formData.get('address'),
             phoneNumber: formData.get('phone'),
         };
-
-        console.log(data);
-
-        
-    
         // Send a POST request
         axios
             .post('http://localhost:4000/api/company/register', data)
@@ -125,7 +112,6 @@ export default function RegisterCompanyPage() {
                     <hr className="w-[47%] border border-custom_gray"/>
                 </div>
                 <div className="flex flex-col text-xl gap-4"> 
-                    
                     <Button 
                         style={'red-default'}
                         redirectPath={`/register/user`}
@@ -141,7 +127,6 @@ export default function RegisterCompanyPage() {
                     </Button>
                 </div>
             </div>
-            
         </section>
     )
 };
