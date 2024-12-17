@@ -1,34 +1,63 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate, useLocation} from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { Toast } from 'primereact/toast';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 import { isValidEmail, isValidPassword } from "../util/validation";
+
 
 import Button from "../components/button"
 
 export default function LoginPage({type = 'user'}) {
-    const [error, setError] = useState(null);
-    const location = useLocation();
+    const toast = useRef(null);
     const navigate = useNavigate();
-    let message = location.state?.message || null;
 
     const dispatch = useDispatch();
+
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
 
 
     function handleSubmit(e) {
         e.preventDefault();
-        message = null;
         const formData = new FormData(e.target);
 
         if(!isValidEmail(formData.get('email'))){
-            setError('Email is invalid');
+            setMessageState({message:'Email is invalid', type: 'error'});
             return;
         }
 
         if(!isValidPassword(formData.get('password'))){
-            setError('Password is invalid');
+            setMessageState({message:'Password is invalid', type: 'error'});
             return;
         }
     
@@ -43,18 +72,17 @@ export default function LoginPage({type = 'user'}) {
             .post(`http://localhost:4000/api/${type.toLowerCase()}/login`, data)
             .then((response) => {
                 dispatch(loginSuccess(response.data.payload));
-                navigate('/profile/' + response.data.payload.user._id);
+                navigate('/profile/' + response.data.payload.user._id, {state: {message: response.data.message, type: 'success'}});
             })
             .catch((error) => {
                 dispatch(loginFailure());
-                setError(error.response.data.message);
+                setMessageState({message: error.response?.data.message || error.message, type: 'error'});
             });
     }
 
     return (
         <section className="bg-custom_bg_gray p-16">
-            {(error && <div className="text-custom_red border border-custom_red max-w-[1000px] flex justify-center m-auto text-center bg-red-100 rounded-lg p-4"><p>{error}</p></div>)}
-            {(message && <div className="bg-green-200 border border-green-600 text-center p-4 w-[1000px] justify-center m-auto rounded-lg text-green-800"><p>{message}</p></div>) }
+            <Toast ref={toast} />
             <div className="flex justify-center flex-col max-w-[1000px] w-[60%] m-auto border border-black rounded-lg bg-white p-16 mt-16">
                 <h1 className="text-center text-6xl text-custom_gray font-bold m-8">Sign in as {type.toLowerCase() === 'user' ? 'User' : 'Company'}</h1>
                 <form onSubmit={handleSubmit}>

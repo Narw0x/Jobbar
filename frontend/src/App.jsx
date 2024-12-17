@@ -61,7 +61,9 @@ function App() {
     value={{
       pt: {
         fileupload: {
-          chooseIcon: { className: 'mr-2' },
+          chooseIcon: { className: 'mr-2 my-auto justify-center' },
+          input: { className: 'hidden' },
+          basicButton: { className: 'flex' },
         },
       },
     }}

@@ -11,7 +11,6 @@ import Button from "../components/button";
 export default function EditUserProfilePage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [error, setError] = useState(null);
 
     const authState = useSelector((state) => state.auth);
 
@@ -74,10 +73,9 @@ export default function EditUserProfilePage() {
         })
         .then((response) => {
             dispatch(updateUser(response.data.payload.user));
-            navigate(`/profile/${authState.user._id}`);
+            navigate(`/profile/${authState.user._id}`, { state: { message: response.data.message, type: 'success' }});
         }).catch((error) => {
-            console.error('Error updating user:', error);
-            setError(error.response.data.message);
+            navigate(`/profile/${authState.user._id}`, { state: { message: error.response.data.message, type: 'error' } });
         });
     }
     
@@ -96,8 +94,9 @@ export default function EditUserProfilePage() {
                             name="demo[]" 
                             accept=".png, .jpg, .jpeg" 
                             auto maxFileSize={1000000} 
+                            unstyled={true}
                             onSelect={onSelectBg} 
-                            className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out"
+                            className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer"
                         />
                         {bgImage !== authState.user.bgImage ? <Button type="button" onClick={() => {setBgImage(authState.user.bgImage)}} style="red-default">Delete</Button>: null}
                     </div>
@@ -136,8 +135,9 @@ export default function EditUserProfilePage() {
                                 name="demo[]" 
                                 accept=".png, .jpg, .jpeg" 
                                 auto maxFileSize={1000000} 
+                                unstyled={true}
                                 onSelect={onSelectPf} 
-                                className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out" 
+                                className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer" 
                             />
                             {
                             profileImage !== authState.user.avatar ?

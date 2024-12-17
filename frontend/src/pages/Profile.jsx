@@ -1,18 +1,49 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { Toast } from 'primereact/toast';
 
 import Button from "../components/button";
 
 
 export default function ProfilePage() {
+    const toast = useRef(null);
     const { id } = useParams();
     const authState = useSelector((state) => state.auth);
     const [profileData, setProfileData] = useState(null); // State to store profile data
     const [isCurrentUser, setIsCurrentUser] = useState(false); // State to check if viewing own profile
     const [error, setError] = useState(null);
     const [isFollowing, setIsFollowing] = useState(false);
+
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
 
     useEffect(() => {
         if (authState.user._id !== id) {
@@ -35,7 +66,7 @@ export default function ProfilePage() {
             setIsCurrentUser(true); // Viewing own profile
             setProfileData(authState.user); // Use current user's data
         }
-    }, [id, authState.user]);
+    }, [id, authState.user, authState.token]);
 
     const handleFollow = () => {
         setIsFollowing(!isFollowing);
@@ -57,13 +88,14 @@ export default function ProfilePage() {
 
     return (
         <section className="bg-custom_bg_gray py-8">
-            <div className="max-w-[1440px] w-[70%] mx-auto border rounded shadow-md bg-white">
+            <Toast ref={toast}/>
+            <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white">
                 <div className="w-full object-fill">
                     <img className="w-full max-h-[250px]" src={`/${profileData?.bgImage}`} alt="" />
                 </div>
                 <div className="flex items-center">
                     <div className="w-60 h-60 rounded  m-8">
-                        <img className="object-cover rounded-lg" src={`/${profileData?.avatar}`} alt="" />
+                        <img className={`object-cover rounded-2xl p-2 ${profileData?.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`/${profileData?.avatar}`} alt="" />
                     </div>
                     <div className="ml-4 flex-1">
                         <h2 className="text-lg text-custom_gray font-semibold" id="UserName">
