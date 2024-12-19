@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import User from '../models/user.model.js';
 import Company from '../models/company.model.js';
 import Blacklist from '../models/blackList.model.js';
@@ -9,41 +10,47 @@ import { checkAuth } from '../utils/auth.js';
 
 const router = express.Router();
 
-const DEFAULT_AVATAR = '/avatar/default_profile.svg';
-const DEFAULT_BG = '/background/default_bg.png';
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Choose destination based on field name
+    // Create directories if they don't exist
+    const backgroundDir = 'public/background';
+    const avatarDir = 'public/avatar';
+    
+    if (!fs.existsSync(backgroundDir)) {
+      fs.mkdirSync(backgroundDir, { recursive: true });
+    }
+    if (!fs.existsSync(avatarDir)) {
+      fs.mkdirSync(avatarDir, { recursive: true });
+    }
+
     if (file.fieldname === 'bgImage') {
-      cb(null, 'public/background/');
+      cb(null, backgroundDir);
     } else if (file.fieldname === 'avatar') {
-      cb(null, 'public/avatar/');
-    } else {
-      cb(null, 'public/');
+      cb(null, avatarDir);
     }
   },
   filename: (req, file, cb) => {
-    // Create unique filename with original extension
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  },
-});
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
-  } else {
-    cb(new Error('Not an image! Please upload an image.'), false);
   }
-};
-
-
+});
 
 const upload = multer({
   storage: storage,
-  fileFilter: fileFilter,
-});
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'));
+    }
+  },
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB
+  }
+}).fields([
+  { name: 'bgImage', maxCount: 1 },
+  { name: 'avatar', maxCount: 1 }
+]);
 
 
 router.post('/profile/logout', async (req, res) => {
@@ -83,70 +90,57 @@ router.get('/profile/:id', checkAuth, async (req, res) => {
     }
 });
 
-router.put('/profile/edit/:id',
-   checkAuth,
-   upload.fields([
-    { name: 'bgImage', maxCount: 1 },
-    { name: 'avatar', maxCount: 1 }
-  ]),
-  async (req, res) => {
-    const { id } = req.params;
-    const updateData = req.body;  // Get all update fields from request body
+router.put('/profile/edit/:id', checkAuth, upload, async (req, res) => {
+  console.log('Files received:', req.files); // Debug logging
+  console.log('Body received:', req.body); // Debug logging
+  const { id } = req.params;
 
-    try {
-      // Find profile in either User or Company collection
-      let profile = await User.findById(id);
-      if (!profile) profile = await Company.findById(id);
-      if (!profile) return res.status(404).json({ message: 'Profile not found' });
+  try {
+    let profile = await User.findById(id);
+    if (!profile) profile = await Company.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
 
-      if (req.files) {
-        // Handle background image
-        if (req.files.bgImage) {
-          // Only delete old image if it's not the default
-          if (profile.bgImage && profile.bgImage !== DEFAULT_BG) {
-            const oldPath = path.join(__dirname, '..', 'public', profile.bgImage);
-            if (fs.existsSync(oldPath)) {
-              fs.unlinkSync(oldPath);
-            }
-          }
-          profile.bgImage = `/background/${req.files.bgImage[0].filename}`;
-        }
+    if (req.files) {
+      // Background Image
+      if (req.files.bgImage && req.files.bgImage[0]) {
+        const oldBgImage = profile.bgImage;
+        profile.bgImage = req.files.bgImage[0].filename;
 
-        // Handle avatar
-        if (req.files.avatar) {
-          // Only delete old image if it's not the default
-          if (profile.avatar && profile.avatar !== DEFAULT_AVATAR) {
-            const oldPath = path.join(__dirname, '..', 'public', profile.avatar);
-            if (fs.existsSync(oldPath)) {
-              fs.unlinkSync(oldPath);
-            }
-          }
-          profile.avatar = `/avatar/${req.files.avatar[0].filename}`;
+        // Delete the old background image
+        if (oldBgImage && fs.existsSync(`public/background/${oldBgImage}`)) {
+          fs.unlinkSync(`public/background/${oldBgImage}`);
         }
       }
 
-      Object.keys(updateData).forEach(field => {
-        if (updateData[field] !== undefined && 
-            profile[field] !== undefined && 
-            field !== 'bgImage' && 
-            field !== 'avatar') {
-          profile[field] = updateData[field];
+      // Avatar
+      if (req.files.avatar && req.files.avatar[0]) {
+        const oldAvatar = profile.avatar;
+        profile.avatar = req.files.avatar[0].filename;
+
+        // Delete the old avatar
+        if (oldAvatar && fs.existsSync(`public/avatar/${oldAvatar}`)) {
+          fs.unlinkSync(`public/avatar/${oldAvatar}`);
         }
-      });
+      }
+    }
 
+    // Handle other form data
+    Object.keys(req.body).forEach(field => {
+      if (field !== 'bgImage' && field !== 'avatar' && profile[field] !== undefined) {
+        profile[field] = req.body[field];
+      }
+    });
 
+    await profile.save();
 
-      // Save the updated profile
-      await profile.save();
-
-      res.status(200).json({
-        message: 'Profile updated successfully',
-        payload: { user: profile }
-      });
+    res.status(200).json({
+      message: 'Profile updated successfully',
+      payload: { user: profile }
+    });
   } catch (error) {
-    console.error('Error updating user profile:', error);
+    console.error('Error in profile update:', error);
     res.status(500).json({
-      message: 'Error in updating user profile.',
+      message: 'Error updating profile',
       error: error.message
     });
   }
