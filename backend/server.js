@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import path from 'path';
 const app = express();
 const port = 4000;
 
@@ -15,10 +16,13 @@ app.use(cors({
   credentials: true // Include cookies if needed
 }));
 
+const __dirname = path.resolve();
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
 // Import routes
 import userRoutes from "./routes/user.js";
 import companyRoutes from "./routes/company.js";
-import profileAuthRoutes from "./routes/profileAuth.js";
+import profileRoutes from "./routes/profile.js";
 import Autocomplete from './routes/autocomplete.js';
 
 app.setMaxListeners(20);
@@ -26,7 +30,7 @@ app.setMaxListeners(20);
 // Setup all the routes
 app.use('/api', userRoutes);
 app.use('/api', companyRoutes);
-app.use('/api', profileAuthRoutes);
+app.use('/api', profileRoutes);
 app.use('/api', Autocomplete);
 
 

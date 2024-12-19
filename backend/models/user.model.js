@@ -40,9 +40,11 @@ const userSchema = new mongoose.Schema({
     education: {
         type: Array,
         default: []
-    },address: {
+    },
+    address: {
         type: String,
-        trim: true
+        trim: true,
+        default: ''
     },
     avatar: {
         type: String,
