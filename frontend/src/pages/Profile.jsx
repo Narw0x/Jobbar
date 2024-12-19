@@ -86,6 +86,7 @@ export default function ProfilePage() {
         );
     }
 
+
     return (
         <section className="bg-custom_bg_gray py-8">
             <Toast ref={toast}/>
@@ -95,45 +96,47 @@ export default function ProfilePage() {
                 </div>
                 <div className="flex items-center">
                     <div className="w-60 h-60 rounded  m-8">
-                        <img className={`object-cover rounded-2xl p-2 ${profileData?.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${profileData?.avatar}`} alt="" />
+                        <img className={`w-full h-full object-cover rounded-2xl p-2 ${profileData?.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${profileData?.avatar}`} alt="" />
                     </div>
-                    <div className="ml-4 flex-1">
-                        <h2 className="text-lg text-custom_gray font-semibold" id="UserName">
-                            {profileData?.firstName || profileData?.companyName}
-                        </h2>
-                        {profileData.address && <p className="text-sm text-gray-500">
-                            {profileData.address}
-                        </p>}
-                        
-                    </div>
-
-                    <div className="m-4 flex gap-4">
-                        <div className="flex gap-4 text-custom_gray justify-center m-auto">
-                            <p>Followers: <span>{profileData?.followers?.length || 0}</span></p>
+                    <div className="flex w-full justify-between">
+                        <div className="ml-4 flex-1">
+                            <h2 className="text-lg text-custom_gray font-semibold" id="UserName">
+                                {profileData?.firstName || profileData?.companyName}
+                            </h2>
+                            {profileData.address && <p className="text-sm text-gray-500">
+                                {profileData.address}
+                            </p>}
                             
                         </div>
-                        {!isCurrentUser && (
-                            !isFollowing ? (<Button
-                                style="red-hover"
-                                onClick={handleFollow}
-                            >
-                                Follow
-                            </Button>) : (<Button
-                                style="red-default"
-                                onClick={handleFollow}
-                            >
-                                Following
-                            </Button>)
-
-                        )}
-                        {isCurrentUser && (
-                            <div className="flex justify-center m-auto">
-                                <Link to={`/profile/${authState.user._id}/edit`}>
-                                    <img className="rotate-90" src="/settings.svg" alt="" />
-                                </Link>
+                        <div className="m-4 mt-0 flex gap-4">
+                            <div className="flex gap-4 text-custom_gray justify-center m-auto">
+                                <p>Followers: <span>{profileData?.followers?.length || 0}</span></p>
+                                
                             </div>
-                        )}
+                            {!isCurrentUser && (
+                                !isFollowing ? (<Button
+                                    style="red-hover"
+                                    onClick={handleFollow}
+                                >
+                                    Follow
+                                </Button>) : (<Button
+                                    style="red-default"
+                                    onClick={handleFollow}
+                                >
+                                    Following
+                                </Button>)
+
+                            )}
+                            {isCurrentUser && (
+                                <div className="flex justify-center m-auto">
+                                    <Link to={`/profile/${authState.user._id}/edit`}>
+                                        <img className="rotate-90" src="/settings.svg" alt="" />
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
                     </div>
+                    
                 </div>
             </div>
             <div>
@@ -146,19 +149,19 @@ export default function ProfilePage() {
                 {profileData.experience && (
                     <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
                         <h2 className="text-lg text-custom_gray font-semibold">Experience</h2>
-                        {Array.isArray(profileData.experience) && profileData.experience.length === 0 && (
+                        {Array.isArray(profileData.experience) && profileData.experience.length === 1 && (
                             <p className="text-sm text-gray-500">
                                 No experience
                             </p>
                         )}
-                        {Array.isArray(profileData.experience) && profileData.experience.map((exp) => (
+                        {/* {Array.isArray(profileData.experience) && profileData.experience.map((exp) => (
                             <div key={exp._id} className="border-b border-gray-200 py-4">
                                 <h3 className="text-md text-custom_gray font-semibold">{exp.position}</h3>
                                 <p className="text-sm text-gray-500">{exp.company}</p>
                                 <p className="text-sm text-gray-500">{exp.startDate} - {exp.endDate}</p>
                                 <p className="text-sm text-gray-500">{exp.description}</p>
                             </div>
-                        ))}
+                        ))} */}
                     </div>
                 )}
                 {profileData.education && (

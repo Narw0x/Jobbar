@@ -64,7 +64,7 @@ export default function Header() {
                             About us
                         </NavLink>
                     </div>
-                    <div className="flex gap-4 flex-row-reverse">
+                    <div className="flex gap-4">
                         {authState.token ? (
                             <div className="relative group">
                             <NavLink
@@ -75,7 +75,10 @@ export default function Header() {
                                 }`
                               }
                             >
-                              <div className="flex items-center space-x-2 max-w-48 min-w-32">
+                              <div className="flex items-center flex-row-reverse max-w-48 min-w-32">
+                                <p id="profileName" className="truncate ml-2">
+                                  {authState.user?.firstName || authState.user?.companyName}
+                                </p>
                                 <svg
                                   width="48"
                                   height="48"
@@ -93,29 +96,58 @@ export default function Header() {
                                     stroke="currentColor"
                                   />
                                 </svg>
-                                <p id="profileName" className="truncate ">
-                                  {authState.user?.firstName || authState.user?.companyName}
-                                </p>
                               </div>
                             </NavLink>
                       
                             {/* Dropdown menu */}
-                            <ul className="absolute mt-2 w-48 py-2 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <ul className="absolute mt-2 w-48 bg-white rounded-md  shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:rounded-md transition-all duration-300 z-50">
                               <li>
-                                <NavLink
-                                  to={`/profile/${authState.user._id}/edit`}
-                                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-custom_red"
-                                >
-                                  Settings
-                                </NavLink>
+                                    <NavLink
+                                        to={`/profile/${authState.user._id}/edit`}
+                                         className="flex gap-2 w-full text-left px-4 py-2 text-gray-800 rounded-t-md hover:bg-gray-100 hover:text-custom_red m-auto align-middle"
+                                    >
+                                        <svg 
+                                            xmlns="http://www.w3.org/2000/svg" 
+                                            width="16" 
+                                            height="16" 
+                                            viewBox="0 0 24 24" 
+                                            fill="none" 
+                                            stroke="currentColor" 
+                                            strokeWidth="2" 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round" 
+                                            className="lucide lucide-settings my-auto"
+                                            >
+                                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                        Settings
+                                    </NavLink>
                               </li>
                               <li>
-                                <button
-                                  onClick={handleClick}
-                                  className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-custom_red"
-                                >
-                                  Logout
-                                </button>
+                                    
+                                    <button
+                                    onClick={handleClick}
+                                    className="flex gap-2 w-full text-left px-4 py-2 text-gray-800 rounded-b-md hover:bg-gray-100 hover:text-custom_red m-auto align-middle"
+                                    >
+                                        <svg 
+                                            xmlns="http://www.w3.org/2000/svg" 
+                                            width="16" 
+                                            height="16" 
+                                            viewBox="0 0 24 24" 
+                                            fill="none" 
+                                            stroke="currentColor" 
+                                            strokeWidth="2" 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round" 
+                                            className="lucide lucide-log-out my-auto"
+                                            >
+                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                            <polyline points="16 17 21 12 16 7" />
+                                            <line x1="21" y1="12" x2="9" y2="12" />
+                                        </svg>
+                                        Logout
+                                    </button>
                               </li>
                             </ul>
                           </div>

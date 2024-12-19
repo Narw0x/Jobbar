@@ -15,7 +15,10 @@ export default function EditUserProfilePage() {
     const authState = useSelector((state) => state.auth);
 
     const [bgImage, setBgImage] = useState(authState.user.bgImage);
-    const [profileImage, setProfileImage] = useState(authState.user.avatar);
+    const [avatar, setAvatar] = useState(authState.user.avatar);
+
+    const [bgPreview, setBgPreview] = useState(authState.user.bgImage);
+    const [avatarPreview, setAvatarPreview] = useState(authState.user.avatar);
 
     const [userInfo, setUserInfo] = useState({
         ...authState.user,
@@ -31,43 +34,56 @@ export default function EditUserProfilePage() {
 
     useEffect(() => {
         return () => {
-          if (bgImage && bgImage.startsWith("blob:")) {
-            URL.revokeObjectURL(bgImage);
+          if (bgPreview && bgPreview.startsWith("blob:")) {
+            URL.revokeObjectURL(bgPreview);
           }
-          if (profileImage && profileImage.startsWith("blob:")) {
-            URL.revokeObjectURL(profileImage);
+          if (avatarPreview && avatarPreview.startsWith("blob:")) {
+            URL.revokeObjectURL(avatarPreview);
           }
         };
-      }, [bgImage, profileImage]);
+      }, [bgPreview, avatarPreview]);
 
 
     const onSelectBg = (e) => {
-        const uploadedFile = e.originalEvent.target.files[0]; // Access the file from the event
-        console.log(e.originalEvent.target.files);
-        if (uploadedFile) {
-            const imageUrl = URL.createObjectURL(uploadedFile); 
-            setBgImage(imageUrl); 
+        const file = e.originalEvent.target.files[0];
+        if (file) {
+          setBgImage(file); // Store the actual file object for upload
+          // Optional: Create URL for preview
+          const previewUrl = URL.createObjectURL(file);
+          setBgPreview(previewUrl); // If you need to show a preview
         }
     };
 
 
     const onSelectPf = (e) => {
-        const uploadedFile = e.originalEvent.target.files[0]; // Access the file from the event
-        if (uploadedFile) {
-            const imageUrl = URL.createObjectURL(uploadedFile); 
-            setProfileImage(imageUrl); 
+        const file = e.originalEvent.target.files[0];
+        if (file) {
+          setAvatar(file); // Store the actual file object for upload
+          // Optional: Create URL for preview
+          const previewUrl = URL.createObjectURL(file);
+          setAvatarPreview(previewUrl); // If you need to show a preview
         }
       };
 
     const handleEditForm = (e) => {
         e.preventDefault();
-        const data = {
-            ...userInfo,
-            bgImage,
-            avatar: profileImage,
-        };
+        // Create a FormData object for sending files
+        const formData = new FormData();
+        
+        // Add all userInfo fields to formData
+        Object.keys(userInfo).forEach(key => {
+            formData.append(key, userInfo[key]);
+        });
 
-        axios.put(`http://localhost:4000/api/profile/edit/${authState.user._id}`, data, {
+        // Add the image files if they exist
+        if (bgImage) {
+            formData.append('bgImage', bgImage);
+        }
+        if (avatar) {
+            formData.append('avatar', avatar);
+        }
+
+        axios.put(`http://localhost:4000/api/profile/edit/${authState.user._id}`, formData, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
             },
@@ -86,7 +102,7 @@ export default function EditUserProfilePage() {
             <form className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white" onSubmit={handleEditForm}>
                 <div>
                     <div className="w-full object-fill flex end flex-col">
-                        <img className="w-full max-h-[250px] rounded-t" src={bgImage === userInfo.bgImage ? `/${bgImage}`: bgImage} alt="" />
+                        <img className="w-full max-h-[250px] rounded-t" src={authState.user.bgImage === bgPreview ? `http://localhost:4000/public/background/${userInfo?.bgImage}`:`${bgPreview}`} alt="" />
                         <hr className="bg-black"/>
                     </div>
                     <div className="flex m-4 ml-auto justify-end gap-4">
@@ -130,7 +146,7 @@ export default function EditUserProfilePage() {
                         </div>
                     </div>
                     <div className="basis-1/3 m-8 flex flex-col gap-4 pt-8">
-                        <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center"  src={profileImage === userInfo.avatar ? `/${profileImage}`: profileImage} alt="" />
+                        <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center" src={authState.user.avatar === avatarPreview ? `http://localhost:4000/public/avatar/${userInfo?.avatar}`:`${avatarPreview}`} alt="" />
                         <div className="flex justify-center gap-4">
                             <FileUpload 
                                 mode="basic" 
@@ -143,10 +159,10 @@ export default function EditUserProfilePage() {
                                 className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer" 
                             />
                             {
-                            profileImage !== authState.user.avatar ?
+                            avatar !== authState.user.avatar ?
                                 <Button 
                                     type="button" 
-                                    onClick={() => {setProfileImage(authState.user.avatar);}} 
+                                    onClick={() => {setAvatar(authState.user.avatar);}} 
                                     style="red-default"
                                 >
                                     Delete

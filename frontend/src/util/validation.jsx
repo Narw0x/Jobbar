@@ -1,8 +1,9 @@
 import axios from "axios";
 
-export function isValidText(value, minLength = 1) {
-    return value && value.trim().length >= minLength;
-  }
+export function isValidText(value, minLength = 1, maxLength = 35) {
+  if (!value || typeof value !== 'string') return false;
+  return value.trim().length >= minLength && value.trim().length <= maxLength;
+}
 
   export function isValidEmail(value) {
     if (!value || typeof value !== 'string') return false;
