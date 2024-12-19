@@ -8,6 +8,7 @@ import RegisterCompanyPage from './pages/RegisterCompany';
 import RegisterUserPage from './pages/RegisterUser';
 import ProfilePage from './pages/Profile';
 import EditUserProfilePage from './pages/EditUserProfile';
+import EditExperiencePage from './pages/EditExperience';
 import { checkAuthLoader } from './util/auth';
 
 import { PrimeReactProvider } from "primereact/api";
@@ -48,6 +49,11 @@ const router = createBrowserRouter([
         loader: checkAuthLoader,
         element: <EditUserProfilePage />
       },
+      {
+        path: 'profile/:id/experience/edit',
+        loader: checkAuthLoader,
+        element: <EditExperiencePage />
+      }
     ]
   },
 ]);
