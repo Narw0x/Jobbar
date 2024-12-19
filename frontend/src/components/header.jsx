@@ -64,26 +64,61 @@ export default function Header() {
                             About us
                         </NavLink>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 flex-row-reverse">
                         {authState.token ? (
-                            <div className="flex gap-4">
-                                <Button onClick={handleClick} style="gray-default">Logout</Button>
-                                <NavLink
-                                    to={`/profile/${authState.user._id}`}
-                                    className={({isActive}) => isActive ? "flex items-center gap-1 cursor-pointer text-custom_red": "flex items-center gap-1 cursor-pointer hover:text-custom_red transition-colors duration-300"}
+                            <div className="relative group">
+                            <NavLink
+                              to={`/profile/${authState.user._id}`}
+                              className={({ isActive }) =>
+                                `flex items-center gap-1 cursor-pointer ${
+                                  isActive ? 'text-custom_red' : 'hover:text-custom_red transition-colors duration-300'
+                                }`
+                              }
+                            >
+                              <div className="flex items-center space-x-2 max-w-48 min-w-32">
+                                <svg
+                                  width="48"
+                                  height="48"
+                                  viewBox="0 0 48 48"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="flex-shrink-0"
                                 >
-                                    <div className="flex ">
-                                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" stroke="currentColor" />
-                                            <path d="M15 34C19.6634 29.1156 28.2864 28.8856 33 34M28.9902 19C28.9902 21.7614 26.7484 24 23.983 24C21.2178 24 18.9759 21.7614 18.9759 19C18.9759 16.2386 21.2178 14 23.983 14C26.7484 14 28.9902 16.2386 28.9902 19Z" stroke="currentColor"/>
-                                        </svg>
-                                        <p id="profileName" className="items-center justify-center m-auto">
-                                            {authState.user?.firstName || authState.user?.companyName}
-                                        </p>
-                                    </div>
-                                    
+                                  <path
+                                    d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
+                                    stroke="currentColor"
+                                  />
+                                  <path
+                                    d="M15 34C19.6634 29.1156 28.2864 28.8856 33 34M28.9902 19C28.9902 21.7614 26.7484 24 23.983 24C21.2178 24 18.9759 21.7614 18.9759 19C18.9759 16.2386 21.2178 14 23.983 14C26.7484 14 28.9902 16.2386 28.9902 19Z"
+                                    stroke="currentColor"
+                                  />
+                                </svg>
+                                <p id="profileName" className="truncate ">
+                                  {authState.user?.firstName || authState.user?.companyName}
+                                </p>
+                              </div>
+                            </NavLink>
+                      
+                            {/* Dropdown menu */}
+                            <ul className="absolute mt-2 w-48 py-2 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                              <li>
+                                <NavLink
+                                  to={`/profile/${authState.user._id}/edit`}
+                                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-custom_red"
+                                >
+                                  Settings
                                 </NavLink>
-                            </div>
+                              </li>
+                              <li>
+                                <button
+                                  onClick={handleClick}
+                                  className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-custom_red"
+                                >
+                                  Logout
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
                         ) : (
                             <>
                                 <NavLink

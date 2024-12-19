@@ -41,14 +41,15 @@ export default function EditUserProfilePage() {
       }, [bgImage, profileImage]);
 
 
-    // Handle upload success
     const onSelectBg = (e) => {
         const uploadedFile = e.originalEvent.target.files[0]; // Access the file from the event
+        console.log(e.originalEvent.target.files);
         if (uploadedFile) {
             const imageUrl = URL.createObjectURL(uploadedFile); 
             setBgImage(imageUrl); 
         }
-      };
+    };
+
 
     const onSelectPf = (e) => {
         const uploadedFile = e.originalEvent.target.files[0]; // Access the file from the event
@@ -93,9 +94,10 @@ export default function EditUserProfilePage() {
                             mode="basic" 
                             name="demo[]" 
                             accept=".png, .jpg, .jpeg" 
-                            auto maxFileSize={1000000} 
+                            auto = {false}
+                            maxFileSize={1000000} 
                             unstyled={true}
-                            onSelect={onSelectBg} 
+                            onSelect={onSelectBg}
                             className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer"
                         />
                         {bgImage !== authState.user.bgImage ? <Button type="button" onClick={() => {setBgImage(authState.user.bgImage)}} style="red-default">Delete</Button>: null}
@@ -128,13 +130,14 @@ export default function EditUserProfilePage() {
                         </div>
                     </div>
                     <div className="basis-1/3 m-8 flex flex-col gap-4 pt-8">
-                        <img className="rounded-lg w-60 h-60 flex m-auto justify-center"  src={profileImage === userInfo.avatar ? `/${profileImage}`: profileImage} alt="" />
+                        <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center"  src={profileImage === userInfo.avatar ? `/${profileImage}`: profileImage} alt="" />
                         <div className="flex justify-center gap-4">
                             <FileUpload 
                                 mode="basic" 
                                 name="demo[]" 
                                 accept=".png, .jpg, .jpeg" 
-                                auto maxFileSize={1000000} 
+                                auto = {false} 
+                                maxFileSize={1000000} 
                                 unstyled={true}
                                 onSelect={onSelectPf} 
                                 className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer" 
