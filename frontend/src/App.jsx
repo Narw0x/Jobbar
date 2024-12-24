@@ -45,12 +45,12 @@ const router = createBrowserRouter([
         element: <ProfilePage />,
       },
       {
-        path: 'profile/:id/edit',
+        path: 'profile/edit',
         loader: checkAuthLoader,
         element: <EditUserProfilePage />
       },
       {
-        path: 'profile/:id/experience/edit',
+        path: 'profile/experience/edit',
         loader: checkAuthLoader,
         element: <EditExperiencePage />
       }
@@ -70,6 +70,16 @@ function App() {
           chooseIcon: { className: 'mr-2 my-auto justify-center' },
           input: { className: 'hidden' },
           basicButton: { className: 'flex' },
+        },
+        calendar: {
+          input: ({ props }) => ({
+            root: {
+                className: "shadow-none border border-black bg-white focus:bg-white rounded p-2 my-2 text-lg",
+            }
+          }),
+          month: ({ context }) => ({
+            className: "shadow-none rounded-none",
+          }),
         },
       },
     }}

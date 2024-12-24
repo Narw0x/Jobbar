@@ -84,6 +84,7 @@ export default function Header() {
                                   height="48"
                                   viewBox="0 0 48 48"
                                   fill="none"
+                                  strokeWidth="1.25"
                                   xmlns="http://www.w3.org/2000/svg"
                                   className="flex-shrink-0"
                                 >
@@ -103,7 +104,7 @@ export default function Header() {
                             <ul className="absolute mt-2 w-48 bg-white rounded-md  shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:rounded-md transition-all duration-300 z-50">
                               <li>
                                     <NavLink
-                                        to={`/profile/${authState.user._id}/edit`}
+                                        to={`/profile/edit`}
                                          className="flex gap-2 w-full text-left px-4 py-2 text-gray-800 rounded-t-md hover:bg-gray-100 hover:text-custom_red m-auto align-middle"
                                     >
                                         <svg 

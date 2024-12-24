@@ -6,7 +6,6 @@ import { isValidText, isValidEmail, isValidPassword, isValidPhoneNumber, isValid
 import Autocomplete from "../components/autocomplete";
 import Button from "../components/button"
 
-
 export default function RegisterCompanyPage() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -57,7 +56,7 @@ export default function RegisterCompanyPage() {
         axios
             .post('http://localhost:4000/api/company/register', data)
             .then((response) => {
-                navigate('/login/company', { state: { message: response.data.message } });
+                navigate('/login/company', {state: {message: response.data.message, type: 'success'}});
             })
             .catch((error) => {
                 console.error('Error:', error.response?.data || error.message); // Handle error

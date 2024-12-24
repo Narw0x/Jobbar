@@ -23,13 +23,13 @@ export default function EditExperiencePage() {
                 <div>
                     <form className="flex flex-row mt-4">
                         <div className="flex flex-col flex-1 mt-2">
-                            <div>
+                            <div className="flex flex-col">
                                 <label htmlFor="jobTitle" className="text-lg text-custom_gray">Job Title</label>
-                                <input type="text" id="jobTitle" className="w-full border border-gray-200 rounded-lg p-2" />
+                                <input type="text" id="jobTitle" className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" />
                             </div>
-                            <div className="mt-2">
+                            <div className="mt-2 flex flex-col">
                                 <label htmlFor="company" className="text-lg text-custom_gray">Company</label>
-                                <input type="text" id="company" className="w-full border border-gray-200 rounded-lg p-2" />
+                                <input type="text" id="company" className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" />
                             </div>
                             <div className="mt-2">
                                 <label className="text-lg text-custom_gray">Employment Type</label>
@@ -44,13 +44,13 @@ export default function EditExperiencePage() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-row gap-4 mt-2">
+                            <div className="flex flex-col">
                                     <label htmlFor="Date" className="text-lg text-custom_gray">Date</label>
-                                    <Calendar value={date} onChange={(e) => setDate(e.value)} view="month" dateFormat="mm/yy"  selectionMode="range" readOnlyInput hideOnRangeSelection className="border rounded "/>
+                                    <Calendar value={date} onChange={(e) => setDate(e.value)} maxDate={new Date()} view="month" dateFormat="mm/yy"  selectionMode="range" readOnlyInput hideOnRangeSelection />
                             </div>
                             <div className="mt-2">
                                 <label htmlFor="description" className="text-lg text-custom_gray">Description</label>
-                                <textarea id="description" className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray p-2 my-2 text-lg w-full resize-none rounded-lg" />
+                                <textarea id="description" className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray p-2 my-2 text-lg w-full resize-none rounded" />
                             </div>
                         </div>
                         <div className="flex flex-col flex-1 mt-[-1rem]">

@@ -50,7 +50,7 @@ export default function RegisterUserPage() {
         axios
             .post('http://localhost:4000/api/user/register', data)
             .then((response) => {
-                navigate('/login/user', { state: { message: response.data.message } });
+                navigate('/login/user', { state: { message: response.data.message, type: 'success' } });
             })
             .catch((error) => {
                 console.error('Error:', error.response?.data || error.message); // Handle error

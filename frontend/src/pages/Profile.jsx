@@ -110,7 +110,7 @@ export default function ProfilePage() {
                         </div>
                         <div className="m-4 mt-0 flex gap-4">
                             <div className="flex gap-4 text-custom_gray justify-center m-auto">
-                                <p>Followers: <span>{profileData?.followers?.length - 1 || 0}</span></p>
+                                <p>Followers: <span>{profileData?.followers?.length || 0}</span></p>
                                 
                             </div>
                             {!isCurrentUser && (
@@ -129,7 +129,7 @@ export default function ProfilePage() {
                             )}
                             {isCurrentUser && (
                                 <div className="flex justify-center m-auto">
-                                    <Link to={`/profile/${authState.user._id}/edit`}>
+                                    <Link to={`/profile/edit`}>
                                         <img className="rotate-90" src="/settings.svg" alt="" />
                                     </Link>
                                 </div>
@@ -149,7 +149,7 @@ export default function ProfilePage() {
                 {profileData.experience && (
                     <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
                         <h2 className="text-lg text-custom_gray font-semibold">Experience</h2>
-                        {Array.isArray(profileData.experience) && profileData.experience.length === 1 ? (
+                        {Array.isArray(profileData.experience) && profileData.experience.length === 0 ? (
                             <p className="text-sm text-gray-500">
                                 No experience
                             </p>

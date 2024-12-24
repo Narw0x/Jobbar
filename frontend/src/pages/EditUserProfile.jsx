@@ -21,7 +21,20 @@ export default function EditUserProfilePage() {
     const [avatarPreview, setAvatarPreview] = useState(authState.user.avatar);
 
     const [userInfo, setUserInfo] = useState({
-        ...authState.user,
+        firstName: authState.user.firstName,
+        lastName: authState.user.lastName,
+        companyName: authState.user.companyName,
+        address: authState.user.address,
+        about: authState.user.about,
+        phoneNumber: authState.user.phoneNumber,
+        website: authState.user.website,
+        socialMedia: {
+            twitter: authState.user.socialMedia.twitter,
+            instagram: authState.user.socialMedia.instagram,
+            github: authState.user.socialMedia.github,
+        },
+        bgImage: authState.user.bgImage,
+        avatar: authState.user.avatar,
     });
 
     const handleUserInfoChange = (e) => {
@@ -31,6 +44,17 @@ export default function EditUserProfilePage() {
             [name]: value,
         }));
     };
+
+    const handleUserSocialChange = (e) => {
+        const { name, value } = e.target;
+        setUserInfo((prevState) => ({
+            ...prevState,
+            socialMedia: {
+                ...prevState.socialMedia,
+                [name]: value,
+            },
+        }));
+    }
 
     useEffect(() => {
         return () => {
@@ -71,9 +95,15 @@ export default function EditUserProfilePage() {
         const formData = new FormData();
         
         // Add all userInfo fields to formData
-        Object.keys(userInfo).forEach(key => {
-            formData.append(key, userInfo[key]);
-        });
+        for (const key in userInfo) {
+            if (key === 'socialMedia') {
+                for (const socialKey in userInfo[key]) {
+                    formData.append(`socialMedia[${socialKey}]`, userInfo[key][socialKey].toString());
+                }
+            } else {
+                formData.append(key, userInfo[key]);
+            }
+        }
 
         // Add the image files if they exist
         if (bgImage) {
@@ -82,6 +112,8 @@ export default function EditUserProfilePage() {
         if (avatar) {
             formData.append('avatar', avatar);
         }
+
+        
 
         axios.put(`http://localhost:4000/api/profile/edit/${authState.user._id}`, formData, {
             headers: {
@@ -189,15 +221,15 @@ export default function EditUserProfilePage() {
                         <div className="flex flex-row mb-4 w-full justify-between">
                             <div className="w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="twitter">Twitter</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserInfoChange}  value={userInfo.socialMedia.twitter || ''} type="text" name="twitter" id="twitter" />
+                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.twitter || ''} type="text" name="twitter" id="twitter" />
                             </div>
                             <div className="w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="instagram">Instagram</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserInfoChange}  value={userInfo.socialMedia.instagram || ''} type="text" name="instagram" id="instagram" />
+                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.instagram || ''} type="text" name="instagram" id="instagram" />
                             </div>
                             <div className="w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="github">Github</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserInfoChange}  value={userInfo.socialMedia.github || ''} type="text" name="github" id="github" />
+                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.github || ''} type="text" name="github" id="github" />
                             </div>
                         </div>
                     </div>
