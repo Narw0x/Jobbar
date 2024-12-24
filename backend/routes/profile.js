@@ -91,9 +91,8 @@ router.get('/profile/:id', checkAuth, async (req, res) => {
 });
 
 router.put('/profile/edit/:id', checkAuth, upload, async (req, res) => {
-  console.log('Files received:', req.files); // Debug logging
-  console.log('Body received:', req.body); // Debug logging
   const { id } = req.params;
+  const { firstName, lastName, address, about, phone, website, socialMedia } = req.body;
 
   try {
     let profile = await User.findById(id);
@@ -107,7 +106,7 @@ router.put('/profile/edit/:id', checkAuth, upload, async (req, res) => {
         profile.bgImage = req.files.bgImage[0].filename;
 
         // Delete the old background image
-        if (oldBgImage && fs.existsSync(`public/background/${oldBgImage}`)) {
+        if(oldBgImage && fs.existsSync(`public/background/${oldBgImage}` && oldBgImage !== 'default_bg.png')) {
           fs.unlinkSync(`public/background/${oldBgImage}`);
         }
       }
@@ -118,18 +117,23 @@ router.put('/profile/edit/:id', checkAuth, upload, async (req, res) => {
         profile.avatar = req.files.avatar[0].filename;
 
         // Delete the old avatar
-        if (oldAvatar && fs.existsSync(`public/avatar/${oldAvatar}`)) {
+        if (oldAvatar && fs.existsSync(`public/avatar/${oldAvatar}`) && oldAvatar !== 'default_profile.svg') {
           fs.unlinkSync(`public/avatar/${oldAvatar}`);
         }
       }
     }
 
     // Handle other form data
-    Object.keys(req.body).forEach(field => {
-      if (field !== 'bgImage' && field !== 'avatar' && profile[field] !== undefined) {
-        profile[field] = req.body[field];
+    const data = { firstName, lastName, address, about, phone, website, socialMedia };
+    for (const key in data) {
+      if (data[key]) {
+        if (Array.isArray(data[key])) {
+          profile[key] = [...data[key]];
+        }
+        profile[key] = data[key];
       }
-    });
+    }
+
 
     await profile.save();
 

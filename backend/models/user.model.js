@@ -55,8 +55,12 @@ const userSchema = new mongoose.Schema({
         default: "default_bg.png"
     },
     socialMedia: {
-        type: Array,
-        default: []
+        type: Object,
+        default: {
+            twitter: '',
+            instagram: '', 
+            github: ''
+        }
     },
     website: {
         type: String,
