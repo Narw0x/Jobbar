@@ -5,6 +5,7 @@ import axios from "axios";
 import { Toast } from 'primereact/toast';
 
 import Button from "../components/button";
+import ErrorPage from "./Error";
 
 
 export default function ProfilePage() {
@@ -46,6 +47,7 @@ export default function ProfilePage() {
     }, [messageState]);
 
     useEffect(() => {
+        
         if (authState.user._id !== id) {
             setIsCurrentUser(false); // Viewing someone else's profile
             axios.get(`http://localhost:4000/api/profile/${id}`, {
@@ -72,20 +74,26 @@ export default function ProfilePage() {
         setIsFollowing(!isFollowing);
     }
 
-    if (!profileData) {
-        return <p>Loading...</p>;
-    }
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('en-US', {
+          year: 'numeric',
+          month: 'short'
+        }).format(date);
+    };
+
+    
 
     if(error) {
         return (
-            <section className="bg-custom_bg_gray p-16">
-                <div className="text-custom_red border border-custom_red max-w-[1000px] flex justify-center m-auto text-center bg-red-100 rounded-lg p-4">
-                    <p>{error}</p>
-                </div>
-            </section>
+            <ErrorPage type="child"/>
         );
     }
 
+    if (!profileData) {
+        return <p>Loading...</p>;
+    }
 
     return (
         <section className="bg-custom_bg_gray py-8">
@@ -154,14 +162,43 @@ export default function ProfilePage() {
                                 No experience
                             </p>
                         ) :
-                        Array.isArray(profileData.experience) && profileData.experience.map((exp) => (
-                            <div key={exp._id} className="border-b border-gray-200 py-4">
-                                <h3 className="text-md text-custom_gray font-semibold">{exp.position}</h3>
-                                <p className="text-sm text-gray-500">{exp.company}</p>
-                                <p className="text-sm text-gray-500">{exp.startDate} - {exp.endDate}</p>
-                                <p className="text-sm text-gray-500">{exp.description}</p>
+                        Array.isArray(profileData.experience) && profileData.experience.map((exp, idx) => (
+                            <div key={exp.experienceId} className="border-b border-gray-200 py-4">
+                                <h3 className="text-md text-custom_gray font-semibold">{exp.company}</h3>
+                                <div className="flex justify-between">
+                                    <div>
+                                        <p className="text-sm text-custom_red">{exp.jobTitle}</p>
+                                        <p className="text-sm text-gray-500">{exp.description}</p>
+                                    </div>
+                                    <div className="flex flex-row justify-end text-end gap-4">
+                                        <div className="flex flex-col justify-end text-end">
+                                            <p className="text-sm text-gray-500">{formatDate(exp.date[0])} - {formatDate(exp.date[1])}</p>
+                                            <p className="text-sm text-gray-500">{exp.employmentType}</p>
+                                        </div>
+                                        {isCurrentUser && (
+                                            <div>
+                                                <Button
+                                                    style="red-default"
+                                                    redirectPath={`/profile/experience/edit/${exp.experienceId}`}
+                                                >
+                                                    Edit
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </div>
+                                    
+                                </div>
+                                
                             </div>
                         ))}
+                        <div className="flex justify-end mt-4 mb-0"> 
+                            <Button 
+                                style="red-hover"
+                                redirectPath={`/profile/experience/add`}
+                            >
+                                Add new
+                            </Button>
+                        </div>
                     </div>
                 )}
                 {profileData.education && (

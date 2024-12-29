@@ -8,10 +8,12 @@ import RegisterCompanyPage from './pages/RegisterCompany';
 import RegisterUserPage from './pages/RegisterUser';
 import ProfilePage from './pages/Profile';
 import EditUserProfilePage from './pages/EditUserProfile';
+import ExperiencePage from './pages/Experience';
 import EditExperiencePage from './pages/EditExperience';
 import { checkAuthLoader } from './util/auth';
 
 import { PrimeReactProvider } from "primereact/api";
+import ErrorPage from './pages/Error';
 
 
 
@@ -20,7 +22,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
-    errorElement: <div>Not Found jdakjsandkjasndkjasnkd</div>,
+    errorElement: <ErrorPage />,
     id: 'root',
     children: [
       {index: true, element: <HomePage />},
@@ -40,20 +42,15 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: 'profile/:id',
+        path: 'profile',
         loader: checkAuthLoader,
-        element: <ProfilePage />,
+        children: [
+            {path: 'experience/add', element: <ExperiencePage />},
+            {path: 'experience/edit/:experienceId', element: <EditExperiencePage />},
+            {path: 'edit', element: <EditUserProfilePage />},
+            {path: ':id', element: <ProfilePage />},
+        ]
       },
-      {
-        path: 'profile/edit',
-        loader: checkAuthLoader,
-        element: <EditUserProfilePage />
-      },
-      {
-        path: 'profile/experience/edit',
-        loader: checkAuthLoader,
-        element: <EditExperiencePage />
-      }
     ]
   },
 ]);

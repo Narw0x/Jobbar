@@ -103,9 +103,33 @@ export default function Header() {
                             {/* Dropdown menu */}
                             <ul className="absolute mt-2 w-48 bg-white rounded-md  shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:rounded-md transition-all duration-300 z-50">
                               <li>
+                                <NavLink
+                                  to={`/profile/${authState.user._id}`}
+                                  className="flex gap-2 w-full text-left px-4 py-2 text-gray-800 rounded-t-md hover:bg-gray-100 hover:text-custom_red m-auto align-middle"
+                                >
+                                <svg 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    width="16" 
+                                    height="16" 
+                                    viewBox="0 0 180 180" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    strokeWidth="15.75" 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    className="custom-icon my-auto"
+                                >
+                                    <path d="M49.3318 116.112C38.721 122.43 10.9002 135.331 27.845 151.475C36.1223 159.36 45.3412 165 56.9315 165H123.068C134.659 165 143.878 159.36 152.155 151.475C169.1 135.331 141.279 122.43 130.668 116.112C105.786 101.296 74.2139 101.296 49.3318 116.112Z"/>
+                                    <path d="M123.75 48.75C123.75 67.3896 108.64 82.5 90 82.5C71.3604 82.5 56.25 67.3896 56.25 48.75C56.25 30.1104 71.3604 15 90 15C108.64 15 123.75 30.1104 123.75 48.75Z"/>
+                                </svg>
+
+                                  Profile
+                                </NavLink>
+                              </li>
+                              <li>
                                     <NavLink
                                         to={`/profile/edit`}
-                                         className="flex gap-2 w-full text-left px-4 py-2 text-gray-800 rounded-t-md hover:bg-gray-100 hover:text-custom_red m-auto align-middle"
+                                         className="flex gap-2 w-full text-left px-4 py-2 text-gray-800  hover:bg-gray-100 hover:text-custom_red m-auto align-middle"
                                     >
                                         <svg 
                                             xmlns="http://www.w3.org/2000/svg" 

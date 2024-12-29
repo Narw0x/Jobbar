@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Calendar } from "primereact/calendar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { updateUser } from "../store/slices/authSlice"
@@ -13,42 +13,13 @@ const pathExperienceImage = "../../../experienceImage.svg";
 
 export default function EditExperiencePage() {
 
-    const {experienceId } = useParams();
-    const dispatch = useDispatch();
     const [experience, setExperience] = useState({
-        experienceId: '',
         jobTitle: '',
         company: '',
         employmentType: '',
         date: [],
         description: ''
     });
-
-
-    
-
-    const navigate = useNavigate();
-
-    const authState = useSelector((state) => state.auth);
-
-    useEffect(() => {
-        const experience = authState.user.experience.find(exp => exp.experienceId === experienceId);
-        if(experience) {
-            const date = [new Date(experience.date[0]), new Date(new Date(experience.date[1]))];
-            setExperience({
-                experienceId: experience.experienceId,
-                jobTitle: experience.jobTitle,
-                company: experience.company,
-                employmentType: experience.employmentType,
-                date,
-                description: experience.description
-            }
-            )
-         }else{
-            navigate(`/profile/${authState.user._id}`, { state: { type: 'error', message: 'Experience not found' } });
-        }
-        
-    }, [experienceId, authState.user.experience , navigate, authState.user._id]);
 
     const handleExprerienceChange = (e) => {
         const { name, value } = e.target;
@@ -58,15 +29,20 @@ export default function EditExperiencePage() {
         }));
     }
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const authState = useSelector((state) => state.auth);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const experienceData = {
+        const data = {
             ...experience,
         }
 
-        axios.put(`http://localhost:4000/api/profile/experience/edit/${experienceId}`, experienceData, {
+        axios.put(`http://localhost:4000/api/profile/experience/add`, data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 Id: authState.user._id
@@ -74,17 +50,18 @@ export default function EditExperiencePage() {
         }).then((response) => {
             if (response.status === 200) {
                 dispatch(updateUser(response.data.payload.user));
-                navigate(`/profile/${authState.user._id}`, { state: { type: 'success', message: 'Experience updated successfully' } });
+                navigate(`/profile/${authState.user._id}`, { state: { type: 'success', message: 'Experience added successfully' } });
             }
         }).catch((error) => {
-            navigate(`/profile/${authState.user._id}`, { state: { type: 'error', message: 'Failed to update experience' } });
+            navigate(`/profile/${authState.user._id}`, { state: { type: 'error', message: 'Failed to add experience' } });
         });
+        
     }
 
     return (
         <section className="bg-custom_bg_gray py-8">
             <div className="max-w-[1440px] mx-auto bg-white p-8 rounded-lg shadow-md">
-                <h1 className="text-4xl text-custom_gray font-bold ">Edit Experience</h1>
+                <h1 className="text-4xl text-custom_gray font-bold ">Add Experience</h1>
                 <div>
                     <form className="flex flex-row mt-4" onSubmit={handleSubmit}>
                         <div className="flex flex-col flex-1 mt-2">
@@ -100,11 +77,11 @@ export default function EditExperiencePage() {
                                 <label className="text-lg text-custom_gray">Employment Type</label>
                                 <div className="flex flex-row gap-4">
                                     <div>
-                                        <input type="radio" id="fullTime" name="employmentType" value="Full-time" checked={experience.employmentType === "Full-time"}  onChange={handleExprerienceChange} className="mx-1 accent-custom_gray  checked:accent-custom_red"/>
+                                        <input type="radio" id="fullTime" name="employmentType" value="Full-time" onChange={handleExprerienceChange} className="mx-1 accent-custom_gray  checked:accent-custom_red"/>
                                         <label htmlFor="employmentType" className="text-custom_gray">Full-time</label>
                                     </div>
                                     <div>
-                                        <input type="radio" id="partTime" name="employmentType" value="Part-time" checked={experience.employmentType === "Part-time"}  onChange={handleExprerienceChange} className="mx-1 accent-custom_gray  checked:accent-custom_red"/>
+                                        <input type="radio" id="partTime" name="employmentType" value="Part-time" onChange={handleExprerienceChange} className="mx-1 accent-custom_gray  checked:accent-custom_red"/>
                                         <label htmlFor="employmentType" className="text-custom_gray">Part-time</label>
                                     </div>
                                 </div>
