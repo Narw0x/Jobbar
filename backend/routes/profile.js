@@ -7,6 +7,7 @@ import Company from '../models/company.model.js';
 import Blacklist from '../models/blackList.model.js';
 import jwt from 'jsonwebtoken';
 import { checkAuth } from '../utils/auth.js';
+import { isValidObjectId } from 'mongoose';
 
 const router = express.Router();
 
@@ -80,6 +81,7 @@ router.post('/profile/logout', async (req, res) => {
 router.get('/profile/:id', checkAuth, async (req, res) => {
     const { id } = req.params;
     try {
+        if (!isValidObjectId(id)) return res.status(400).json({ message: 'Invalid user ID', isValid: false });
         let profile = await User.findById(id).select('-password');
         if (!profile) profile = await Company.findById(id).select('-password');
         if (!profile) return res.status(404).json({ message: 'Profile not found' });
@@ -149,5 +151,58 @@ router.put('/profile/edit/:id', checkAuth, upload, async (req, res) => {
     });
   }
 });
+
+
+router.put('/profile/experience/add', checkAuth, async (req, res) => {
+  const { jobTitle, company, employmentType, date, description } = req.body;
+  const { id } = req.headers;
+
+  try {
+    let profile = await User.findById(id);
+    if (!profile) profile = await Company.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    const experienceId = Math.floor(Math.random() * 1000000000).toString().padStart(9, '0');
+
+    profile.experience.unshift({ experienceId, jobTitle, company, employmentType, date, description });
+
+    await profile.save();
+    res.status(200).json({
+      message: 'Experience added successfully',
+      payload: { user: profile }
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+  }
+});
+
+router.put('/profile/experience/edit/:experienceId', checkAuth, async (req, res) => {
+  const { jobTitle, company, employmentType, date, description } = req.body;
+  const { id } = req.headers;
+  const { experienceId } = req.params;
+
+  try {
+    let profile = await User.findById(id);
+    if (!profile) profile = await Company.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    const experienceIndex = profile.experience.findIndex(exp => exp.experienceId === experienceId);
+    if (experienceIndex === -1) return res.status(404).json({ message: 'Experience not found' });
+
+    profile.experience[experienceIndex] = { experienceId, jobTitle, company, employmentType, date, description };
+
+    await profile.save();
+    res.status(200).json({
+      message: 'Experience updated successfully',
+      payload: { user: profile }
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+  }
+});
+
+
 
 export default router;
