@@ -204,5 +204,169 @@ router.put('/profile/experience/edit/:experienceId', checkAuth, async (req, res)
 });
 
 
+router.put('/profile/experience/delete/:experienceId', checkAuth, async (req, res) => {
+  const { id } = req.headers;
+  const { experienceId } = req.params;
+
+  try {
+    let profile = await User.findById(id);
+    if (!profile) profile = await Company.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    const experienceIndex = profile.experience.findIndex(exp => exp.experienceId === experienceId);
+    if (experienceIndex === -1) return res.status(404).json({ message: 'Experience not found' });
+
+    profile.experience.splice(experienceIndex, 1);
+
+    await profile.save();
+    res.status(200).json({
+      message: 'Experience deleted successfully',
+      payload: { user: profile }
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+  }
+});
+
+
+router.post('/profile/education/add', checkAuth, async (req, res) => {
+  const {educationType} = req.body;
+  const { id } = req.headers;
+
+  try {
+    let profile = await User.findById(id);
+    if (!profile) profile = await Company.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+    
+    const educationId = Math.floor(Math.random() * 1000000000).toString().padStart(9, '0');
+    const newEducation = { educationId, ...req.body };
+
+    switch (educationType) {
+        case 'school':
+            profile.education.school.unshift(newEducation);
+            break;
+        case 'certificate':
+            profile.education.certificate.unshift(newEducation);
+            break;
+        case 'skill':
+            profile.education.skill.unshift(newEducation);
+            break;
+        default:
+            return res.status(400).json({ message: 'Invalid education type' });
+    }
+
+    profile.markModified('education');
+        
+    await profile.save();
+    
+    res.status(200).json({
+      message: 'Education added successfully',
+      payload: { user: profile }
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+  }
+});
+
+
+router.put('/profile/education/edit/:educationId', checkAuth, async (req, res) => {
+  const { educationType } = req.body;
+  const { id } = req.headers;
+  const { educationId } = req.params;
+
+  try {
+    let profile = await User.findById(id);
+    if (!profile) profile = await Company.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    let educationArray;
+    switch (educationType) {
+        case 'school':
+            educationArray = profile.education.school;
+            break;
+        case 'certificate':
+            educationArray = profile.education.certificate;
+            break;
+        case 'skill':
+            educationArray = profile.education.skill;
+            break;
+        default:
+            return res.status(400).json({ message: 'Invalid education type' });
+    }
+
+    const educationIndex = educationArray.findIndex(edu => edu.educationId === educationId);
+    if (educationIndex === -1) return res.status(404).json({ message: 'Education not found' });
+
+    educationArray[educationIndex] = { educationId, ...req.body };
+
+    profile.markModified('education');
+
+    await profile.save();
+    res.status(200).json({
+      message: 'Education updated successfully',
+      payload: { user: profile }
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+  }
+});
+
+router.put('/profile/education/delete/:educationId', checkAuth, async (req, res) => {
+  const { id } = req.headers;
+  const { educationId } = req.params;
+
+  try {
+    let profile = await User.findById(id);
+    if (!profile) profile = await Company.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    let educationIndex = profile.education.school.findIndex(edu => edu.educationId === educationId);
+    let educationType = 'school';
+    if (educationIndex === -1) {
+        educationType = 'certificate';
+        educationIndex = profile.education.certificate.findIndex(edu => edu.educationId === educationId);
+    }
+    if (educationIndex === -1) {
+        educationType = 'skill';
+        educationIndex = profile.education.skill.findIndex(edu => edu.educationId === educationId);
+    }
+    
+    if (educationIndex === -1) return res.status(404).json({ message: 'Education not found' });
+
+    switch (educationType) {
+        case 'school':
+            profile.education.school.splice(educationIndex, 1);
+            break;
+        case 'certificate':
+            profile.education.certificate.splice(educationIndex, 1);
+            break;
+        case 'skill':
+            profile.education.skill.splice(educationIndex, 1);
+            break;
+        default:
+            return res.status(400).json({ message: 'Invalid education type' });
+    }
+
+    profile.markModified('education');
+    
+    await profile.save();
+
+    res.status(200).json({
+      message: 'Education deleted successfully',
+      payload: { user: profile }
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+  }
+});
+
+
+
+
+
 
 export default router;

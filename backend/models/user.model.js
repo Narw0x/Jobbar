@@ -38,8 +38,12 @@ const userSchema = new mongoose.Schema({
         default: []
     },
     education: {
-        type: Array,
-        default: []
+        type: Object,
+        default: {
+            school: [],
+            certificate: [],
+            skill: []
+        }
     },
     address: {
         type: String,
