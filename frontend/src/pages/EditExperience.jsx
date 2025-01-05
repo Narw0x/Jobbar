@@ -44,11 +44,11 @@ export default function EditExperiencePage() {
                 description: experience.description
             }
             )
-         }else{
+        }else{
             navigate(`/profile/${authState.user._id}`, { state: { type: 'error', message: 'Experience not found' } });
         }
         
-    }, [experienceId, authState.user.experience , navigate, authState.user._id]);
+    }, [experienceId, navigate, authState.user._id]);
 
     const handleExprerienceChange = (e) => {
         const { name, value } = e.target;
@@ -56,6 +56,22 @@ export default function EditExperiencePage() {
             ...prevState,
             [name]: value
         }));
+    }
+
+    const handleDelete = async () => {
+        await axios.put(`http://localhost:4000/api/profile/experience/delete/${experienceId}`, {}, {
+            headers: {
+                Authorization: `Bearer ${authState.token}`,
+                id: authState.user._id,
+            }
+        }).then((response) => {
+            if (response.status === 200) {
+                navigate(`/profile/${authState.user._id}`, { state: { type: 'success', message: 'Experience deleted successfully' } });
+                dispatch(updateUser(response.data.payload.user));
+            }
+        }).catch((error) => {
+            navigate(`/profile/${authState.user._id}`, { state: { type: 'error', message: 'Failed to delete experience' } });
+        });
     }
 
 
@@ -116,6 +132,15 @@ export default function EditExperiencePage() {
                             <div className="mt-2">
                                 <label htmlFor="description" className="text-lg text-custom_gray">Description</label>
                                 <textarea id="description" name="description" value={experience.description} onChange={handleExprerienceChange} className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray p-2 my-2 text-lg w-full resize-none rounded" />
+                            </div>
+                            <div>
+                                <Button 
+                                    style="red-hover"
+                                    type="button"
+                                    onClick={handleDelete}
+                                >
+                                    Delete Experience
+                                </Button>
                             </div>
                         </div>
                         <div className="flex flex-col flex-1 mt-[-1rem]">

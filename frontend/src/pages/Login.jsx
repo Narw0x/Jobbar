@@ -76,6 +76,7 @@ export default function LoginPage({type = 'user'}) {
             })
             .catch((error) => {
                 dispatch(loginFailure());
+                console.log(error);
                 setMessageState({message: error.response?.data.message || error.message, type: 'error'});
             });
     }

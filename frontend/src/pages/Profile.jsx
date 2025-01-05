@@ -83,6 +83,15 @@ export default function ProfilePage() {
         }).format(date);
     };
 
+    const formatDateBetter = (dateString) => {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit'
+        }).format(date);
+    };
+
     
 
     if(error) {
@@ -156,57 +165,175 @@ export default function ProfilePage() {
                 )}
                 {profileData.experience && (
                     <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
-                        <h2 className="text-lg text-custom_gray font-semibold">Experience</h2>
                         {Array.isArray(profileData.experience) && profileData.experience.length === 0 ? (
-                            <p className="text-sm text-gray-500">
-                                No experience
-                            </p>
-                        ) :
-                        Array.isArray(profileData.experience) && profileData.experience.map((exp, idx) => (
-                            <div key={exp.experienceId} className="border-b border-gray-200 py-4">
-                                <h3 className="text-md text-custom_gray font-semibold">{exp.company}</h3>
-                                <div className="flex justify-between">
+                            <>
+                                <div className="flex justify-between align-middle">
                                     <div>
-                                        <p className="text-sm text-custom_red">{exp.jobTitle}</p>
-                                        <p className="text-sm text-gray-500">{exp.description}</p>
+                                        <h2 className="text-lg text-custom_gray font-semibold">Experience</h2>
+                                        <p className="text-sm text-gray-500">
+                                            No experience
+                                        </p>
                                     </div>
-                                    <div className="flex flex-row justify-end text-end gap-4">
-                                        <div className="flex flex-col justify-end text-end">
-                                            <p className="text-sm text-gray-500">{formatDate(exp.date[0])} - {formatDate(exp.date[1])}</p>
-                                            <p className="text-sm text-gray-500">{exp.employmentType}</p>
+                                    {isCurrentUser && (
+                                        <div className="flex justify-end mt-4 mb-0">
+                                            <Button style="red-hover" redirectPath="/profile/experience/add">
+                                                Add new
+                                            </Button>
                                         </div>
-                                        {isCurrentUser && (
-                                            <div>
-                                                <Button
-                                                    style="red-default"
-                                                    redirectPath={`/profile/experience/edit/${exp.experienceId}`}
-                                                >
-                                                    Edit
-                                                </Button>
-                                            </div>
-                                        )}
-                                    </div>
-                                    
+                                    )} 
                                 </div>
-                                
+                            </>
+                        ) : (
+                            <div>
+                                <h2 className="text-lg text-custom_gray font-semibold">Experience</h2>
+                                {profileData.experience.map((exp, idx) => (
+                                    <div key={exp.experienceId} className="border-b border-gray-200 py-4">
+                                        <h3 className="text-md text-custom_gray font-semibold">{exp.company}</h3>
+                                        <div className="flex justify-between">
+                                            <div>
+                                                <p className="text-sm text-custom_red">{exp.jobTitle}</p>
+                                                <p className="text-sm text-gray-500">{exp.description}</p>
+                                            </div>
+                                            <div className="flex flex-row justify-end text-end gap-4">
+                                                <div className="flex flex-col justify-end text-end">
+                                                    <p className="text-sm text-gray-500">{formatDate(exp.date[0])} - {formatDate(exp.date[1])}</p>
+                                                    <p className="text-sm text-gray-500">{exp.employmentType}</p>
+                                                </div>
+                                                {isCurrentUser && (
+                                                    <div>
+                                                        <Button
+                                                            style="red-default"
+                                                            redirectPath={`/profile/experience/edit/${exp.experienceId}`}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                                {isCurrentUser && (
+                                    <div className="flex justify-end mt-4 mb-0">
+                                        <Button
+                                            style="red-hover"
+                                            redirectPath="/profile/experience/add"
+                                        >
+                                            Add new
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
-                        ))}
-                        <div className="flex justify-end mt-4 mb-0"> 
-                            <Button 
-                                style="red-hover"
-                                redirectPath={`/profile/experience/add`}
-                            >
-                                Add new
-                            </Button>
-                        </div>
+                        )}
                     </div>
                 )}
                 {profileData.education && (
                     <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
-                        <h2 className="text-lg text-custom_gray font-semibold">Education</h2>
-                        <p className="text-sm text-gray-500">
-                            {Array.isArray(profileData.education) && profileData.education.length === 0 && "No education"}
-                        </p>
+                        {(profileData.education.school.length === 0 && profileData.education.certificate.length === 0 && profileData.education.skill.length === 0) ? (
+                            <div className="flex justify-between align-middle">
+                                <div>
+                                    <h2 className="text-lg text-custom_gray font-semibold">Education</h2>
+                                    <p className="text-sm text-gray-500">
+                                        No education
+                                    </p>
+                                </div>
+                                {isCurrentUser && (
+                                    <div className="flex justify-end mt-4 mb-0">
+                                        <Button style="red-hover" redirectPath="/profile/education/add">
+                                            Add new
+                                        </Button>
+                                    </div>
+                                )} 
+                            </div>
+                        ) : (
+                            <>
+                                
+                                <h2 className="text-lg text-custom_gray font-semibold">Education</h2>
+                                <div>
+                                   {profileData.education.school && profileData.education.school.length > 0 && (<p className="text-sm text-gray-500 mt-4">School</p>) }
+                                    {profileData.education.school.map((edu, idx) => (
+                                        <div key={edu.educationId} className="border-b border-gray-200">
+                                            <div className="flex justify-between my-2">
+                                                <div>
+                                                    <h3 className="text-md text-custom_gray font-semibold">{edu.schoolName}</h3>
+                                                    <p className="text-sm text-custom_red">{formatDate(edu.date[0])} - {formatDate(edu.date[1])}</p>
+                                                </div>
+                                                {isCurrentUser && (
+                                                    <div>
+                                                        <Button
+                                                            style="red-default"
+                                                            redirectPath={`/profile/education/edit/${edu.educationId}`}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))} 
+                                </div>
+                                <div>
+                                    {profileData.education.certificate && profileData.education.certificate.length > 0 && (<p className="text-sm text-gray-500 mt-4">Certificate</p>) }
+                                    {profileData.education.certificate.map((edu, idx) => (
+                                        <div key={edu.educationId} className="border-b border-gray-200">
+                                            <div className="flex justify-between my-2">
+                                                <div>
+                                                    <h3 className="text-md text-custom_gray font-semibold">{edu.certificateName}</h3>
+                                                    <p className="text-sm text-custom_gray">{edu.company}</p>
+                                                    <p className="text-sm text-custom_red">{formatDateBetter(edu.date)}</p>
+                                                </div>
+                                                {isCurrentUser && (
+                                                    <div className=" mt-auto">
+                                                        <Button
+                                                            style="red-default"
+                                                            redirectPath={`/profile/education/edit/${edu.educationId}`}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))} 
+                                </div>
+                                <div>
+                                    {profileData.education.skill && profileData.education.skill.length > 0 && (<p className="text-sm text-gray-500 mt-4">Skill</p>) }
+                                    {profileData.education.skill.map((edu, idx) => (
+                                        <div key={edu.educationId} className="border-b border-gray-200">
+                                            <div className="flex justify-between my-2">
+                                                <div>
+                                                    <h3 className="text-md text-custom_gray font-semibold">{edu.skillName}</h3>
+                                                    <p className="text-sm text-custom_red">{edu.level}</p>
+                                                </div>
+                                                {isCurrentUser && (
+                                                    <div>
+                                                        <Button
+                                                            style="red-default"
+                                                            redirectPath={`/profile/education/edit/${edu.educationId}`}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {isCurrentUser && (
+                                        <div className="flex justify-end mt-4 mb-0">
+                                            <Button
+                                                style="red-hover"
+                                                redirectPath="/profile/education/add"
+                                            >
+                                                Add new
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                
+                            </>
+                        )}
+                        
                     </div>
                 )}
                 {profileData.jobOffers && (

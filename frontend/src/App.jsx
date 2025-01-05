@@ -14,6 +14,8 @@ import { checkAuthLoader } from './util/auth';
 
 import { PrimeReactProvider } from "primereact/api";
 import ErrorPage from './pages/Error';
+import EducationPage from './pages/Education';
+import EditEducationPage from './pages/EditEducation';
 
 
 
@@ -45,6 +47,8 @@ const router = createBrowserRouter([
         path: 'profile',
         loader: checkAuthLoader,
         children: [
+            {path: 'education/add', element: <EducationPage />},
+            {path: 'education/edit/:educationId', element: <EditEducationPage />},
             {path: 'experience/add', element: <ExperiencePage />},
             {path: 'experience/edit/:experienceId', element: <EditExperiencePage />},
             {path: 'edit', element: <EditUserProfilePage />},
