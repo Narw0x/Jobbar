@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import { isValidText, isValidEmail, isValidPassword, isValidPhoneNumber, isValidAddress } from "../util/validation";
+
 import Autocomplete from "../components/autocomplete";
 import Button from "../components/button"
 
@@ -10,48 +11,55 @@ export default function RegisterCompanyPage() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+    const [companyProfile, setCompanyProfile] = useState({
+        companyName: '',
+        email: '',
+        password: '',
+        address: '',
+        phone: ''
+    });
+
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setCompanyProfile((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    }
+
     function handleSubmit(e) {
         e.preventDefault(); 
-        const formData = new FormData(e.target);
-        
-        // Validate company name
-        if (!isValidText(formData.get('companyName'))) {
-            setError('Company name is invalid');
-            return;
-        }
-        // Validate email
-        if (!isValidEmail(formData.get('email'))) {
-            setError('Email is invalid');
-            return;
-        }
-        // Validate password
-        if (!isValidPassword(formData.get('password'))) {
-            setError('Password is invalid');
-            return;
-        }
-        // Validate password match
-        if (formData.get('password') !== formData.get('password_2')) {
-            setError('Passwords do not match');
-            return;
-        }
-        // Validate address
-        if (!isValidAddress(formData.get('address'))) {
-            setError('Address is invalid');
-            return;
-        }
-        // Validate phone number
-        if (!isValidPhoneNumber(formData.get('phone'))) {
-            setError('Phone number is invalid');
-            return;
-        }
-        // Create the data object
+
         const data = {
-            companyName: formData.get('companyName'),
-            email: formData.get('email'),
-            password: formData.get('password'),
-            address: formData.get('address'),
-            phoneNumber: formData.get('phone'),
+            ...companyProfile,
         };
+
+        if (!isValidText(data.companyName)) {
+            setError('Company name is required.');
+            return;
+        }
+
+        if (!isValidEmail(data.email)) {
+            setError('Email is invalid.');
+            return;
+        }
+
+        if (!isValidPassword(data.password)) {
+            setError('Password must be at least 8 characters long.');
+            return;
+        }
+
+        if (!isValidAddress(data.address)) {
+            setError('Address is required.');
+            return;
+        }
+
+        if (!isValidPhoneNumber(data.phone)) {
+            setError('Phone number is invalid.');
+            return;
+        }
+
+       
         // Send a POST request
         axios
             .post('http://localhost:4000/api/company/register', data)
@@ -93,7 +101,10 @@ export default function RegisterCompanyPage() {
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="address">Address</label>
-                        <Autocomplete />
+                        <Autocomplete
+                            value={companyProfile.address}
+                            onChange={handleChange}
+                            />
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="phone">Phone</label>

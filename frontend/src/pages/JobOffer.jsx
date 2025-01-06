@@ -1,0 +1,293 @@
+import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import Button from "../components/button";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../store/slices/authSlice";
+
+import { Calendar } from "primereact/calendar";
+
+import Autocomplete from "../components/autocomplete";
+import axios from 'axios';
+
+
+
+const pathExperienceImage = "../../../experienceImage.svg";
+
+export default function JobOfferPage() {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const authState = useSelector((state) => state.auth);
+
+    const [jobOffer, setJobOffer] = useState({
+        jobTitle: '',
+        company: '',
+        employmentType: 'full-time',
+        date: [],
+        description: '',
+        requirements: [
+            {
+                requirementName: '',
+                requirementType: 'Beginner'
+            }
+        ],
+        salary: {
+                amount: '0',
+                salaryType: 'yearly'
+        },
+        address: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setJobOffer((prevState) => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleRequirementChange = (index, field, value) => {
+
+        setJobOffer(prevState => ({
+            ...prevState,
+            requirements: prevState.requirements.map((req, i) => 
+                i === index ? { ...req, [field]: value } : req
+            )
+        }));
+    };
+
+    const addRequirement = () => {
+        setJobOffer(prevState => ({
+            ...prevState,
+            requirements: [
+                ...prevState.requirements,
+                { requirementName: '', requirementType: 'Beginner' }
+            ]
+        }));
+    };
+
+    const handleSalaryChange = (e) => {
+        const { name, value } = e.target;
+        setJobOffer((prevState) => ({
+            ...prevState,
+            salary: {
+                ...prevState.salary,
+                [name]: value
+            }
+        }));
+    };
+
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const data = {
+            ...jobOffer,
+            company: authState.user.companyName
+        }
+
+        console.log(data);
+
+        axios.post(`http://localhost:4000/api/job/create`, data, {
+            headers: {
+                Authorization: `Bearer ${authState.token}`,
+                id: authState.user._id
+            }
+        }).then((response) => {
+            if (response.status === 201) {
+                dispatch(updateUser(response.data.payload.user));
+                navigate(`/profile/${authState.user._id}`, { state: { type: 'success', message: 'Job offer added successfully' } });
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+        
+
+    };
+
+
+  return (
+    <section className="bg-custom_bg_gray py-8">
+        <div className="max-w-[1440px] mx-auto bg-white p-8 rounded-lg shadow-md">
+            <h1 className="text-4xl text-custom_gray font-bold ">Create a Job Offer</h1>
+            <div>
+                <form className="flex flex-row mt-4" onSubmit={handleSubmit}>
+                    <div className="flex flex-col flex-1 mt-2">
+                        <div className="flex flex-col">
+                            <label htmlFor="jobTitle" className="text-lg text-custom_gray">Job Title</label>
+                            <input 
+                                type="text" 
+                                name="jobTitle" 
+                                id="jobTitle" 
+                                className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg"
+                                onChange={handleChange}
+                                value={jobOffer.jobTitle}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="address" className="text-lg text-custom_gray">Location</label>
+                            <Autocomplete
+                                value={jobOffer.address}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        
+                        <div className="flex flex-col mt-4">
+                            <label htmlFor="employmentType" className="text-lg text-custom_gray">Employment Type</label>
+                            <select 
+                                name="employmentType" 
+                                id="employmentType" 
+                                className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg"
+                                onChange={handleChange}
+                                value={jobOffer.employmentType}
+                            >
+                                <option value="full-time">Full-time</option>
+                                <option value="part-time">Part-time</option>
+                                <option value="contract">Contract</option>
+                                <option value="temporary">Temporary</option>
+                                <option value="internship">Internship</option>
+                            </select>
+                        </div>
+                        <div className="flex flex-col mt-4">
+                            <label htmlFor="date" className="text-lg text-custom_gray">Starting date</label>
+                            <Calendar name="date" value={jobOffer.date} onChange={handleChange} minDate={new Date()} dateFormat="mm/dd/yy"  readOnlyInput hideOnRangeSelection showButtonBar/>
+                        </div>
+                        <div className="flex flex-col mt-4">
+                            <label htmlFor="description" className="text-lg text-custom_gray">Description</label>
+                            <textarea 
+                                name="description" 
+                                id="description" 
+                                className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray p-2 my-2 text-lg w-full resize-none rounded-lg"
+                                onChange={handleChange}
+                                value={jobOffer.description}
+                            />
+                        </div>
+                        <div className="flex flex-col mt-4">
+                            <label htmlFor="requirements" className="text-lg text-custom_gray">Requirements</label>
+                            <div>
+                                {jobOffer.requirements.map((requirement, index) => (
+                                    <div key={index}  className='flex flex-row justify-between gap-4' >
+                                        <input 
+                                            type="text" 
+                                            name="requirementName" 
+                                            id={`requirementName-${index}`} 
+                                            className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg flex-1"
+                                            onChange={(e) => handleRequirementChange(index, 'requirementName', e.target.value)}
+                                            value={requirement.requirementName}
+                                        />
+                                        <select 
+                                            name="requirementType" 
+                                            id={`requirementType-${index}`} 
+                                            className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-xl "
+                                            onChange={(e) => handleRequirementChange(index, 'requirementType', e.target.value)}
+                                            value={requirement.requirementType}
+                                        >
+                                            <option value="Begginer">Begginer</option>
+                                            <option value="Intermediate">Intermediate</option>
+                                            <option value="Advanced">Advanced</option>
+                                            <option value="Expert">Expert</option>
+                                        </select>
+                                        {index > 0 && (
+                                            <div className="flex flex-col justify-center">   
+                                                <Button 
+                                                    style="red-hover" 
+                                                    type="button" 
+                                                    onClick={() => {
+                                                        setJobOffer(prevState => ({
+                                                            ...prevState,
+                                                            requirements: prevState.requirements.filter((req, i) => i !== index)
+                                                        }));
+                                                    }}
+                                                >
+                                                    Remove
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+
+
+
+                                
+                            </div>
+                            <div className="flex flex-row justify-end">
+                                <Button 
+                                    style="red-hover" 
+                                    type="button" 
+                                    onClick={addRequirement}
+                                >
+                                    Add Requirement
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="flex flex-col mt-4">
+                            <label htmlFor="salary" className="text-lg text-custom_gray">Salary</label>
+                            <div className="flex flex-row gap-4">
+                                <div className="relative flex items-center flex-1">
+                                    <span className="absolute left-3 text-gray-500">$</span>
+                                    <input
+                                        type="number"
+                                        name="amount"
+                                        id="amount"
+                                        className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 pl-6 my-2 text-lg flex-1"
+                                        onChange={handleSalaryChange}
+                                        value={jobOffer.salary.amount}
+                                    />
+                                </div>
+                                <select 
+                                    name='salaryType'
+                                    id='salaryType'
+                                    className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg"
+                                    onChange={handleSalaryChange}
+                                    value={jobOffer.salary.salaryType}
+                                >
+                                    <option value="yearly">Yearly</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="hourly">Hourly</option>
+                                </select>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                    <div className="flex flex-col flex-1 mt-[-1rem]">
+                        <div className="flex flex-col justify-end flex-wrap">
+                            <img src={pathExperienceImage} alt="" /> 
+                            <p className="text-right mt-[-2rem]">Designed by 
+                            <a 
+                                href="https://www.freepik.com" 
+                                className="text-custom_red p-2" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                            >
+                                Freepik
+                            </a>
+                            </p>
+                        </div>
+                        <div className="flex space-x-4 justify-end mt-4">
+                            <Button 
+                                style="red-hover"
+                                type="button"
+                                onClick={() => {
+                                    navigate(`/profile/${authState.user._id}`);
+                                }}
+                            >
+                                Back
+                            </Button>
+                            <Button 
+                                style="red-default"
+                                type="submit"
+                            >
+                                Save
+                            </Button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+  );
+}

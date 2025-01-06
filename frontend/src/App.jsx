@@ -16,6 +16,7 @@ import { PrimeReactProvider } from "primereact/api";
 import ErrorPage from './pages/Error';
 import EducationPage from './pages/Education';
 import EditEducationPage from './pages/EditEducation';
+import JobOfferPage from './pages/JobOffer';
 
 
 
@@ -51,6 +52,8 @@ const router = createBrowserRouter([
             {path: 'education/edit/:educationId', element: <EditEducationPage />},
             {path: 'experience/add', element: <ExperiencePage />},
             {path: 'experience/edit/:experienceId', element: <EditExperiencePage />},
+            {path: 'job/add', element: <JobOfferPage />},
+            
             {path: 'edit', element: <EditUserProfilePage />},
             {path: ':id', element: <ProfilePage />},
         ]

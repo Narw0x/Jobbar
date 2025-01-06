@@ -338,10 +338,29 @@ export default function ProfilePage() {
                 )}
                 {profileData.jobOffers && (
                     <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
-                        <h2 className="text-lg text-custom_gray font-semibold">Job Offers</h2>
-                        <p className="text-sm text-gray-500">
-                            {Array.isArray(profileData.jobOffers) && profileData.jobOffers.length === 0 && "No job offers"}
-                        </p>
+                        {Array.isArray(profileData.jobOffers) && profileData.jobOffers.length === 0 ? (
+                            <>
+                                <div className="flex justify-between align-middle">
+                                    <div>
+                                        <h2 className="text-lg text-custom_gray font-semibold">Job Offers</h2>
+                                        <p className="text-sm text-gray-500">
+                                            No job offers
+                                        </p>
+                                    </div>
+                                    {isCurrentUser && (
+                                        <div className="flex justify-end mt-4 mb-0">
+                                            <Button style="red-hover" redirectPath="/profile/job/add">
+                                                Add new
+                                            </Button>
+                                        </div>
+                                    )} 
+                                </div>
+                            </>
+                        ) : (
+                            <div>
+                                Mame ulozene job offers bejbe
+                            </div>
+                        )}
                     </div>
                 )}
                 {(profileData.phoneNumber || profileData.email || profileData.website) && (
