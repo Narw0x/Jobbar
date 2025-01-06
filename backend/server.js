@@ -24,6 +24,7 @@ import userRoutes from "./routes/user.js";
 import companyRoutes from "./routes/company.js";
 import profileRoutes from "./routes/profile.js";
 import Autocomplete from './routes/autocomplete.js';
+import jobRoutes from './routes/job.js';
 
 app.setMaxListeners(20);
 
@@ -32,6 +33,8 @@ app.use('/api', userRoutes);
 app.use('/api', companyRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', Autocomplete);
+app.use('/api', jobRoutes);
+
 
 
 

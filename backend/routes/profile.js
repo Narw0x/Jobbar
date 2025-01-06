@@ -5,6 +5,7 @@ import fs from 'fs';
 import User from '../models/user.model.js';
 import Company from '../models/company.model.js';
 import Blacklist from '../models/blackList.model.js';
+import JobOffer from '../models/jobOffer.model.js';
 import jwt from 'jsonwebtoken';
 import { checkAuth } from '../utils/auth.js';
 import { isValidObjectId } from 'mongoose';
