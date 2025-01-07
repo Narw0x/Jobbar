@@ -17,6 +17,7 @@ import ErrorPage from './pages/Error';
 import EducationPage from './pages/Education';
 import EditEducationPage from './pages/EditEducation';
 import JobOfferPage from './pages/JobOffer';
+import EditJobOfferPage from './pages/EditJobOffer';
 
 
 
@@ -52,8 +53,10 @@ const router = createBrowserRouter([
             {path: 'education/edit/:educationId', element: <EditEducationPage />},
             {path: 'experience/add', element: <ExperiencePage />},
             {path: 'experience/edit/:experienceId', element: <EditExperiencePage />},
+            {path: 'job/:jobId', element: <JobOfferPage />},
             {path: 'job/add', element: <JobOfferPage />},
-            
+            {path: 'job/edit/:jobId', element: <EditJobOfferPage />},
+
             {path: 'edit', element: <EditUserProfilePage />},
             {path: ':id', element: <ProfilePage />},
         ]

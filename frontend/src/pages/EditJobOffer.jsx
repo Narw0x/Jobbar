@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/button";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, updateUser } from "../store/slices/authSlice";
@@ -13,32 +13,56 @@ import axios from 'axios';
 
 const pathExperienceImage = "../../../experienceImage.svg";
 
-export default function JobOfferPage() {
+export default function EditJobOfferPage() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const params = useParams();
 
     const authState = useSelector((state) => state.auth);
 
     const [jobOffer, setJobOffer] = useState({
         jobTitle: '',
-        company: '',
+        address: '',
         employmentType: 'Full-time',
-        date: [],
+        date: '',
         description: '',
         requirements: [
-            {
-                requirementName: '',
-                requirementType: 'Beginner'
-            }
+            { requirementName: '', requirementType: 'Beginner' }
         ],
         salary: {
-                currency: '€',
-                amount: '0',
-                salaryType: 'year'
-        },
-        address: ''
+            amount: '',
+            currency: 'USD',
+            salaryType: 'year'
+        }
+
     });
+
+    useEffect(() => {
+        if (params.jobId) {
+            axios.get(`http://localhost:4000/api/job/edit/${params.jobId}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.token}`,
+                    id: authState.user._id
+                }
+            }).then((response) => {
+                if (response.status === 200) {
+                    const date = new Date(response.data.payload.job.date);
+                    setJobOffer(prevState => ({
+                        ...prevState,
+                        ...response.data.payload.job,
+                        date
+                    }));
+                }
+            }).catch((error) => {
+                console.log('neviem');
+                
+                console.log(error);
+            });
+        }
+    }, [params.jobId, authState.token, authState.user._id, dispatch, navigate]);
+
+        
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -79,6 +103,24 @@ export default function JobOfferPage() {
         }));
     };
 
+    const handleDelete = async () => {
+        await axios.put(`http://localhost:4000/api/job/delete/${params.jobId}`, {}, {
+            headers: {
+                Authorization: `Bearer ${authState.token}`,
+                id: authState.user._id,
+            }
+        }).then((response) => {
+            if (response.status === 200) {
+                navigate(`/profile/${authState.user._id}`, { state: { type: 'success', message: 'Job offer deleted successfully' } });
+                dispatch(updateUser(response.data.payload.user));
+            }
+        }).catch((error) => {
+            console.log(error);
+            
+        });
+    };
+
+
 
 
     const handleSubmit = (e) => {
@@ -86,12 +128,9 @@ export default function JobOfferPage() {
 
         const data = {
             ...jobOffer,
-            company: authState.user.companyName
         }
 
-        console.log(data);
-
-        axios.post(`http://localhost:4000/api/job/create`, data, {
+        axios.put(`http://localhost:4000/api/job/edit/${params.jobId}`, data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 id: authState.user._id
@@ -103,8 +142,13 @@ export default function JobOfferPage() {
             }
         }).catch((error) => {
             console.log(error);
-            dispatch(logout());
-            navigate(`/login/user`, { state: { type: 'error', message: 'Session expired. Please login again.' } });
+
+            if(error.response.statusText === 'Unauthorized'){
+                dispatch(logout());
+                navigate(`/login/user`, { state: { type: 'error', message: 'Session expired. Please login again.' } });
+            }else{
+                navigate(`/profile/${authState.user._id}`, { state: { type: 'error', message: 'Failed to add job offer' } });
+            }
         });
         
 
@@ -252,6 +296,16 @@ export default function JobOfferPage() {
                                     <option value="hour">Hourly</option>
                                 </select>
                             </div>
+                            <div>
+                                <Button 
+                                    style="red-hover"
+                                    type="button"
+                                    onClick={handleDelete}
+                                >
+                                    Delete Experience
+                                </Button>
+                            </div>
+
                             
                         </div>
 

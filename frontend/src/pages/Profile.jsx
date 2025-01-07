@@ -1,6 +1,7 @@
-import { Link, useParams, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
+import { logout } from "../store/slices/authSlice";
 import axios from "axios";
 import { Toast } from 'primereact/toast';
 
@@ -12,10 +13,16 @@ export default function ProfilePage() {
     const toast = useRef(null);
     const { id } = useParams();
     const authState = useSelector((state) => state.auth);
-    const [profileData, setProfileData] = useState(null); // State to store profile data
-    const [isCurrentUser, setIsCurrentUser] = useState(false); // State to check if viewing own profile
+    const [profileData, setProfileData] = useState(null); 
+    const [jobOffers, setJobOffers] = useState(null);
+    const [isCurrentUser, setIsCurrentUser] = useState(false);
     const [error, setError] = useState(null);
     const [isFollowing, setIsFollowing] = useState(false);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+
 
     const location = useLocation();
     const [messageState, setMessageState] = useState(location.state || null);
@@ -47,7 +54,6 @@ export default function ProfilePage() {
     }, [messageState]);
 
     useEffect(() => {
-        
         if (authState.user._id !== id) {
             setIsCurrentUser(false); // Viewing someone else's profile
             axios.get(`http://localhost:4000/api/profile/${id}`, {
@@ -69,6 +75,29 @@ export default function ProfilePage() {
             setProfileData(authState.user); // Use current user's data
         }
     }, [id, authState.user, authState.token]);
+
+    useEffect(() => {
+        if (profileData && profileData.jobOffers){
+            axios.get(`http://localhost:4000/api/job/${profileData._id}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.token}`, // Include the token in the Authorization header
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    setJobOffers(response.data.payload.jobs); // Update state with fetched job offers
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching job offers:', error);
+                setError('An error occurred while fetching the job offers. Please try again.');
+                if(error.response.statusText === "Unauthorized"){
+                    dispatch(logout());
+                    navigate('/login', { state: { type: 'error', message: 'You are not authorized to view this page. Please log in.' } });
+                }
+            });
+        }   
+    }, [profileData, authState.token]);
 
     const handleFollow = () => {
         setIsFollowing(!isFollowing);
@@ -338,7 +367,70 @@ export default function ProfilePage() {
                 )}
                 {profileData.jobOffers && (
                     <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
-                        {Array.isArray(profileData.jobOffers) && profileData.jobOffers.length === 0 ? (
+                        {jobOffers ? (
+                            <>
+                                <h2 className="text-lg text-custom_gray font-semibold">Job Offers</h2>
+                                <div className="flex flex-row gap-4 flex-wrap pt-2">
+                                {jobOffers.map((job, idx) => (
+                                    <div key={job._id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 w-[20.5rem]">
+                                    <h3 className="text-md text-custom_gray font-semibold text-xl">{job.jobTitle}</h3>
+                                    <p className="text-sm text-custom_red mb-3">{job.company}</p>
+                                    <div className="flex flex-col justify-between">
+                                        <div className="flex flex-col items-start space-y-2">
+                                            <div className="flex flex-row w-full justify-between">
+                                                <p className=" text-custom_gray font-semibold">Salary:</p>
+                                                <p className=" text-custom_red">{job.salary.amount}{job.salary.currency}/<span className="text-sm">{job.salary.salaryType}</span> </p>
+                                            </div>
+                                            <div className="flex flex-row  w-full justify-between">
+                                                <p className=" text-custom_gray font-semibold">Location:</p>
+                                                <div className="max-w-32">
+                                                    <p className=" text-custom_red truncate">{job.address}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-row  w-full justify-end">
+                                                <p className="text-sm text-custom_gray">{formatDateBetter(job.date)}</p>
+                                            </div>
+                                            
+                                        </div>
+                                        <div className="flex flex-row gap-4 mt-2 justify-end">
+                                            
+                                            {isCurrentUser && (
+                                                <div className="flex flex-grow">
+                                                    <Button
+                                                        style="red-default"
+                                                        redirectPath={`/profile/job/edit/${job._id}`}
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                </div>
+                                            )}
+                                            <div>
+                                                <Button
+                                                    style="red-hover"
+                                                    redirectPath={`/job/${job._id}`}
+                                                >
+                                                    View
+                                                </Button>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    </div>
+                                ))}
+                                
+                                </div>
+                                {isCurrentUser && (
+                                    <div className="flex justify-end mt-4">
+                                    <Button
+                                        style="red-hover"
+                                        redirectPath="/profile/job/add"
+                                    >
+                                        Add new
+                                    </Button>
+                                    </div>
+                                )}
+                            </>
+                        ) : (
                             <>
                                 <div className="flex justify-between align-middle">
                                     <div>
@@ -356,10 +448,6 @@ export default function ProfilePage() {
                                     )} 
                                 </div>
                             </>
-                        ) : (
-                            <div>
-                                Mame ulozene job offers bejbe
-                            </div>
                         )}
                     </div>
                 )}
