@@ -5,6 +5,20 @@ import JobOffer from '../models/jobOffer.model.js';
 
 const router = express.Router();
 
+router.get('/job/:userId', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const profile = await Company.findById(userId);
+        if (!profile) return res.status(400).json({ message: 'Company not found' });
+
+        const jobs = await JobOffer.find({ _id: { $in: profile.jobOffers } });
+        res.status(200).json({ message: 'Jobs found', payload: { jobs } });
+
+    } catch (error) {
+        res.status(500).send({ message: error });
+    }
+});
+
 router.post('/job/create', checkAuth, async (req, res) => {
     const { jobTitle, company, employmentType, date, description, address, requirements, salary } = req.body;
     const {id} = req.headers;
@@ -24,13 +38,9 @@ router.post('/job/create', checkAuth, async (req, res) => {
             salary
         }
 
-        // First create the job offer and get its ID
         const jobOffer = await JobOffer.create(newJob);
-
-        // Then push the job offer's ID to the profile
         profile.jobOffers.push(jobOffer._id);  
 
-        // Save the profile
         await profile.save();
 
         res.status(201).json({ message: 'Job created successfully', payload: {user: profile} });
@@ -40,6 +50,72 @@ router.post('/job/create', checkAuth, async (req, res) => {
         res.status(500).send({ message: error });
     }
 
+});
+
+router.get('/job/edit/:jobId', checkAuth, async (req, res) => {
+    const { jobId } = req.params;
+    try {
+        const job = await JobOffer.findById(jobId);
+        if (!job) return res.status(400).json({ message: 'Job offer not found' });
+
+        res.status(200).json({ message: 'Job found', payload: { job } });
+    } catch (error) {
+        res.status(500).send({ message: error });
+    }
+});
+
+router.put('/job/edit/:jobId', checkAuth, async (req, res) => {
+    const { jobTitle, company, employmentType, date, description, address, requirements, salary } = req.body;
+    const {id} = req.headers;
+    const { jobId } = req.params;
+
+    try {
+        const profile = await Company.findById(id);
+        if (!profile) return res.status(400).json({ message: 'Company not found' });
+
+        const jobOffer = await JobOffer.findById(jobId);
+        if (!jobOffer) return res.status(400).json({ message: 'Job offer not found' });
+
+        jobOffer.jobTitle = jobTitle;
+        jobOffer.company = company;
+        jobOffer.employmentType = employmentType;
+        jobOffer.date = date;
+        jobOffer.description = description;
+        jobOffer.address = address;
+        jobOffer.requirements = requirements;
+        jobOffer.salary = salary;
+
+        await jobOffer.save();
+
+        res.status(201).json({ message: 'Job updated successfully', payload: { user: profile } });
+    } catch (error) {
+        res.status(500).send({ message: error });
+    }
+});
+
+router.put('/job/delete/:jobId', checkAuth, async (req, res) => {
+    const {id} = req.headers;
+    const { jobId } = req.params;
+    console.log('mame');
+    
+
+    try {
+        const profile = await Company.findById(id);
+        if (!profile) return res.status(400).json({ message: 'Company not found' });
+
+        const jobOffer = await JobOffer.findById(jobId);
+        if (!jobOffer) return res.status(400).json({ message: 'Job offer not found' });
+
+        await JobOffer.deleteOne({ _id: jobId });
+
+        profile.jobOffers = profile.jobOffers.filter((job) => job.toString() !== jobId);
+
+        await profile.save();
+
+        res.status(200).json({ message: 'Job deleted successfully', payload: { user: profile } });
+    } catch (error) {
+        res.status(500).send({ message: error });
+    }
 });
 
 
