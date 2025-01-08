@@ -14,7 +14,7 @@ export default function ProfilePage() {
     const { id } = useParams();
     const authState = useSelector((state) => state.auth);
     const [profileData, setProfileData] = useState(null); 
-    const [jobOffers, setJobOffers] = useState(null);
+    const [jobOffers, setJobOffers] = useState([]);
     const [isCurrentUser, setIsCurrentUser] = useState(false);
     const [error, setError] = useState(null);
     const [isFollowing, setIsFollowing] = useState(false);
@@ -78,7 +78,7 @@ export default function ProfilePage() {
 
     useEffect(() => {
         if (profileData && profileData.jobOffers){
-            axios.get(`http://localhost:4000/api/job/${profileData._id}`, {
+            axios.get(`http://localhost:4000/api/jobs/${profileData._id}`, {
                 headers: {
                     Authorization: `Bearer ${authState.token}`, // Include the token in the Authorization header
                 },
@@ -367,54 +367,53 @@ export default function ProfilePage() {
                 )}
                 {profileData.jobOffers && (
                     <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
-                        {jobOffers ? (
+                        {jobOffers.length !== 0  ? (
                             <>
                                 <h2 className="text-lg text-custom_gray font-semibold">Job Offers</h2>
-                                <div className="flex flex-row gap-4 flex-wrap pt-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
                                 {jobOffers.map((job, idx) => (
-                                    <div key={job._id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 w-[20.5rem]">
-                                    <h3 className="text-md text-custom_gray font-semibold text-xl">{job.jobTitle}</h3>
-                                    <p className="text-sm text-custom_red mb-3">{job.company}</p>
-                                    <div className="flex flex-col justify-between">
-                                        <div className="flex flex-col items-start space-y-2">
-                                            <div className="flex flex-row w-full justify-between">
-                                                <p className=" text-custom_gray font-semibold">Salary:</p>
-                                                <p className=" text-custom_red">{job.salary.amount}{job.salary.currency}/<span className="text-sm">{job.salary.salaryType}</span> </p>
-                                            </div>
-                                            <div className="flex flex-row  w-full justify-between">
-                                                <p className=" text-custom_gray font-semibold">Location:</p>
-                                                <div className="max-w-32">
-                                                    <p className=" text-custom_red truncate">{job.address}</p>
+                                    <div key={job._id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 ">
+                                        <h3 className="text-md text-custom_gray font-semibold text-xl">{job.jobTitle}</h3>
+                                        <div className="flex flex-col justify-between">
+                                            <div className="flex flex-col items-start space-y-2">
+                                                <div className="flex flex-row w-full gap-16 justify-between">
+                                                    <p className=" text-custom_gray font-semibold">Salary:</p>
+                                                    <p className=" text-custom_red">{job.salary.amount}{job.salary.currency}/<span className="text-sm">{job.salary.salaryType}</span> </p>
                                                 </div>
+                                                <div className="flex flex-row  w-full justify-between">
+                                                    <p className=" text-custom_gray font-semibold">Location:</p>
+                                                    <div className="max-w-32">
+                                                        <p className=" text-custom_red truncate">{job.address}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-row  w-full justify-end">
+                                                    <p className="text-sm text-custom_gray">{formatDateBetter(job.date)}</p>
+                                                </div>
+                                                
                                             </div>
-                                            <div className="flex flex-row  w-full justify-end">
-                                                <p className="text-sm text-custom_gray">{formatDateBetter(job.date)}</p>
-                                            </div>
-                                            
-                                        </div>
-                                        <div className="flex flex-row gap-4 mt-2 justify-end">
-                                            
-                                            {isCurrentUser && (
-                                                <div className="flex flex-grow">
+                                            <div className="flex flex-row gap-4 mt-2 justify-end">
+                                                
+                                                {isCurrentUser && (
+                                                    <div className="flex flex-grow">
+                                                        <Button
+                                                            style="red-default"
+                                                            redirectPath={`/profile/job/edit/${job._id}`}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                                <div>
                                                     <Button
-                                                        style="red-default"
-                                                        redirectPath={`/profile/job/edit/${job._id}`}
+                                                        style="red-hover"
+                                                        redirectPath={`/job/${job._id}`}
                                                     >
-                                                        Edit
+                                                        View
                                                     </Button>
                                                 </div>
-                                            )}
-                                            <div>
-                                                <Button
-                                                    style="red-hover"
-                                                    redirectPath={`/job/${job._id}`}
-                                                >
-                                                    View
-                                                </Button>
                                             </div>
+                                            
                                         </div>
-                                        
-                                    </div>
                                     </div>
                                 ))}
                                 

@@ -18,6 +18,7 @@ import EducationPage from './pages/Education';
 import EditEducationPage from './pages/EditEducation';
 import JobOfferPage from './pages/JobOffer';
 import EditJobOfferPage from './pages/EditJobOffer';
+import ViewJobOfferPage from './pages/ViewJobOffer';
 
 
 
@@ -53,7 +54,6 @@ const router = createBrowserRouter([
             {path: 'education/edit/:educationId', element: <EditEducationPage />},
             {path: 'experience/add', element: <ExperiencePage />},
             {path: 'experience/edit/:experienceId', element: <EditExperiencePage />},
-            {path: 'job/:jobId', element: <JobOfferPage />},
             {path: 'job/add', element: <JobOfferPage />},
             {path: 'job/edit/:jobId', element: <EditJobOfferPage />},
 
@@ -61,6 +61,15 @@ const router = createBrowserRouter([
             {path: ':id', element: <ProfilePage />},
         ]
       },
+      {
+        path: 'job',
+        loader: checkAuthLoader,
+        children: [
+          {path: 'add', element: <JobOfferPage />},
+          {path: 'edit/:jobId', element: <EditJobOfferPage />},
+          {path: ':jobId', element: <ViewJobOfferPage />}
+        ]
+      }
     ]
   },
 ]);

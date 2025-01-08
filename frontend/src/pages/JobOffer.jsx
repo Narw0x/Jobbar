@@ -22,7 +22,6 @@ export default function JobOfferPage() {
 
     const [jobOffer, setJobOffer] = useState({
         jobTitle: '',
-        company: '',
         employmentType: 'Full-time',
         date: [],
         description: '',
@@ -86,10 +85,7 @@ export default function JobOfferPage() {
 
         const data = {
             ...jobOffer,
-            company: authState.user.companyName
         }
-
-        console.log(data);
 
         axios.post(`http://localhost:4000/api/job/create`, data, {
             headers: {
@@ -97,6 +93,7 @@ export default function JobOfferPage() {
                 id: authState.user._id
             }
         }).then((response) => {
+            
             if (response.status === 201) {
                 dispatch(updateUser(response.data.payload.user));
                 navigate(`/profile/${authState.user._id}`, { state: { type: 'success', message: 'Job offer added successfully' } });
@@ -246,10 +243,10 @@ export default function JobOfferPage() {
                                     onChange={handleSalaryChange}
                                     value={jobOffer.salary.salaryType}
                                 >
-                                    <option value="year">Yearly</option>
-                                    <option value="month">Monthly</option>
-                                    <option value="week">Weekly</option>
-                                    <option value="hour">Hourly</option>
+                                    <option value="year">Year</option>
+                                    <option value="month">Month</option>
+                                    <option value="week">Week</option>
+                                    <option value="hour">Hour</option>
                                 </select>
                             </div>
                             
