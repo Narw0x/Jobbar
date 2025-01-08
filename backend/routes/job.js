@@ -5,7 +5,19 @@ import JobOffer from '../models/jobOffer.model.js';
 
 const router = express.Router();
 
-router.get('/job/:userId', async (req, res) => {
+router.get('/job/:jobId', async (req, res) => {
+    const { jobId } = req.params;
+    try {
+        const jobWithCompany = await JobOffer.findById(jobId).populate('companyId');
+        if (!jobWithCompany) return res.status(400).json({ message: 'Job offer not found' });
+
+        res.status(200).json({ message: 'Job found', payload: { job: jobWithCompany } });
+    } catch (error) {
+        res.status(500).send({ message: error });
+    }
+});
+
+router.get('/jobs/:userId', async (req, res) => {
     const { userId } = req.params;
     try {
         const profile = await Company.findById(userId);
@@ -19,8 +31,11 @@ router.get('/job/:userId', async (req, res) => {
     }
 });
 
+
+
+
 router.post('/job/create', checkAuth, async (req, res) => {
-    const { jobTitle, company, employmentType, date, description, address, requirements, salary } = req.body;
+    const { jobTitle, employmentType, date, description, address, requirements, salary } = req.body;
     const {id} = req.headers;
 
     try {
@@ -29,7 +44,7 @@ router.post('/job/create', checkAuth, async (req, res) => {
 
         const newJob = {
             jobTitle,
-            company,
+            companyId: profile._id,
             employmentType,
             date,
             description,
@@ -96,8 +111,6 @@ router.put('/job/edit/:jobId', checkAuth, async (req, res) => {
 router.put('/job/delete/:jobId', checkAuth, async (req, res) => {
     const {id} = req.headers;
     const { jobId } = req.params;
-    console.log('mame');
-    
 
     try {
         const profile = await Company.findById(id);

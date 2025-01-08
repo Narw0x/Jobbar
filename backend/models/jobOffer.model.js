@@ -6,10 +6,10 @@ const jobOfferSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    company: {
-        type: String,
-        required: true,
-        trim: true
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company',
+        required: true
     },
     address: {
         type: String,
@@ -40,7 +40,11 @@ const jobOfferSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-});
+},
+    {
+        timestamps: true,
+    }
+);
 
 const JobOffer = mongoose.model('JobOffers', jobOfferSchema);
 
