@@ -24,11 +24,19 @@ const jobOfferSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    experience: {
+        type: String,
+        required: true
+    },
     description: {
         type: String,
         required: true
     },
     requirements: {
+        type: Array,
+        default: []
+    },
+    skills: {
         type: Array,
         default: []
     },

@@ -5,12 +5,40 @@ import fs from 'fs';
 import User from '../models/user.model.js';
 import Company from '../models/company.model.js';
 import Blacklist from '../models/blackList.model.js';
-import JobOffer from '../models/jobOffer.model.js';
 import jwt from 'jsonwebtoken';
 import { checkAuth } from '../utils/auth.js';
 import { isValidObjectId } from 'mongoose';
+import { isValidPassword } from '../utils/auth.js';
+import { createJSONToken } from '../utils/auth.js';
+
 
 const router = express.Router();
+
+
+router.post('/profile/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (!user) user = await Company.findOne({ email });
+    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+
+    const isMatch = await isValidPassword(password, user.password);
+    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
+    const token = createJSONToken(email);
+    const { password: _, ...userWithoutPassword } = user.toObject();
+    const exp = new Date().getTime() + 86400000;
+    
+    res.status(200).json({
+      message: 'Login successful',
+      payload: { user: userWithoutPassword, token, exp },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Error in logging in company.', error: error });
+  }
+});
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

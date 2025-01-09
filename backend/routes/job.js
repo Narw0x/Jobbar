@@ -35,7 +35,7 @@ router.get('/jobs/:userId', async (req, res) => {
 
 
 router.post('/job/create', checkAuth, async (req, res) => {
-    const { jobTitle, employmentType, date, description, address, requirements, salary } = req.body;
+    const { jobTitle, employmentType, date, experience, description, address, requirements, skills, salary } = req.body;
     const {id} = req.headers;
 
     try {
@@ -47,9 +47,11 @@ router.post('/job/create', checkAuth, async (req, res) => {
             companyId: profile._id,
             employmentType,
             date,
+            experience,
             description,
             address,
             requirements,
+            skills,
             salary
         }
 
@@ -80,7 +82,7 @@ router.get('/job/edit/:jobId', checkAuth, async (req, res) => {
 });
 
 router.put('/job/edit/:jobId', checkAuth, async (req, res) => {
-    const { jobTitle, company, employmentType, date, description, address, requirements, salary } = req.body;
+    const { jobTitle, companyId, employmentType, experience, date, description, address, skills, requirements, salary } = req.body;
     const {id} = req.headers;
     const { jobId } = req.params;
 
@@ -91,12 +93,16 @@ router.put('/job/edit/:jobId', checkAuth, async (req, res) => {
         const jobOffer = await JobOffer.findById(jobId);
         if (!jobOffer) return res.status(400).json({ message: 'Job offer not found' });
 
+        
+
         jobOffer.jobTitle = jobTitle;
-        jobOffer.company = company;
+        jobOffer.companyId = companyId;
         jobOffer.employmentType = employmentType;
         jobOffer.date = date;
+        jobOffer.experience = experience;
         jobOffer.description = description;
         jobOffer.address = address;
+        jobOffer.skills = skills;
         jobOffer.requirements = requirements;
         jobOffer.salary = salary;
 

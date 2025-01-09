@@ -7,34 +7,14 @@ import { checkAuth } from '../utils/auth.js';
 
 const router = express.Router();
 
-router.post('/user/login', async (req, res) => {
-    const { email, password } = req.body;
-    try {
-      const user = await User.findOne({ email });
-      if (!user) return res.status(400).json({ message: 'User not found' });
-      
-      const isMatch = await isValidPassword(password, user.password);
-      if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
-      
-      const token = createJSONToken(email);
-      const { password: _, ...userWithoutPassword } = user.toObject();
-      const exp = new Date().getTime() + 86400000;
-      
-      res.status(200).json({
-        message: 'Login successful',
-        payload: { user: userWithoutPassword, token, exp },
-      });
-    } catch (error) {
-        res.status(500).send({ message: 'Error in logging in user.' });
-    }
-});
-
 router.post('/user/register', async (req, res) => {
     const { firstName, lastName, email, password, gender, phoneNumber } = req.body;
     
     try {
       const existingUser = await User.findOne({ email });
       if (existingUser) return res.status(400).json({ message: 'User already exists' });
+      const existingCompany = await Company.findOne({ email });
+      if (existingCompany) return res.status(400).json({ message: 'Company already exists' });
 
       const hashedPassword = await bcrypt.hash(password, 12);
 
