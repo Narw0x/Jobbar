@@ -64,7 +64,7 @@ const Autocomplete = ({ value = undefined, onChange = undefined }) => {
         onChange={handleChange}
         placeholder="Enter a location"
         name='address'
-        className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg w-full"
+        className="bg-white text-custom_gray focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg w-full"
       />
       <ul className="absolute z-50 mt-1 max-h-60 overflow-auto bg-white border rounded-md shadow-lg">
         {suggestions.map((suggestion) => (

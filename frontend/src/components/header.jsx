@@ -37,7 +37,7 @@ export default function Header() {
                 <div className="flex justify-center gap-4 items-center">
                     <div className="flex gap-4 text-custom_gray">
                         <NavLink
-                            to="/"
+                            to='/job/search'
                             end
                             className={({isActive}) => isActive ? "flex items-center gap-1 cursor-pointer text-custom_red": "flex items-center gap-1 cursor-pointer hover:text-custom_red transition-colors duration-300"}
                         >
@@ -179,7 +179,7 @@ export default function Header() {
                         ) : (
                             <>
                                 <NavLink
-                                    to="/login/user"
+                                    to="/login"
                                     >
                                     <Button style="gray-hover">Login</Button>
                                 </NavLink>

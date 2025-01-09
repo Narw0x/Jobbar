@@ -11,9 +11,22 @@ import { isValidEmail, isValidPassword } from "../util/validation";
 
 import Button from "../components/button"
 
-export default function LoginPage({type = 'user'}) {
+export default function LoginPage() {
     const toast = useRef(null);
     const navigate = useNavigate();
+
+    const [data , setData] = useState({
+        email: '',
+        password: ''
+    });
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    }
 
     const dispatch = useDispatch();
 
@@ -49,27 +62,22 @@ export default function LoginPage({type = 'user'}) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        const formData = new FormData(e.target);
-
-        if(!isValidEmail(formData.get('email'))){
-            setMessageState({message:'Email is invalid', type: 'error'});
+        
+        if (!isValidEmail(data.email)) {
+            setMessageState({message: 'Email is invalid', type: 'error'});
             return;
         }
 
-        if(!isValidPassword(formData.get('password'))){
-            setMessageState({message:'Password is invalid', type: 'error'});
+        if (!isValidPassword(data.password)) {
+            setMessageState({message: 'Password is invalid', type: 'error'});
             return;
         }
-    
-        const data = {
-            email: formData.get('email'),
-            password: formData.get('password'),
-        };
+
     
         // Send a POST request
         dispatch(loginStart());
         axios
-            .post(`http://localhost:4000/api/${type.toLowerCase()}/login`, data)
+            .post(`http://localhost:4000/api/profile/login`, data)
             .then((response) => {
                 dispatch(loginSuccess(response.data.payload));
                 navigate('/profile/' + response.data.payload.user._id, {state: {message: response.data.message, type: 'success'}});
@@ -85,15 +93,15 @@ export default function LoginPage({type = 'user'}) {
         <section className="bg-custom_bg_gray p-16">
             <Toast ref={toast} />
             <div className="flex justify-center flex-col max-w-[1000px] w-[60%] m-auto border border-black rounded-lg bg-white p-16 mt-16">
-                <h1 className="text-center text-6xl text-custom_gray font-bold m-8">Sign in as {type.toLowerCase() === 'user' ? 'User' : 'Company'}</h1>
+                <h1 className="text-center text-6xl text-custom_gray font-bold m-8">Sign in</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-col mb-4">
                         <label className="text-custom_gray text-2xl font-bold" htmlFor="email">Email</label>
-                        <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" type="email" name="email" id="email" />
+                        <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" type="email" name="email" id="email" value={data.email} onChange={handleChange} />
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="password">Password</label>
-                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password" />
+                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password" value={data.password} onChange={handleChange} />
                         <label className="text-custom_red text-s" htmlFor="password">Forgot your password?</label>
                     </div>
                     <div className="flex flex-col text-xl">
@@ -110,15 +118,15 @@ export default function LoginPage({type = 'user'}) {
                 <div className="flex flex-col text-xl gap-4"> 
                     <Button 
                         style={'red-default'}
-                        redirectPath={`/login/${type.toLowerCase() === 'user' ? 'company' : 'user'}`}
+                        redirectPath={`/register/user`}
                     >
-                        Sign in as {type.toLowerCase() === 'user' ? 'Company' : 'User'}
+                        Create an User Account
                     </Button>
                     <Button 
                         style={'red-default'}
-                        redirectPath={`/register/${type.toLowerCase()}`}
+                        redirectPath={`/register/company`}
                     >
-                        Create an Account
+                        Create a Company Account
                     </Button>
                 </div>
             </div>

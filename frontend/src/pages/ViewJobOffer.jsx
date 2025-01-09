@@ -83,11 +83,11 @@ export default function ViewJobOfferPage() {
                             <h3 className="text-xl text-custom_gray">Start Date:</h3>
                             <p className=" text-custom_gray">{formatDateBetter(job.date)}</p>
                         </div>
-                        <p className="text-custom_red text-sm">{job.employmentType}</p>
+                        <p className="text-custom_red ">{job.employmentType}</p>
                         <div className="flex flex-col mt-4 w-96">
                             <h3 className="text-xl text-custom_gray">Desired skills</h3>
                             {job.requirements.map((requirement, index) => (
-                                <p className="text-custom_gray" key={index}>{requirement.requirementName} - {requirement.requirementType}</p>
+                                <p className="text-custom_gray" key={index}>{requirement.requirementName} - <span className="text-custom_red">{requirement.requirementType}</span></p>
                             ))}
                         </div>
                     </div>
@@ -110,7 +110,7 @@ export default function ViewJobOfferPage() {
                         </Button>
                         <Button 
                             style="red-default"
-                            redirectPath="/search"
+                            redirectPath="/job/search"
                         >
                             Back
                         </Button>

@@ -131,7 +131,7 @@ export default function RegisterCompanyPage() {
 
                     <Button 
                         style={'red-default'}
-                        redirectPath={`/login/user`}
+                        redirectPath={`/login`}
                     >
                         Sign in
                     </Button>

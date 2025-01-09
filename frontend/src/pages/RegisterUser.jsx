@@ -6,60 +6,71 @@ import Button from "../components/button"
 
 export default function RegisterUserPage() {
     const [error, setError] = useState(null);
+    const [user, setUser] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        password_2: '',
+        gender: '',
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUser((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    }
+
     const navigate = useNavigate();
 
     function handleSubmit(e) {
-        e.preventDefault(); // Prevent default form submission behavior
-        const formData = new FormData(e.target);
+        e.preventDefault();
 
-        // Validate first name
-        if (!isValidText(formData.get('firstName') || !isValidText(formData.get('lastName')))) {
-            setError('First name or Last name is invalid');
+        if(!isValidText(user.firstName)){
+            setError('First name is required.');
             return;
         }
-        // Validate email
-        if (!isValidEmail(formData.get('email'))) {
-            setError('Email is invalid');
+
+        if(!isValidText(user.lastName)){
+            setError('Last name is required.');
             return;
         }
-        // Validate password
-        if (!isValidPassword(formData.get('password'))) {
-            setError('Password is invalid');
+
+        if(!isValidEmail(user.email)){
+            setError('Email is invalid.');
             return;
         }
-        // Validate phone number
-        if (!isValidPhoneNumber(formData.get('phone'))) {
-            setError('Phone number is invalid');
+
+        if(!isValidPassword(user.password)){
+            setError('Password must be at least 8 characters long.');
             return;
         }
-        // Validate password match
-        if (formData.get('password') !== formData.get('password_2')) {
-            setError('Passwords do not match');
+
+        if(user.password !== user.password_2){
+            setError('Passwords do not match.');
             return;
         }
-        // Create the data object
+
         const data = {
-            firstName: formData.get('firstName'),
-            lastName: formData.get('lastName'),
-            email: formData.get('email'),
-            password: formData.get('password'),
-            gender: formData.get('gender'),
-            phoneNumber: formData.get('phone'),
-        };
-        // Send a POST request
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            password: user.password,
+            gender: user.gender
+        }
+       
         axios
             .post('http://localhost:4000/api/user/register', data)
             .then((response) => {
                 navigate('/login/user', { state: { message: response.data.message, type: 'success' } });
             })
             .catch((error) => {
-                console.error('Error:', error.response?.data || error.message); // Handle error
+                console.error('Error:', error.response?.data || error.message);
                 setError('An error occurred during registration. Please try again.');
             });
     }
-    
-
-
 
     return(
         <section className="bg-custom_bg_gray p-16">
@@ -70,44 +81,77 @@ export default function RegisterUserPage() {
             }
             <div className="flex justify-center flex-col max-w-[1000px] w-[60%] m-auto border border-black rounded-lg bg-white p-16 mt-16">
                 <h1 className="text-center text-6xl text-custom_gray font-bold m-8">Sign up as User</h1>
-                <form  onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <div className="flex justify-between">
                         <div className="flex flex-col w-[45%]">
                             <label className="text-custom_gray text-2xl font-bold" htmlFor="firstName">First Name</label>
-                            <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg w-full" type="text" name="firstName" id="firstName" />
+                            <input 
+                                className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg w-full" 
+                                type="text" 
+                                name="firstName" 
+                                id="firstName" 
+                                value={user.firstName} 
+                                onChange={handleChange}
+                            />
                         </div>
                         <div className="flex flex-col w-[45%]">
                             <label className="text-custom_gray text-2xl font-bold" htmlFor="lastName">Last Name</label>
-                            <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" type="text" name="lastName" id="lastName" />
+                            <input 
+                                className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" 
+                                type="text" 
+                                name="lastName" 
+                                id="lastName" 
+                                value={user.lastName} 
+                                onChange={handleChange}
+                            />
                         </div>
                     </div>
                     <div className="flex flex-col mb-4">
                         <label className="text-custom_gray text-2xl font-bold" htmlFor="email">Email</label>
-                        <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" type="email" name="email" id="email" placeholder=""/>
+                        <input 
+                            className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" 
+                            type="email" 
+                            name="email" 
+                            id="email" 
+                            value={user.email} 
+                            onChange={handleChange}
+                        />
                     </div>
                     <div className="flex flex-col mb-4">
-                        <label  className="text-custom_gray text-2xl font-bold" htmlFor="password">Password</label>
-                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password" />
+                        <label className="text-custom_gray text-2xl font-bold" htmlFor="password">Password</label>
+                        <input  
+                            className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" 
+                            type="password" 
+                            name="password" 
+                            id="password" 
+                            value={user.password} 
+                            onChange={handleChange}
+                        />
                     </div>
                     <div className="flex flex-col mb-4">
-                        <label  className="text-custom_gray text-2xl font-bold" htmlFor="password2">Password again</label>
-                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password_2" id="password_2" />
+                        <label className="text-custom_gray text-2xl font-bold" htmlFor="password2">Password again</label>
+                        <input  
+                            className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" 
+                            type="password" 
+                            name="password_2" 
+                            id="password_2" 
+                            value={user.password_2} 
+                            onChange={handleChange}
+                        />
                     </div>
-                    {/* gender */}
                     <div className="flex flex-col mb-4">
                         <label className="text-custom_gray text-2xl font-bold" htmlFor="gender">Gender</label>
                         <select 
                             id="gender" 
                             name="gender" 
-                            className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-3 my-2 text-lg">
+                            value={user.gender}
+                            onChange={handleChange}
+                            className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-3 my-2 text-lg"
+                        >
                             <option value="">Select Gender</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                         </select>
-                    </div>
-                    <div className="flex flex-col mb-4">
-                        <label  className="text-custom_gray text-2xl font-bold" htmlFor="phone">Phone</label>
-                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="phone" name="phone" id="phone" placeholder="+421 xxxxxxxxx"/>
                     </div>
 
                     <div className="flex flex-col text-xl">
@@ -122,22 +166,21 @@ export default function RegisterUserPage() {
                     <hr className="w-[47%] border border-custom_gray"/>
                 </div>
                 <div className="flex flex-col text-xl gap-4"> 
-                    
                     <Button 
                         style={'red-default'}
-                        redirectPath={`/register/company`}
+                        redirectPath={'/register/company'}
                     >
                         Sign up as Company
                     </Button>
 
                     <Button 
                         style={'red-default'}
-                        redirectPath={`/login/user`}
+                        redirectPath={'/login'}
                     >
                         Sign in
                     </Button>
                 </div>
             </div>
         </section>
-    )
-};
+    );
+}

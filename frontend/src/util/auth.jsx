@@ -1,7 +1,7 @@
 import { redirect } from "react-router-dom";
 
 export function getTokenDuration() {
-    let exporationDate = localStorage.getItem('expiration');
+    let exporationDate = localStorage.getItem('exp');
     exporationDate = new Date(exporationDate);
     const now = new Date();
     const duration = exporationDate.getTime() - now.getTime();
@@ -13,8 +13,8 @@ export function getAuthToken() {
 
     if(!token) return null;
 
-    // const tokenDuration = getTokenDuration();
-    // if(tokenDuration <= 0) return "EXPIRED";
+    const tokenDuration = getTokenDuration();
+    if(tokenDuration <= 0) return "Expired";
     
     return token;
 }
@@ -28,6 +28,10 @@ export function checkAuthLoader(){
 
     if(!token){
         return redirect('/');
+    }
+
+    if(token === "Expired"){
+        return redirect('/login', {state: {type: 'error', message: 'Session expired. Please login again.'}});
     }
 
     return null;

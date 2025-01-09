@@ -27,6 +27,13 @@ export default function EditJobOfferPage() {
         employmentType: 'Full-time',
         date: '',
         description: '',
+        experience: '',
+        skills: [
+            {
+                skillName: '',
+                skillLevel: 'Beginner'
+            }
+        ],
         requirements: [
             { requirementName: '', requirementType: 'Beginner' }
         ],
@@ -88,6 +95,26 @@ export default function EditJobOfferPage() {
             requirements: [
                 ...prevState.requirements,
                 { requirementName: '', requirementType: 'Beginner' }
+            ]
+        }));
+    };
+
+    const handleSkillChange = (index, field, value) => {
+        setJobOffer(prevState => ({
+            ...prevState,
+            skills: prevState.skills.map((req, i) =>
+                i === index ? { ...req, [field]: value } : req
+            )
+        }));
+
+    };
+
+    const addSkill = () => {
+        setJobOffer(prevState => ({
+            ...prevState,
+            skills: [
+                ...prevState.skills,
+                { skillName: '', skillLevel: 'Beginner' }
             ]
         }));
     };
@@ -210,6 +237,75 @@ export default function EditJobOfferPage() {
                                 onChange={handleChange}
                                 value={jobOffer.description}
                             />
+                        </div>
+                        <div className="flex flex-col mt-4">
+                            <label htmlFor="experience" className="text-lg text-custom_gray">Years of Experience</label>
+                            <select
+                                name="experience"
+                                id="experience"
+                                className="bg-white text-custom_gray focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-xl"
+                                onChange={handleChange}
+                                value={jobOffer.experience}
+                            >
+                                <option value="0-1">0-1</option>
+                                <option value="1-3">1-3</option>
+                                <option value="3-5">3-5</option>
+                                <option value="5+">5+</option>
+                            </select>
+                        </div>
+                        <div className="flex flex-col mt-4">
+                            <label htmlFor="skills"  className="text-lg text-custom_gray">Skills</label>
+                            <div>
+                                {jobOffer.skills.map((skill, index) => (
+                                    <div key={index}  className='flex flex-row justify-between gap-4' >
+                                        <input 
+                                            type="text" 
+                                            name="skillName" 
+                                            id={`skillName-${index}`} 
+                                            className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg flex-1"
+                                            onChange={(e) => handleSkillChange(index, 'skillName', e.target.value)}
+                                            value={skill.skillName}
+                                        />
+                                        <select 
+                                            name="skillLevel" 
+                                            id={`skillLevel-${index}`} 
+                                            className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-xl "
+                                            onChange={(e) => handleSkillChange(index, 'skillLevel', e.target.value)}
+                                            value={skill.skillLevel}
+                                        >
+                                            <option value="Beginner">Beginner</option>
+                                            <option value="Intermediate">Intermediate</option>
+                                            <option value="Advanced">Advanced</option>
+                                            <option value="Expert">Expert</option>
+                                        </select>
+                                        {index > 0 && (
+                                            <div className="flex flex-col justify-center">   
+                                                <Button 
+                                                    style="red-hover" 
+                                                    type="button" 
+                                                    onClick={() => {
+                                                        setJobOffer(prevState => ({
+                                                            ...prevState,
+                                                            skills: prevState.skills.filter((req, i) => i !== index)
+                                                        }));
+                                                    }}
+                                                >
+                                                    Remove
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex flex-row justify-end">
+                                <Button
+                                    style="red-hover"
+                                    type="button"
+                                    onClick={addSkill}
+                                >
+                                    Add Skill
+                                </Button>
+                            </div>
                         </div>
                         <div className="flex flex-col mt-4">
                             <label htmlFor="requirements" className="text-lg text-custom_gray">Requirements</label>

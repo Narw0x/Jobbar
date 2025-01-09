@@ -19,6 +19,7 @@ import EditEducationPage from './pages/EditEducation';
 import JobOfferPage from './pages/JobOffer';
 import EditJobOfferPage from './pages/EditJobOffer';
 import ViewJobOfferPage from './pages/ViewJobOffer';
+import SearchPage from './pages/Search';
 
 
 
@@ -34,10 +35,7 @@ const router = createBrowserRouter([
       {path: 'about', element: <AboutPage />},
       {
         path: 'login',
-        children: [
-          {path: 'user', element: <LoginPage type='User'/>},
-          {path: 'company', element: <LoginPage type='Company'/>}
-        ]
+        element: <LoginPage />
       },
       {
         path: 'register',
@@ -67,7 +65,8 @@ const router = createBrowserRouter([
         children: [
           {path: 'add', element: <JobOfferPage />},
           {path: 'edit/:jobId', element: <EditJobOfferPage />},
-          {path: ':jobId', element: <ViewJobOfferPage />}
+          {path: ':jobId', element: <ViewJobOfferPage />},
+          {path: 'search', element: <SearchPage />, loader: checkAuthLoader}
         ]
       }
     ]
