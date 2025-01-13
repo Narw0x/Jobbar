@@ -2,8 +2,113 @@ import express from 'express';
 import { checkAuth } from '../utils/auth.js';
 import Company from '../models/company.model.js';
 import JobOffer from '../models/jobOffer.model.js';
+import User from '../models/user.model.js';
+import JobApplicant from '../models/jobApplicant.model.js';
 
 const router = express.Router();
+
+// router.get('/jobs', async (req, res) => {
+//     try {
+//       // Extract search parameters from query params instead of headers
+//       const { address, radius, jobType, salary, experience } = req.query;
+  
+//       // Input validation
+//       if (!salary || !jobType) {
+//         return res.status(400).json({
+//           message: 'Missing required search parameters',
+//           required: ['salary', 'jobType']
+//         });
+//       }
+  
+//       // Build query object dynamically
+//       const query = {};
+  
+//       // Salary filter with numeric conversion
+//       if (salary) {
+//         query.salary = { $gte: parseFloat(salary) };
+//       }
+  
+//       // Experience filter (assuming it's an array in string format like "1,2,3")
+//       if (experience) {
+//         query.experience = { $in: experience.split(',').map(exp => exp.trim()) };
+//       }
+  
+//       // Job type filter
+//       if (jobType) {
+//         query.employmentType = jobType;
+//       }
+  
+//       // Location-based search using MongoDB geospatial query
+//       if (address && radius) {
+//         // Assuming you have a function to convert address to coordinates
+//         const coordinates = await getCoordinates(address);
+//         query.location = {
+//           $near: {
+//             $geometry: {
+//               type: "Point",
+//               coordinates: [coordinates.longitude, coordinates.latitude]
+//             },
+//             $maxDistance: parseInt(radius) * 1000 // Convert km to meters
+//           }
+//         };
+//       }
+  
+//       // Add pagination
+//       const page = parseInt(req.query.page) || 1;
+//       const limit = parseInt(req.query.limit) || 10;
+//       const skip = (page - 1) * limit;
+  
+//       // Execute query with pagination
+//       const jobs = await JobOffer.find(query)
+//         .skip(skip)
+//         .limit(limit)
+//         .select('-__v') // Exclude version key
+//         .lean(); // Convert to plain JavaScript objects
+  
+//       // Get total count for pagination
+//       const total = await JobOffer.countDocuments(query);
+  
+//       // Send response with pagination metadata
+//       res.status(200).json({
+//         message: 'Jobs found',
+//         payload: {
+//           jobs,
+//           pagination: {
+//             total,
+//             page,
+//             limit,
+//             pages: Math.ceil(total / limit)
+//           }
+//         }
+//       });
+  
+//     } catch (error) {
+//       console.error('Job search error:', error);
+//       res.status(500).json({
+//         message: 'An error occurred while searching for jobs',
+//         error: process.env.NODE_ENV === 'development' ? error.message : undefined
+//       });
+//     }
+//   });
+
+router.get('/jobs', async (req, res) => {
+    const searchConfig = JSON.parse(req.headers.searchconfig);
+    const { salary, jobType, experience} = searchConfig;
+
+    try {
+        const salaryAmount = Number(salary);
+        
+        const jobs = await JobOffer.find({
+            'salary.amount': { $gte: salaryAmount },
+            'employmentType': { $regex: jobType, $options: 'i' },
+            'experience': { $regex: experience, $options: 'i' }
+        });
+
+        res.status(200).json({ message: 'Jobs found', payload: { jobs } });
+    } catch (error) {
+        res.status(500).send({ message: error });
+    }
+});
 
 router.get('/job/:jobId', async (req, res) => {
     const { jobId } = req.params;
@@ -11,7 +116,22 @@ router.get('/job/:jobId', async (req, res) => {
         const jobWithCompany = await JobOffer.findById(jobId).populate('companyId');
         if (!jobWithCompany) return res.status(400).json({ message: 'Job offer not found' });
 
-        res.status(200).json({ message: 'Job found', payload: { job: jobWithCompany } });
+        let applicants = await JobApplicant.find({ jobOffer: jobId }).populate('applicant');
+
+        res.status(200).json({ message: 'Job found', payload: { job: jobWithCompany, applicants } });
+    } catch (error) {
+        res.status(500).send({ message: error });
+    }
+});
+
+router.get('/job/user/:userId', async (req, res) => {
+    const { userId } = req.params;
+    try {
+
+        const jobs = await JobApplicant.find({ applicant: userId }).populate('jobOffer');
+        if (!jobs) return res.status(400).json({ message: 'Jobs not found' });
+
+        res.status(200).json({ message: 'Job found', payload: { jobs } });
     } catch (error) {
         res.status(500).send({ message: error });
     }
@@ -125,6 +245,17 @@ router.put('/job/delete/:jobId', checkAuth, async (req, res) => {
         const jobOffer = await JobOffer.findById(jobId);
         if (!jobOffer) return res.status(400).json({ message: 'Job offer not found' });
 
+        const jobApplicants = await JobApplicant.find({ jobOffer: jobId });
+        if (jobApplicants.length > 0){
+            jobApplicants.forEach(async (applicant) => {
+                const user = await User.findById(applicant.applicant);
+                user.application = user.application.filter((job) => job.toString() !== jobId);
+                await user.save();
+            });
+        }
+
+        await JobApplicant.deleteMany({ jobOffer: jobId });
+        await JobOffer.deleteOne({ _id: jobId });
         await JobOffer.deleteOne({ _id: jobId });
 
         profile.jobOffers = profile.jobOffers.filter((job) => job.toString() !== jobId);
@@ -134,6 +265,53 @@ router.put('/job/delete/:jobId', checkAuth, async (req, res) => {
         res.status(200).json({ message: 'Job deleted successfully', payload: { user: profile } });
     } catch (error) {
         res.status(500).send({ message: error });
+    }
+});
+
+
+router.post('/job/apply/:jobId', checkAuth, async (req, res) => {
+    const { id } = req.headers;
+    const { jobId } = req.params;
+
+    try {
+      const profile = await User.findById(id);
+      if (!profile) return res.status(404).json({ message: 'User not found' });
+  
+      const jobOffer = await JobOffer.findById(jobId);
+      if (!jobOffer) return res.status(404).json({ message: 'Job offer not found' });
+  
+      const existingApplication = await JobApplicant.findOne({
+        applicant: profile._id,
+        jobOffer: jobOffer._id
+      });
+      if (existingApplication) return res.status(400).json({ message: 'You have already applied for this position' });
+  
+      // Create application
+      const application = await JobApplicant.create({
+        applicant: profile._id,
+        jobOffer: jobOffer._id,
+        status: 'Pending'
+      });
+  
+      // Update job offer with new applicant
+      await JobOffer.findByIdAndUpdate(jobId, {
+        $push: { applicants: profile._id }
+      });
+  
+      // Update user's applications
+      await User.findByIdAndUpdate(id, {
+        $push: { application: jobId }
+      });
+  
+      return res.status(201).json({
+        message: 'Applied successfully',
+      });
+  
+    } catch (error) {
+      console.error('Job application error:', error);
+      return res.status(500).json({ 
+        message: 'An error occurred while processing your application' 
+      });
     }
 });
 

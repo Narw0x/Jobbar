@@ -181,6 +181,33 @@ router.put('/profile/edit/:id', checkAuth, upload, async (req, res) => {
   }
 });
 
+router.put('/profile/config', checkAuth, async (req, res) => {
+  const { id } = req.headers;
+  const { address, radius, jobType, salary, experience } = req.body;
+
+  try {
+    let profile = await User.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    profile.searchConfig = {
+      address,
+      radius,
+      jobType,
+      salary,
+      experience
+    };
+
+    await profile.save();
+    res.status(200).json({
+      message: 'Profile config updated successfully',
+      payload: { user: profile }
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+  }
+});
+
 
 router.put('/profile/experience/add', checkAuth, async (req, res) => {
   const { jobTitle, company, employmentType, date, description } = req.body;

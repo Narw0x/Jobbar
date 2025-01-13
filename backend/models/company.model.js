@@ -50,18 +50,14 @@ const companySchema = new mongoose.Schema({
             github: ''
         }
     },
-    followers: {
-        type: Array,
-        default: []
-    },
-    following: {
-        type: Array,
-        default: []
-    },
     jobOffers: {
         type: Array,
         default: []
     },
+    role: {
+        type: String,
+        default: 'company'
+    }
 }, {
     timestamps: true,
     collection: 'company'

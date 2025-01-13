@@ -26,7 +26,7 @@ import profileRoutes from "./routes/profile.js";
 import Autocomplete from './routes/autocomplete.js';
 import jobRoutes from './routes/job.js';
 
-app.setMaxListeners(20);
+app.setMaxListeners(30);
 
 // Setup all the routes
 app.use('/api', userRoutes);

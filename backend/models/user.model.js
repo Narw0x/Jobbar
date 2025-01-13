@@ -71,14 +71,24 @@ const userSchema = new mongoose.Schema({
         trim: true,
         default: "https://www.example.com"
     },
-    followers: {
+    role: {
+        type: String,
+        default: "user"
+    },
+    application: {
         type: Array,
         default: []
     },
-    following: {
-        type: Array,
-        default: []
-    },
+    searchConfig: {
+        type: Object,
+        default: {
+            address: '',
+            radius: '5',
+            jobType: 'full-time',
+            salary: 0,
+            experience: '0-1'
+        }
+    }
 }, {
     timestamps: true,
     collection: 'user'
