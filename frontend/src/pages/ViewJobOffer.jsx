@@ -1,13 +1,20 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+
 
 import Button from "../components/button";
+import { Toast } from "primereact/toast";
 
 export default function ViewJobOfferPage() {
-
+    const toast = useRef(null);
     const { jobId } = useParams();
+    const [applied, setApplied] = useState(false);
+    const [applicants, setApplicants] = useState([]);
+
+    
 
     const [job, setJob] = useState({
         jobTitle: '',
@@ -19,10 +26,17 @@ export default function ViewJobOfferPage() {
         employmentType: 'Full-time',
         date: new Date(),
         description: '',
+        expereince: '0-1',
+        skills: [
+            {
+                skillName: '',
+                skillLevel: 'Beginner'
+            }
+        ],
         requirements: [
             {
                 requirementName: '',
-                requirementType: 'Beginner'
+                requirementType: 'required'
             }
         ],
         salary: {
@@ -30,10 +44,12 @@ export default function ViewJobOfferPage() {
                 amount: '0',
                 salaryType: 'year'
         },
-        address: ''
+        address: '',
+        applicants: []
     });
 
     const authState = useSelector((state) => state.auth);
+
 
     useEffect(() => {
         axios.get(`http://localhost:4000/api/job/${jobId}`, {
@@ -43,11 +59,13 @@ export default function ViewJobOfferPage() {
         }).then((response) => {
             const date = new Date(response.data.payload.job.date);
 
+            setApplicants(response.data.payload.applicants);
             setJob((prev) => ({
                 ...prev,
                 ...response.data.payload.job,
                 date
             }));
+            setApplied(response.data.payload.job.applicants.includes(authState.user._id));
         
         }).catch((error) => {
             console.log(error);
@@ -63,31 +81,111 @@ export default function ViewJobOfferPage() {
         }).format(date);
     };
 
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+    
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
+
+    const handleApply = () => {
+        axios.post(`http://localhost:4000/api/job/apply/${jobId}`, {}, {
+            headers: {
+                Authorization: `Bearer ${authState.token}`,
+                id: authState.user._id
+            }
+            }).then((response) => {
+                setApplied(true);
+                setMessageState({type: 'success', message: response.data.message});
+            }).catch((error) => {
+                setMessageState({type: 'error', message: error.response.data.message});
+            }
+        );
+    }
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+    
+        setApplicants((prev) =>
+            prev.map((applicant) =>
+                applicant._id === id
+                    ? { ...applicant, status: value } 
+                    : applicant 
+            )
+        );
+    };
+    
+
+    const handleSumbitStatus = (e) => {
+        e.preventDefault();
+
+        console.log(e.target);
+        
+
+    }
+
+        
+        
 
     return (
         <section className="bg-custom_bg_gray py-8">
+            <Toast ref={toast} />
             <div className="max-w-[1440px] w-[70%] flex flex-col mx-auto border rounded-lg shadow-md bg-white">
                 <div className="flex flex-row px-8 py-8">
                     <div className="basis-2/3">
                         <h1 className="text-3xl text-custom_gray font-bold">{job.jobTitle}</h1>
                         <p className="text-custom_red text-sm">{job.address}</p>
-                        <div className="flex flex-col justify-between mt-4 w-96"> 
+                        <div className="flex flex-col justify-between mt-4 w-[50%]"> 
                             <h3 className="text-xl text-custom_gray">About the job</h3>
                             <p className="text-custom_gray">{job.description}</p>
                         </div>
-                        <div className="flex flex-row  justify-between mt-4 w-96">
+                        <div className="flex flex-row  justify-between mt-4 w-[50%]">
                             <h3 className="text-xl text-custom_gray">Salary:</h3>
                             <p className="text-xl text-custom_gray align-middle mt-auto">{job.salary.currency}{job.salary.amount}/{job.salary.salaryType}</p>
                         </div>
-                        <div className="flex flex-row justify-between mt-1 w-96">
+                        <div className="flex flex-row justify-between mt-1 w-[50%]">
                             <h3 className="text-xl text-custom_gray">Start Date:</h3>
                             <p className=" text-custom_gray">{formatDateBetter(job.date)}</p>
                         </div>
-                        <p className="text-custom_red ">{job.employmentType}</p>
-                        <div className="flex flex-col mt-4 w-96">
-                            <h3 className="text-xl text-custom_gray">Desired skills</h3>
+                        <div className="flex flex-row mt-4 w-[50%] justify-between">
+                            <h3 className="text-xl text-custom_gray">Employment Type</h3>
+                            <p className="text-custom_red ">{job.employmentType}</p>
+                        </div>
+                        <div className="flex flex-row mt-4 w-[50%] justify-between">
+                            <h3 className="text-xl text-custom_gray">Experience</h3>
+                            <p className="text-custom_gray">{job.expereince} years</p>
+                        </div>
+                        <div className="flex flex-col mt-4 w-[50%]">
+                            <h3 className="text-xl text-custom_gray">Requirements</h3>
                             {job.requirements.map((requirement, index) => (
                                 <p className="text-custom_gray" key={index}>{requirement.requirementName} - <span className="text-custom_red">{requirement.requirementType}</span></p>
+                            ))}
+                        </div>
+                        <div className="flex flex-col mt-4 w-96">
+                            <h3 className="text-xl text-custom_gray">Desired skills</h3>
+                            {job.skills.map((skill, index) => (
+                                <p className="text-custom_gray" key={index}>{skill.skillName} - <span className="text-custom_red">{skill.skillLevel}</span></p>
                             ))}
                         </div>
                     </div>
@@ -101,16 +199,55 @@ export default function ViewJobOfferPage() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-row px-8 py-4 gap-4">
+                <div>
+                    <h1 className="text-3xl text-custom_gray font-bold px-8 py-8">Applicants</h1>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-8">
+                        {applicants.map((applicant, idx) => (
+                            <div key={applicant._id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 flex flex-col gap-4">
+                                <div className="flex flex-row gap-4">
+                                  <div className="w-28 aspect-square object-cover rounded">
+                                        <img className={` object-cover rounded-2xl p-2 ${applicant.applicant.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${applicant.applicant.avatar}`} alt="" />
+                                    </div>
+                                    <div className="flex flex-col w-full">
+                                        <h3 className="text-md text-custom_gray font-semibold text-xl">{applicant.applicant.firstName}</h3>
+                                        <div className="flex flex-col mt-2">
+                                            <div className="flex flex-col items-start">
+                                                <div className="flex flex-row w-full justify-between">
+                                                    <p className=" text-custom_gray font-semibold">Email:</p>
+                                                    <p className=" text-custom_red">{applicant.applicant.email}</p>
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                        </div>  
+                                    </div>  
+                                </div>
+                                <div className="flex flex-row gap-4 justify-end">
+                                        <Button
+                                            style="red-hover"
+                                            redirectPath={`/profile/${applicant.applicant._id}`}
+                                        >
+                                            View
+                                        </Button>
+                                </div>
+                                
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="flex flex-row px-8 py-8 gap-4">
+                    {authState.user.role === 'company' ? (
                         <Button
                             style="red-hover"
-
+                            onClick={handleApply}
+                            disabled={applied}
                         >
-                            Apply
+                            {applied ? 'Applied' : 'Apply'}
                         </Button>
+                    ) : null}
                         <Button 
                             style="red-default"
-                            redirectPath="/job/search"
+                            redirectPath={`${authState.user.role === 'company' ? '/job/search' : (`/profile/${authState.user._id}`)}`}
                         >
                             Back
                         </Button>

@@ -39,8 +39,7 @@ export default function EditJobOfferPage() {
         ],
         salary: {
             amount: '',
-            currency: 'USD',
-            salaryType: 'year'
+            currency: '€'
         }
 
     });
@@ -367,7 +366,7 @@ export default function EditJobOfferPage() {
                         </div>
                         <div className="flex flex-col mt-4">
                             <label htmlFor="salary" className="text-lg text-custom_gray">Salary</label>
-                            <div className="flex flex-row gap-4">
+                            <div className="flex flex-row gap-4 items-center">
                                 <div className="relative flex items-center flex-1">
                                     <span className="absolute left-3 text-gray-500">{jobOffer.salary.currency}</span>
                                     <input
@@ -379,18 +378,7 @@ export default function EditJobOfferPage() {
                                         value={jobOffer.salary.amount}
                                     />
                                 </div>
-                                <select 
-                                    name='salaryType'
-                                    id='salaryType'
-                                    className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg"
-                                    onChange={handleSalaryChange}
-                                    value={jobOffer.salary.salaryType}
-                                >
-                                    <option value="year">Yearly</option>
-                                    <option value="month">Monthly</option>
-                                    <option value="week">Weekly</option>
-                                    <option value="hour">Hourly</option>
-                                </select>
+                                <p className='text-xl text-custom_gray'>Year</p>
                             </div>
                             <div>
                                 <Button 

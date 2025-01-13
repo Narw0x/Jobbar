@@ -17,7 +17,6 @@ export default function ProfilePage() {
     const [jobOffers, setJobOffers] = useState([]);
     const [isCurrentUser, setIsCurrentUser] = useState(false);
     const [error, setError] = useState(null);
-    const [isFollowing, setIsFollowing] = useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -91,7 +90,7 @@ export default function ProfilePage() {
             .catch((error) => {
                 console.error('Error fetching job offers:', error);
                 setError('An error occurred while fetching the job offers. Please try again.');
-                if(error.response.statusText === "Unauthorized"){
+                if(error.response?.statusText === "Unauthorized"){
                     dispatch(logout());
                     navigate('/login', { state: { type: 'error', message: 'You are not authorized to view this page. Please log in.' } });
                 }
@@ -99,9 +98,6 @@ export default function ProfilePage() {
         }   
     }, [profileData, authState.token]);
 
-    const handleFollow = () => {
-        setIsFollowing(!isFollowing);
-    }
 
 
     const formatDate = (dateString) => {
@@ -153,33 +149,6 @@ export default function ProfilePage() {
                                 {profileData.address}
                             </p>}
                             
-                        </div>
-                        <div className="m-4 mt-0 flex gap-4">
-                            <div className="flex gap-4 text-custom_gray justify-center m-auto">
-                                <p>Followers: <span>{profileData?.followers?.length || 0}</span></p>
-                                
-                            </div>
-                            {!isCurrentUser && (
-                                !isFollowing ? (<Button
-                                    style="red-hover"
-                                    onClick={handleFollow}
-                                >
-                                    Follow
-                                </Button>) : (<Button
-                                    style="red-default"
-                                    onClick={handleFollow}
-                                >
-                                    Following
-                                </Button>)
-
-                            )}
-                            {isCurrentUser && (
-                                <div className="flex justify-center m-auto">
-                                    <Link to={`/profile/edit`}>
-                                        <img className="rotate-90" src="/settings.svg" alt="" />
-                                    </Link>
-                                </div>
-                            )}
                         </div>
                     </div>
                     
@@ -378,7 +347,7 @@ export default function ProfilePage() {
                                             <div className="flex flex-col items-start space-y-2">
                                                 <div className="flex flex-row w-full gap-16 justify-between">
                                                     <p className=" text-custom_gray font-semibold">Salary:</p>
-                                                    <p className=" text-custom_red">{job.salary.amount}{job.salary.currency}/<span className="text-sm">{job.salary.salaryType}</span> </p>
+                                                    <p className=" text-custom_red">{job.salary.amount}{job.salary.currency}/<span className="text-sm">Year</span> </p>
                                                 </div>
                                                 <div className="flex flex-row  w-full justify-between">
                                                     <p className=" text-custom_gray font-semibold">Location:</p>

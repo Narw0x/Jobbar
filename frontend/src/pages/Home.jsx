@@ -1,12 +1,16 @@
 import { Link  } from "react-router-dom";
 import Button from "../components/button";
 import Features from "../components/features";
+import { useSelector } from "react-redux";
 
 const pathManAtTable = "./Man_at_table.svg";
 
 
 
 export default function HomePage(){
+
+    const authState = useSelector(state => state.auth);
+
     return(
         <>
             <section className="bg-custom_bg_gray w-[100%] pt-16">
@@ -30,7 +34,7 @@ export default function HomePage(){
                         <div>
                             <Button
                                 style="red-default"
-                                redirectPath={"/search"}
+                                redirectPath={authState.token ? "/job/search" : "/login"}
                                 >
                                 Search
                             </Button>

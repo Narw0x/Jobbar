@@ -23,6 +23,8 @@ export function tokenLoader(){
     return getAuthToken();
 }
 
+
+
 export function checkAuthLoader(){
     const token = getAuthToken();
 
@@ -32,6 +34,31 @@ export function checkAuthLoader(){
 
     if(token === "Expired"){
         return redirect('/login', {state: {type: 'error', message: 'Session expired. Please login again.'}});
+    }
+
+    return null;
+}
+
+export function getUserRole(){
+    const user = localStorage.getItem('user');
+    if(!user) return null;
+
+    const userType = JSON.parse(user).role;
+
+    return userType;
+}
+
+export function checkCompanyLoader(){
+    const role = getUserRole();
+
+
+    if(!role){
+        return redirect('/');
+    }
+    
+
+    if(role === "company"){
+        return redirect('/');
     }
 
     return null;

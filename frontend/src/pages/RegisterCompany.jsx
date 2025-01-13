@@ -104,7 +104,7 @@ export default function RegisterCompanyPage() {
                         <Autocomplete
                             value={companyProfile.address}
                             onChange={handleChange}
-                            />
+                        />
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="phone">Phone</label>

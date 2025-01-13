@@ -48,7 +48,7 @@ export default function Carousel() {
             <h2 className="text-5xl font-bold text-custom_gray text-center">
                 What people say about us?
             </h2>
-            <div className="border border-black w-[70%] max-w-[1440px] flex m-auto rounded-lg my-8 justify-between p-8 bg-white">
+            <div className="border w-[70%] max-w-[1440px] flex m-auto my-8 justify-between p-8 rounded-lg shadow-md bg-white">
                 <button
                     onClick={handlePrev}
                     className="text-3xl text-custom_gray font-bold"

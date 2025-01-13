@@ -10,7 +10,7 @@ import ProfilePage from './pages/Profile';
 import EditUserProfilePage from './pages/EditUserProfile';
 import ExperiencePage from './pages/Experience';
 import EditExperiencePage from './pages/EditExperience';
-import { checkAuthLoader } from './util/auth';
+import { checkAuthLoader, checkCompanyLoader } from './util/auth';
 
 import { PrimeReactProvider } from "primereact/api";
 import ErrorPage from './pages/Error';
@@ -66,7 +66,7 @@ const router = createBrowserRouter([
           {path: 'add', element: <JobOfferPage />},
           {path: 'edit/:jobId', element: <EditJobOfferPage />},
           {path: ':jobId', element: <ViewJobOfferPage />},
-          {path: 'search', element: <SearchPage />, loader: checkAuthLoader}
+          {path: 'search', element: <SearchPage />, loader: checkCompanyLoader}
         ]
       }
     ]
