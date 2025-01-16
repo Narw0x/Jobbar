@@ -60,11 +60,14 @@ export default function RegisterUserPage() {
             password: user.password,
             gender: user.gender
         }
+
+        console.log(data);
+        
        
         axios
             .post('http://localhost:4000/api/user/register', data)
             .then((response) => {
-                navigate('/login/user', { state: { message: response.data.message, type: 'success' } });
+                navigate('/login', { state: { message: response.data.message, type: 'success' } });
             })
             .catch((error) => {
                 console.error('Error:', error.response?.data || error.message);

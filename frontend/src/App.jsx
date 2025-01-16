@@ -20,6 +20,8 @@ import JobOfferPage from './pages/JobOffer';
 import EditJobOfferPage from './pages/EditJobOffer';
 import ViewJobOfferPage from './pages/ViewJobOffer';
 import SearchPage from './pages/Search';
+import ManageJobsPage from './pages/ManageJobs';
+import ManageJobPage from './pages/ManageJob';
 
 
 
@@ -66,7 +68,9 @@ const router = createBrowserRouter([
           {path: 'add', element: <JobOfferPage />},
           {path: 'edit/:jobId', element: <EditJobOfferPage />},
           {path: ':jobId', element: <ViewJobOfferPage />},
-          {path: 'search', element: <SearchPage />, loader: checkCompanyLoader}
+          {path: 'search', element: <SearchPage />, loader: checkCompanyLoader},
+          {path: 'manage', element: <ManageJobsPage />},
+          {path: 'manage/:jobId', element: <ManageJobPage />}
         ]
       }
     ]

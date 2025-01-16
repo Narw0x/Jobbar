@@ -25,8 +25,6 @@ export default function SearchBookmarksView() {
         });
     }, [authState.token, authState.user.searchConfig]);
 
-    console.log(jobs);
-    
     const formatDateBetter = (dateString) => {
         const date = new Date(dateString);
         return new Intl.DateTimeFormat('en-US', {
