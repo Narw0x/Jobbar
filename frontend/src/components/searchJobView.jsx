@@ -15,10 +15,9 @@ export default function SearchJobView() {
 
     useEffect(() => {
         if(authState.user.role === 'user') {
-        axios.get('http://localhost:4000/api/jobs', {
+        axios.post('http://localhost:4000/api/jobs',{searchConfig: authState.user.searchConfig} ,  {
             headers: {
-                Authorization: `Bearer ${authState.token}`,
-                searchConfig: JSON.stringify(authState.user.searchConfig)
+                Authorization: `Bearer ${authState.token}`
             }
         })
         .then(response => {
@@ -28,7 +27,6 @@ export default function SearchJobView() {
         });
     }}, [authState.token, authState.user.searchConfig]);
 
-    console.log(jobs);
     
     const formatDateBetter = (dateString) => {
         const date = new Date(dateString);

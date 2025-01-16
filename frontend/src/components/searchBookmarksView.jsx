@@ -68,7 +68,7 @@ export default function SearchBookmarksView() {
                                     <div>
                                         <Button
                                             style="red-hover"
-                                            redirectPath={`/job/${job._id}`}
+                                            redirectPath={`/job/${job.jobOffer._id}`} 
                                         >
                                             View
                                         </Button>

@@ -221,15 +221,15 @@ export default function EditUserProfilePage() {
                         <div className="flex flex-row mb-4 w-full justify-between">
                             <div className="w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="twitter">Twitter</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.twitter || ''} type="text" name="twitter" id="twitter" />
+                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.twitter || ''} type="text" name="twitter" id="twitter" placeholder="https://x.com/username" />
                             </div>
                             <div className="w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="instagram">Instagram</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.instagram || ''} type="text" name="instagram" id="instagram" />
+                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.instagram || ''} type="text" name="instagram" id="instagram" placeholder="https://www.instagram.com/username" />
                             </div>
                             <div className="w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="github">Github</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.github || ''} type="text" name="github" id="github" />
+                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.github || ''} type="text" name="github" id="github" placeholder="https://github.com/username" />
                             </div>
                         </div>
                     </div>

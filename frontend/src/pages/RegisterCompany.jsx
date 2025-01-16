@@ -15,6 +15,7 @@ export default function RegisterCompanyPage() {
         companyName: '',
         email: '',
         password: '',
+        password_2: '',
         address: '',
         phone: ''
     });
@@ -31,7 +32,10 @@ export default function RegisterCompanyPage() {
         e.preventDefault(); 
 
         const data = {
-            ...companyProfile,
+            companyName: companyProfile.companyName,
+            email: companyProfile.email,
+            password: companyProfile.password,
+            address: companyProfile.address,
         };
 
         if (!isValidText(data.companyName)) {
@@ -54,17 +58,11 @@ export default function RegisterCompanyPage() {
             return;
         }
 
-        if (!isValidPhoneNumber(data.phone)) {
-            setError('Phone number is invalid.');
-            return;
-        }
-
-       
         // Send a POST request
         axios
             .post('http://localhost:4000/api/company/register', data)
             .then((response) => {
-                navigate('/login/company', {state: {message: response.data.message, type: 'success'}});
+                navigate('/login', {state: {message: response.data.message, type: 'success'}});
             })
             .catch((error) => {
                 console.error('Error:', error.response?.data || error.message); // Handle error
@@ -85,19 +83,19 @@ export default function RegisterCompanyPage() {
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-col mb-4">
                         <label className="text-custom_gray text-2xl font-bold" htmlFor="companyName">Company Name</label>
-                        <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" type="text" name="companyName" id="companyName" />
+                        <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" type="text" name="companyName" id="companyName" value={companyProfile.companyName} onChange={handleChange}/>
                     </div>
                     <div className="flex flex-col mb-4">
                         <label className="text-custom_gray text-2xl font-bold" htmlFor="email">Email</label>
-                        <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" type="email" name="email" id="email" />
+                        <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" type="email" name="email" id="email" value={companyProfile.email} onChange={handleChange} />
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="password">Password</label>
-                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password" />
+                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password"  value={companyProfile.password} onChange={handleChange}/>
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="password">Password again</label>
-                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password_2" id="password_2" />
+                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password_2" id="password_2"  value={companyProfile.password_2} onChange={handleChange}/>
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="address">Address</label>
@@ -105,10 +103,6 @@ export default function RegisterCompanyPage() {
                             value={companyProfile.address}
                             onChange={handleChange}
                         />
-                    </div>
-                    <div className="flex flex-col mb-4">
-                        <label  className="text-custom_gray text-2xl font-bold" htmlFor="phone">Phone</label>
-                        <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="phone" name="phone" id="phone"  placeholder="+421 xxxxxxxxx"/>
                     </div>
                     <div className="flex flex-col text-xl">
                         <Button style={'red-hover'}>Sign up</Button>
