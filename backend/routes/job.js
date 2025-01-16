@@ -180,6 +180,20 @@ router.get('/job/:jobId', async (req, res) => {
     }
 });
 
+router.get('/job/applicants/:jobId', async (req, res) => {
+    const { jobId } = req.params;
+    try {
+        const job = await JobOffer.findById(jobId);
+        if (!job) return res.status(400).json({ message: 'Job offer not found' });
+
+        const applicants = await JobApplicant.find({ jobOffer: jobId }).populate('applicant');
+        res.status(200).json({ message: 'Applicants found', payload: { applicants } });
+    }
+    catch (error) {
+        res.status(500).send({ message: error });
+    }
+});
+
 router.get('/job/user/:userId', async (req, res) => {
     const { userId } = req.params;
     try {
