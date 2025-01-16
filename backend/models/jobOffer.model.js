@@ -16,6 +16,17 @@ const jobOfferSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point'
+        },
+        coordinates: {
+            type: [Number],
+            default: undefined
+        }
+    },
     salary: {
         type: Object,
         required: true

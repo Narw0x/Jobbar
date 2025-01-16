@@ -1,14 +1,12 @@
 import bcrypt from 'bcryptjs';
 import express from 'express';
 import User from '../models/user.model.js';
-
-import { createJSONToken, isValidPassword} from '../utils/auth.js';
-import { checkAuth } from '../utils/auth.js';
+import Company from '../models/company.model.js';
 
 const router = express.Router();
 
 router.post('/user/register', async (req, res) => {
-    const { firstName, lastName, email, password, gender, phoneNumber } = req.body;
+    const { firstName, lastName, email, password, gender } = req.body;
     
     try {
       const existingUser = await User.findOne({ email });
@@ -24,7 +22,6 @@ router.post('/user/register', async (req, res) => {
         email,
         password: hashedPassword, 
         gender,
-        phoneNumber
       });
       await newUser.save();
 

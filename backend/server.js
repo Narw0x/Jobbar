@@ -5,6 +5,7 @@ import path from 'path';
 const app = express();
 const port = 4000;
 
+
 import {connectDB} from "./config/db.js";
 
 dotenv.config();
@@ -34,10 +35,6 @@ app.use('/api', companyRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', Autocomplete);
 app.use('/api', jobRoutes);
-
-
-
-
 
 
 app.listen(port, () => {

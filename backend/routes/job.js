@@ -5,6 +5,9 @@ import JobOffer from '../models/jobOffer.model.js';
 import User from '../models/user.model.js';
 import JobApplicant from '../models/jobApplicant.model.js';
 
+import  {getCoordinates, createSphere}  from '../utils/helper.js';
+
+
 const router = express.Router();
 
 // router.get('/jobs', async (req, res) => {
@@ -91,22 +94,75 @@ const router = express.Router();
 //     }
 //   });
 
-router.get('/jobs', async (req, res) => {
-    const searchConfig = JSON.parse(req.headers.searchconfig);
-    const { salary, jobType, experience} = searchConfig;
 
+router.post('/jobs', async (req, res) => {
     try {
+        // Parse search configuration from headers
+        const {searchConfig} = req.body;
+        const { salary, jobType, experience, address, radius } = searchConfig;
+        
+        // Convert salary to number
         const salaryAmount = Number(salary);
         
-        const jobs = await JobOffer.find({
+        // Build base query
+        const query = {
             'salary.amount': { $gte: salaryAmount },
             'employmentType': { $regex: jobType, $options: 'i' },
             'experience': { $regex: experience, $options: 'i' }
+        };
+
+        // Add location search if address and radius are provided
+        if (address && radius) {
+            try {
+                const searchCoordinates = await getCoordinates(address);
+                const jobs = await JobOffer.aggregate([
+                    {
+                        $geoNear: {
+                            near: {
+                                type: "Point",
+                                coordinates: [searchCoordinates.longitude, searchCoordinates.latitude]
+                            },
+                            distanceField: "distance",
+                            maxDistance: parseInt(radius) * 1000,
+                            spherical: true,
+                            query: query
+                        }
+                    }
+                ]);
+
+                return res.status(200).json({ 
+                    message: 'Jobs found', 
+                    payload: { 
+                        jobs,
+                        count: jobs.length 
+                    } 
+                });
+            } catch (geocodingError) {
+                console.error('Geocoding error:', geocodingError);
+                return res.status(400).json({ 
+                    message: 'Invalid address or geocoding error',
+                    error: geocodingError.message 
+                });
+            }
+        }
+
+        // If no location search, use regular find
+        const jobs = await JobOffer.find(query);
+        
+        res.status(200).json({ 
+            message: 'Jobs found', 
+            payload: { 
+                jobs,
+                count: jobs.length 
+            } 
         });
 
-        res.status(200).json({ message: 'Jobs found', payload: { jobs } });
     } catch (error) {
-        res.status(500).send({ message: error });
+        console.error('Server error:', error);
+        res.status(500).json({ 
+            message: 'Internal server error',
+            error: error.message 
+        });
     }
 });
 
@@ -162,6 +218,8 @@ router.post('/job/create', checkAuth, async (req, res) => {
         const profile = await Company.findById(id);
         if (!profile) return res.status(400).json({ message: 'Company not found' });
 
+        const coordinates = await getCoordinates(address);
+
         const newJob = {
             jobTitle,
             companyId: profile._id,
@@ -172,8 +230,15 @@ router.post('/job/create', checkAuth, async (req, res) => {
             address,
             requirements,
             skills,
-            salary
+            salary,
+            location: {
+                type: 'Point',
+                coordinates: [coordinates.longitude, coordinates.latitude]
+            }
         }
+
+        await createSphere();
+
 
         const jobOffer = await JobOffer.create(newJob);
         profile.jobOffers.push(jobOffer._id);  
