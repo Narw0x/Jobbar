@@ -52,7 +52,7 @@ export default function ManageJobsPage() {
          <section className="bg-custom_bg_gray py-8">
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white">
                 <div className="p-8">
-                    {jobOffers.length && (
+                    {jobOffers.length !== 0 && (
                         <>
                             <h2 className="text-2xl text-custom_gray font-semibold">Your Job Offers</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">

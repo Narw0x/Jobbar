@@ -56,7 +56,9 @@ export default function Header() {
                               </svg>
                               Search Jobs
                           </NavLink>
-                        ): (
+                        ): null}
+
+                        {authState.token && authState.user.companyName ? (
                           <NavLink
                               to='/job/manage'
                               end
@@ -79,7 +81,7 @@ export default function Header() {
                               </svg>
                               Manage Jobs
                           </NavLink>
-                        )}
+                        ): null}
 
                         <NavLink
                             to="/about"
