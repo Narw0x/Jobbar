@@ -187,6 +187,7 @@ router.get('/job/applicants/:jobId', async (req, res) => {
         if (!job) return res.status(400).json({ message: 'Job offer not found' });
 
         const applicants = await JobApplicant.find({ jobOffer: jobId }).populate('applicant');
+        
         res.status(200).json({ message: 'Applicants found', payload: { applicants } });
     }
     catch (error) {
@@ -393,6 +394,9 @@ router.post('/job/apply/:jobId', checkAuth, async (req, res) => {
       });
     }
 });
+
+
+
 
 
 export default router;

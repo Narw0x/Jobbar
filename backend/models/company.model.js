@@ -56,6 +56,10 @@ const companySchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'company'
+    },
+    favoriteApplicants: {
+        type: Array,
+        default: []
     }
 }, {
     timestamps: true,

@@ -208,6 +208,32 @@ router.put('/profile/config', checkAuth, async (req, res) => {
   }
 });
 
+router.put('/profile/favorite/:userId', checkAuth, async (req, res) => {
+  const { id } = req.headers;
+  const { userId } = req.params;
+  
+
+  try {
+    let profile = await Company.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    if (profile.favoriteApplicants.includes(userId)) {
+      profile.favoriteApplicants = profile.favoriteApplicants.filter(fav => fav !== userId);
+    } else {
+      profile.favoriteApplicants.push(userId);
+    }
+
+    await profile.save();
+    res.status(200).json({
+      message: 'Favorite updated successfully',
+      payload: { user: profile }
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+  }
+});
+
 
 router.put('/profile/experience/add', checkAuth, async (req, res) => {
   const { jobTitle, company, employmentType, date, description } = req.body;
