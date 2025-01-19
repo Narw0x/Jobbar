@@ -10,7 +10,7 @@ import Button from "../components/button"
 import { isValidPassword, isValidEmail } from "../util/validation";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../store/slices/authSlice";
+import { loginSuccess, loginFailure, loginStart } from "../store/slices/authSlice";
 
 
 export default function AdminLoginPage() {
@@ -44,6 +44,7 @@ export default function AdminLoginPage() {
             return;
         }
 
+        dispatch(loginStart());
         axios.post('http://localhost:4000/api/admin/login', data)
             .then((res) => {
                 setMessageState({type: 'success', message: res.data.message});
@@ -52,10 +53,10 @@ export default function AdminLoginPage() {
             })
             .catch((err) => {
                 console.log(err);
+                setMessageState({type: 'error', message: err.response.data.message});
+                dispatch(loginFailure());
                 
             });
-
-        
 
     }
 

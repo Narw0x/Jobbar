@@ -79,27 +79,41 @@ const userRoutes = {
   ]
 };
 
+const adminLogin = {
+  path: '/admin/login',
+  element: <AdminLoginPage />
+};
+
 const adminRoutes = {
   path: '/admin',
   element: <AdminRootLayout />,
   errorElement: <ErrorPage />,
+  loader: checkAuthLoader,
   id: 'admin',
   children: [
-    {path: 'login', element: <AdminLoginPage />},
     {
       path: 'dashboard',
       element: <AdminDashboard />,
-      loader: checkAuthLoader,
-      // children: [
-      //   {path: ''}
-      // ]
+    },
+    {
+      path: 'users',
+      element: <AdminDashboard />,
+    },
+    {
+      path: 'jobs',
+      element: <AdminDashboard />,
+    },
+    {
+      path: 'reports',
+      element: <AdminDashboard />,
     }
   ]
 };
 
 
 
-const router = createBrowserRouter([userRoutes, adminRoutes]);
+
+const router = createBrowserRouter([userRoutes, adminLogin, adminRoutes]);
 
 
 
