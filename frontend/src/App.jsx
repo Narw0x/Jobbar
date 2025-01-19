@@ -24,66 +24,82 @@ import ManageJobsPage from './pages/ManageJobs';
 import ManageJobPage from './pages/ManageJob';
 import FavoritePage from './pages/Favorites';
 
+import AdminRootLayout from './pages/AdminRoot';
+import AdminLoginPage from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+
+
+const userRoutes = {
+  path: '/',
+  element: <RootLayout />,
+  errorElement: <ErrorPage />,
+  id: 'root',
+  children: [
+    {index: true, element: <HomePage />},
+    {path: 'about', element: <AboutPage />},
+    {
+      path: 'login',
+      element: <LoginPage />
+    },
+    {
+      path: 'register',
+      children: [
+        {path: 'user', element: <RegisterUserPage />},
+        {path: 'company', element: <RegisterCompanyPage />}
+      ]
+    },
+    {
+      path: 'profile',
+      loader: checkAuthLoader,
+      children: [
+          {path: 'education/add', element: <EducationPage />},
+          {path: 'education/edit/:educationId', element: <EditEducationPage />},
+          {path: 'experience/add', element: <ExperiencePage />},
+          {path: 'experience/edit/:experienceId', element: <EditExperiencePage />},
+          {path: 'job/add', element: <JobOfferPage />},
+          {path: 'job/edit/:jobId', element: <EditJobOfferPage />},
+
+          {path: 'edit', element: <EditUserProfilePage />},
+          {path: 'favorite', element: <FavoritePage />},
+          {path: ':id', element: <ProfilePage />},
+      ]
+    },
+    {
+      path: 'job',
+      loader: checkAuthLoader,
+      children: [
+        {path: 'add', element: <JobOfferPage />},
+        {path: 'edit/:jobId', element: <EditJobOfferPage />},
+        {path: ':jobId', element: <ViewJobOfferPage />},
+        {path: 'search', element: <SearchPage />, loader: checkCompanyLoader},
+        {path: 'manage', element: <ManageJobsPage />},
+        {path: 'manage/:jobId', element: <ManageJobPage />}
+      ]
+    },
+  ]
+};
+
+const adminRoutes = {
+  path: '/admin',
+  element: <AdminRootLayout />,
+  errorElement: <ErrorPage />,
+  id: 'admin',
+  children: [
+    {path: 'login', element: <AdminLoginPage />},
+    {
+      path: 'dashboard',
+      element: <AdminDashboard />,
+      loader: checkAuthLoader,
+      // children: [
+      //   {path: ''}
+      // ]
+    }
+  ]
+};
 
 
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <RootLayout />,
-    errorElement: <ErrorPage />,
-    id: 'root',
-    children: [
-      {index: true, element: <HomePage />},
-      {path: 'about', element: <AboutPage />},
-      {
-        path: 'login',
-        element: <LoginPage />
-      },
-      {
-        path: 'register',
-        children: [
-          {path: 'user', element: <RegisterUserPage />},
-          {path: 'company', element: <RegisterCompanyPage />}
-        ]
-      },
-      {
-        path: 'profile',
-        loader: checkAuthLoader,
-        children: [
-            {path: 'education/add', element: <EducationPage />},
-            {path: 'education/edit/:educationId', element: <EditEducationPage />},
-            {path: 'experience/add', element: <ExperiencePage />},
-            {path: 'experience/edit/:experienceId', element: <EditExperiencePage />},
-            {path: 'job/add', element: <JobOfferPage />},
-            {path: 'job/edit/:jobId', element: <EditJobOfferPage />},
-
-            {path: 'edit', element: <EditUserProfilePage />},
-            {path: 'favorite', element: <FavoritePage />},
-            {path: ':id', element: <ProfilePage />},
-        ]
-      },
-      {
-        path: 'job',
-        loader: checkAuthLoader,
-        children: [
-          {path: 'add', element: <JobOfferPage />},
-          {path: 'edit/:jobId', element: <EditJobOfferPage />},
-          {path: ':jobId', element: <ViewJobOfferPage />},
-          {path: 'search', element: <SearchPage />, loader: checkCompanyLoader},
-          {path: 'manage', element: <ManageJobsPage />},
-          {path: 'manage/:jobId', element: <ManageJobPage />}
-        ]
-      },
-      {
-        path: 'admin',
-        children: [
-          {path: 'login', element: <LoginPage />},
-        ]
-      }
-    ]
-  },
-]);
+const router = createBrowserRouter([userRoutes, adminRoutes]);
 
 
 
