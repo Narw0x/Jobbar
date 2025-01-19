@@ -107,6 +107,25 @@ router.post('/profile/logout', async (req, res) => {
     res.status(200).json({ message: 'Logged out successfully' });
 });
 
+router.get('/profile/favorite', checkAuth, async (req, res) => {
+  const { id } = req.headers;
+  
+  try {
+    let profile = await Company.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    const favoriteUsers = await User.find({ _id: { $in: profile.favoriteApplicants } }).select('-password');
+
+    res.status(200).json({
+      message: 'Favorite users fetched successfully',
+      payload: { favoriteUsers }
+    });
+  } catch (error) {
+    console.error('Error fetching favorite users:', error);
+    return res.status(500).json({ message: 'Error fetching favorite users', error: error.message });
+  }
+});
+
 router.get('/profile/:id', checkAuth, async (req, res) => {
     const { id } = req.params;
     try {
@@ -208,6 +227,8 @@ router.put('/profile/config', checkAuth, async (req, res) => {
   }
 });
 
+
+
 router.put('/profile/favorite/:userId', checkAuth, async (req, res) => {
   const { id } = req.headers;
   const { userId } = req.params;
@@ -217,8 +238,11 @@ router.put('/profile/favorite/:userId', checkAuth, async (req, res) => {
     let profile = await Company.findById(id);
     if (!profile) return res.status(404).json({ message: 'Profile not found' });
 
+    let state = 'added';
+
     if (profile.favoriteApplicants.includes(userId)) {
       profile.favoriteApplicants = profile.favoriteApplicants.filter(fav => fav !== userId);
+      state = 'removed';
     } else {
       profile.favoriteApplicants.push(userId);
     }
@@ -226,7 +250,7 @@ router.put('/profile/favorite/:userId', checkAuth, async (req, res) => {
     await profile.save();
     res.status(200).json({
       message: 'Favorite updated successfully',
-      payload: { user: profile }
+      payload: { user: profile, state }
     });
   } catch (error) {
     console.error('Error fetching user profile:', error);
