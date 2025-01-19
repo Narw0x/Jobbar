@@ -47,7 +47,9 @@ export default function ManageJobPage() {
                 },
             }
         ).then(response => {
+            response.data.payload.state === 'added' ? toast.current?.show({severity: 'success', summary: 'Success', detail: 'User added to favorites', life: 2000}) : toast.current?.show({severity: 'success', summary: 'Success', detail: 'User removed from favorites', life: 2000});
             dispatch(updateUser(response.data.payload.user));
+
         }).catch(err => {
             console.log(err);
         });
@@ -81,12 +83,6 @@ export default function ManageJobPage() {
             return () => clearTimeout(timer);
         }
     }, [messageState]);
-    
-
-
-
-
-    
 
     return(
         <section className="bg-custom_bg_gray py-8">
@@ -106,7 +102,7 @@ export default function ManageJobPage() {
                                 </div>
                                 <div className="flex flex-row justify-end basis-1/2">
                                     <div className="  font-bold text-xl text-custom_gray">
-                                        Save
+                                        Actions
                                     </div>
                                 </div>
                                 

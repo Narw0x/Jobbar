@@ -22,6 +22,7 @@ import ViewJobOfferPage from './pages/ViewJobOffer';
 import SearchPage from './pages/Search';
 import ManageJobsPage from './pages/ManageJobs';
 import ManageJobPage from './pages/ManageJob';
+import FavoritePage from './pages/Favorites';
 
 
 
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
             {path: 'job/edit/:jobId', element: <EditJobOfferPage />},
 
             {path: 'edit', element: <EditUserProfilePage />},
+            {path: 'favorite', element: <FavoritePage />},
             {path: ':id', element: <ProfilePage />},
         ]
       },
@@ -71,6 +73,12 @@ const router = createBrowserRouter([
           {path: 'search', element: <SearchPage />, loader: checkCompanyLoader},
           {path: 'manage', element: <ManageJobsPage />},
           {path: 'manage/:jobId', element: <ManageJobPage />}
+        ]
+      },
+      {
+        path: 'admin',
+        children: [
+          {path: 'login', element: <LoginPage />},
         ]
       }
     ]

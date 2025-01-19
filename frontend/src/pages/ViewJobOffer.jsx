@@ -12,7 +12,6 @@ export default function ViewJobOfferPage() {
     const toast = useRef(null);
     const { jobId } = useParams();
     const [applied, setApplied] = useState(false);
-    const [applicants, setApplicants] = useState([]);
 
     
 
@@ -59,7 +58,6 @@ export default function ViewJobOfferPage() {
         }).then((response) => {
             const date = new Date(response.data.payload.job.date);
 
-            setApplicants(response.data.payload.applicants);
             setJob((prev) => ({
                 ...prev,
                 ...response.data.payload.job,
@@ -169,7 +167,7 @@ export default function ViewJobOfferPage() {
                     </div>
                     <div className="flex flex-col basis-1/3 justify-center items-center">
                         <div className="w-full aspect-square object-cover rounded">
-                            <img className={`w-full h-full object-cover rounded-2xl p-2 ${job.companyId.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${job.companyId.avatar}`} alt="" />
+                            <img className={`w-full aspect-square object-cover rounded-2xl p-2 ${job.companyId.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${job.companyId.avatar}`} alt="" />
                         </div>
                         <div className="flex flex-col text-left mt-4 w-full p-2">
                             <h3 className="text-xl text-custom_gray font-semibold">{job.companyId.companyName}</h3>
@@ -177,44 +175,6 @@ export default function ViewJobOfferPage() {
                         </div>
                     </div>
                 </div>
-                {authState.user.role === 'company' && ( authState.user.jobOffers.includes(jobId) &&
-                    <div>
-                        {applicants.length > 0 ? <h1 className="text-3xl text-custom_gray font-bold px-8 py-8">Applicants</h1> : null}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-8">
-                            {applicants.map((applicant, idx) => (
-                                <div key={applicant._id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 flex flex-col gap-4">
-                                    <div className="flex flex-row gap-4">
-                                    <div className="w-28 aspect-square object-cover rounded">
-                                            <img className={` object-cover rounded-2xl p-2 ${applicant.applicant.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${applicant.applicant.avatar}`} alt="" />
-                                        </div>
-                                        <div className="flex flex-col w-full">
-                                            <h3 className="text-md text-custom_gray font-semibold text-xl">{applicant.applicant.firstName}</h3>
-                                            <div className="flex flex-col mt-2">
-                                                <div className="flex flex-col items-start">
-                                                    <div className="flex flex-row w-full justify-between">
-                                                        <p className=" text-custom_gray font-semibold">Email:</p>
-                                                        <p className=" text-custom_red">{applicant.applicant.email}</p>
-                                                    </div>
-                                                </div>
-                                                
-                                                
-                                            </div>  
-                                        </div>  
-                                    </div>
-                                    <div className="flex flex-row gap-4 justify-end">
-                                            <Button
-                                                style="red-hover"
-                                                redirectPath={`/profile/${applicant.applicant._id}`}
-                                            >
-                                                View
-                                            </Button>
-                                    </div>
-                                    
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
                 <div className="flex flex-row px-8 py-8 gap-4">
                     {authState.user.role === 'user' ? (
                         <Button
