@@ -4,6 +4,9 @@ import cors from 'cors';
 import path from 'path';
 const app = express();
 const port = 4000;
+import bcrypt from 'bcryptjs';
+import Admin from './models/admin.model.js';
+
 
 
 import {connectDB} from "./config/db.js";
@@ -26,6 +29,7 @@ import companyRoutes from "./routes/company.js";
 import profileRoutes from "./routes/profile.js";
 import Autocomplete from './routes/autocomplete.js';
 import jobRoutes from './routes/job.js';
+import adminRoutes from './routes/admin.js';
 
 app.setMaxListeners(30);
 
@@ -35,6 +39,7 @@ app.use('/api', companyRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', Autocomplete);
 app.use('/api', jobRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 app.listen(port, () => {
