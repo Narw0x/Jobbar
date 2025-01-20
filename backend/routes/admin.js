@@ -2,6 +2,7 @@ import express from 'express';
 import Admin from '../models/admin.model.js';
 import jwt from 'jsonwebtoken';
 import Blacklist from '../models/blackList.model.js';
+import JobOffer from '../models/jobOffer.model.js';
 
 import { checkAuth, createJSONToken, isValidPassword } from '../utils/auth.js';
 import User from '../models/user.model.js';
@@ -108,6 +109,20 @@ router.get('/user/:userEmail', checkAuth, async (req, res) => {
     } catch (error) {
         console.log(error);
         
+        res.status(500).json({ message: error.message });
+    }
+});
+
+router.get('/jobOffer/:companyEmail', checkAuth, async (req, res) => {
+    const { companyEmail } = req.params;
+    try {
+        const company = await Company.findOne({ email: companyEmail });
+        if(!company) return res.status(404).json({ message: 'Company not found' });
+        const jobs = await JobOffer.find({ _id: { $in: company.jobOffers } });
+
+        res.status(200).json({ message: 'Job offers fetched successfully', payload: { jobs } });
+    } catch (error) {
+        console.log(error);
         res.status(500).json({ message: error.message });
     }
 });
