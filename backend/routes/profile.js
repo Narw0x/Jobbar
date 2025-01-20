@@ -149,6 +149,8 @@ router.put('/profile/edit/:id', checkAuth, upload, async (req, res) => {
     if (!profile) profile = await Company.findById(id);
     if (!profile) return res.status(404).json({ message: 'Profile not found' });
 
+    
+
     if (req.files) {
       // Background Image
       if (req.files.bgImage && req.files.bgImage[0]) {

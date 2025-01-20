@@ -7,8 +7,54 @@ import { checkAuth, createJSONToken, isValidPassword } from '../utils/auth.js';
 import User from '../models/user.model.js';
 import Company from '../models/company.model.js';
 import Report from '../models/report.model.js';
+import fs from 'fs';
+import path from 'path';
+import multer from 'multer';
+
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // Create directories if they don't exist
+    const backgroundDir = 'public/background';
+    const avatarDir = 'public/avatar';
+    
+    if (!fs.existsSync(backgroundDir)) {
+      fs.mkdirSync(backgroundDir, { recursive: true });
+    }
+    if (!fs.existsSync(avatarDir)) {
+      fs.mkdirSync(avatarDir, { recursive: true });
+    }
+
+    if (file.fieldname === 'bgImage') {
+      cb(null, backgroundDir);
+    } else if (file.fieldname === 'avatar') {
+      cb(null, avatarDir);
+    }
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'));
+    }
+  },
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB
+  }
+}).fields([
+  { name: 'bgImage', maxCount: 1 },
+  { name: 'avatar', maxCount: 1 }
+]);
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -52,10 +98,10 @@ router.get('/user/:userEmail', checkAuth, async (req, res) => {
     const { userEmail } = req.params;
     try {
         const user = await User.find({ email: userEmail }).select('firstName email');
-        if(user.length > 0) return res.status(200).json({ message: 'User fetched successfully', payload: {user:{userName: user[0].firstName, email: user[0].email}} });
+        if(user.length > 0) return res.status(200).json({ message: 'User fetched successfully', payload: {user:{_id: user[0]._id, userName: user[0].firstName, email: user[0].email}} });
 
         const company = await Company.find({ email: userEmail }).select('companyName email');
-        if(company.length > 0) return res.status(200).json({ message: 'Company fetched successfully', payload: {user:{userName: company[0].companyName, email: company[0].email}} });
+        if(company.length > 0) return res.status(200).json({ message: 'Company fetched successfully', payload: {user:{_id: company[0]._id, userName: company[0].companyName, email: company[0].email}} });
 
 
         res.status(404).json({ message: 'User not found' });
@@ -66,28 +112,103 @@ router.get('/user/:userEmail', checkAuth, async (req, res) => {
     }
 });
 
-router.post('/logout', checkAuth, async (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1];
-  
-    if (!token) {
-      return res.status(400).json({ message: 'Token is required' });
-    }
-  
-    // Decode the token to get its expiration time
-    const decoded = jwt.decode(token);
-  
-    if (!decoded || !decoded.exp) {
-      return res.status(400).json({ message: 'Invalid token' });
-    }
-  
-    const expiryDate = new Date(decoded.exp * 1000); // Convert exp from seconds to milliseconds
-  
-    // Save token in the blacklist with expiration
-    await Blacklist.create({ token, createdAt: expiryDate });
-    await Blacklist.deleteMany({ createdAt: { $lte: new Date() } });
+router.get('/edit/:userId', checkAuth, async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const user = await User.findById(userId).select('firstName lastName address about avatar bgImage email phoneNumber socialMedia website');
+        if(user) return res.status(200).json({ message: 'User fetched successfully', payload: { user } });
 
-  
-    res.status(200).json({ message: 'Logged out successfully' });
+        const company = await Company.findById(userId).select('companyName address about avatar bgImage email phoneNumber socialMedia website');
+        if(company) return res.status(200).json({ message: 'Company fetched successfully', payload: { user: company } });
+
+        res.status(404).json({ message: 'User not found' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+router.put('/edit/:userId', checkAuth, upload, async (req, res) => {
+    const { userId } = req.params;
+    const { firstName, lastName, companyName, address, about, email, phoneNumber, socialMedia, website } = req.body;
+    try {
+        let profile = await User.findById(userId);
+        if (!profile) profile = await Company.findById(userId);
+        if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+        console.log(req.files);
+
+        if (req.files) {
+        // Background Image
+            if (req.files.bgImage && req.files.bgImage[0]) {
+                const oldBgImage = profile.bgImage;
+                profile.bgImage = req.files.bgImage[0].filename;
+
+                // Delete the old background image
+                if(oldBgImage && fs.existsSync(`public/background/${oldBgImage}` && oldBgImage !== 'default_bg.png')) {
+                fs.unlinkSync(`public/background/${oldBgImage}`);
+                }
+            }
+
+        // Avatar
+            if (req.files.avatar && req.files.avatar[0]) {
+                const oldAvatar = profile.avatar;
+                profile.avatar = req.files.avatar[0].filename;
+
+                // Delete the old avatar
+                if (oldAvatar && fs.existsSync(`public/avatar/${oldAvatar}`) && oldAvatar !== 'default_profile.svg') {
+                    fs.unlinkSync(`public/avatar/${oldAvatar}`);
+                    }
+                }
+            }
+
+        // Handle other form data
+        const data = { firstName, lastName, companyName, address, about, website, socialMedia, phoneNumber, email };
+        for (const key in data) {
+            if (data[key]) {
+                if (Array.isArray(data[key])) {
+                profile[key] = [...data[key]];
+                }
+                profile[key] = data[key];
+            }
+        }
+
+
+        await profile.save();
+
+        res.status(200).json({ message: 'Profile updated successfully' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+);
+
+router.post('/logout', async (req, res) => {
+    try{
+        const token = req.headers.authorization?.split(' ')[1];
+    
+        if (!token) {
+            return res.status(400).json({ message: 'Token is required' });
+        }
+        // Decode the token to get its expiration time
+        const decoded = jwt.decode(token);
+        if (!decoded || !decoded.exp) {
+            return res.status(400).json({ message: 'Invalid token' });
+        }
+    
+        const expiryDate = new Date(decoded.exp * 1000); // Convert exp from seconds to milliseconds
+    
+        // Save token in the blacklist with expiration
+        await Blacklist.create({ token, createdAt: expiryDate });
+        await Blacklist.deleteMany({ createdAt: { $lte: new Date() } });
+
+    
+        res.status(200).json({ message: 'Logged out successfully' });
+    }catch(error){
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
 });
 
 
