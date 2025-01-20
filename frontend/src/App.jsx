@@ -109,7 +109,11 @@ const adminRoutes = {
     },
     {
       path: 'jobs',
-      element: <AdminJobsPage />,
+      children: [
+        {index: true, element: <AdminJobsPage />},
+        {path: ':jobId'},
+        {path: 'edit/:jobId'},
+      ]
     },
     {
       path: 'reports',
