@@ -27,6 +27,9 @@ import FavoritePage from './pages/Favorites';
 import AdminRootLayout from './pages/AdminRoot';
 import AdminLoginPage from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminUsersPage from './pages/AdminUsers';
+
+import { checkAdminLoader } from './util/auth';
 
 
 const userRoutes = {
@@ -88,7 +91,7 @@ const adminRoutes = {
   path: '/admin',
   element: <AdminRootLayout />,
   errorElement: <ErrorPage />,
-  loader: checkAuthLoader,
+  loader: checkAdminLoader,
   id: 'admin',
   children: [
     {
@@ -97,7 +100,7 @@ const adminRoutes = {
     },
     {
       path: 'users',
-      element: <AdminDashboard />,
+      element: <AdminUsersPage />,
     },
     {
       path: 'jobs',

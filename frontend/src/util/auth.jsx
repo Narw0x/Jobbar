@@ -63,3 +63,27 @@ export function checkCompanyLoader(){
 
     return null;
 }
+
+function getAdmin(){
+    const admin = localStorage.getItem('admin');
+    if(!admin) return null;
+
+    console.log(admin);
+    
+
+    const isAdmin = JSON.parse(admin).role === "admin";
+
+
+    return isAdmin;
+}
+
+
+export function checkAdminLoader(){
+    const role = getAdmin();
+
+    if(!role){
+        return redirect('/');
+    }
+
+    return null;
+}

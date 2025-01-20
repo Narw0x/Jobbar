@@ -2,9 +2,9 @@ import { NavLink } from "react-router-dom";
 
 import Button from "../components/button";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../store/slices/authSlice";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { adminLogout } from "../store/slices/adminSlice";
 
 
 const path_logo = "/jobbar_logo.svg";
@@ -16,16 +16,18 @@ export default function AdminHeader() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const authState = useSelector((state) => state.auth);
+    const adminState = useSelector((state) => state.admin);
 
     function handleClick() {
-        axios.post('http://localhost:4000/api/profile/logout', {}, {
+        axios.post('http://localhost:4000/api/admin/logout', {}, {
             headers: {
-                Authorization: `Bearer ${authState.token}`,
+                Authorization: `Bearer ${adminState.token}`,
             }
         })
         .then((response) => {
-            dispatch(logout());
+            if (response.data.message === 'Logged out successfully'){
+                dispatch(adminLogout());
+            }
         })
         .catch((error) => {
             console.error('Logout failed:', error.response || error.message); 

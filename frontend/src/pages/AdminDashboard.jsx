@@ -11,12 +11,12 @@ export default function AdminDashboard() {
         reports: 0
     });
 
-    const authState = useSelector((state) => state.auth);
+    const adminState = useSelector((state) => state.admin);
 
     useEffect(() => {
         axios.get('http://localhost:4000/api/admin/length', {
             headers: {
-                Authorization: `Bearer ${authState.token}`
+                Authorization: `Bearer ${adminState.adminToken}`
             }
         })
             .then((res) => {
@@ -30,7 +30,7 @@ export default function AdminDashboard() {
                 console.log(err);
             });
     }
-    , [authState.token]);
+    , [adminState.token]);
 
 
 

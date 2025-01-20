@@ -9,8 +9,9 @@ import { Toast } from "primereact/toast";
 import Button from "../components/button"
 import { isValidPassword, isValidEmail } from "../util/validation";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { loginSuccess, loginFailure, loginStart } from "../store/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { adminLoginFailure, adminLoginStart, adminLoginSuccess } from "../store/slices/adminSlice";
+import { use } from "react";
 
 
 export default function AdminLoginPage() {
@@ -18,10 +19,20 @@ export default function AdminLoginPage() {
     const toast = useRef(null);
     const navigate = useNavigate();
 
+    const adminToken = useSelector((state) => state.admin.adminToken);
+
+
     const [data , setData] = useState({
         email: '',
         password: ''
     });
+
+    useEffect(() => {
+        if(adminToken) {
+            navigate('/admin/dashboard');
+        }
+    }, []);
+
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -44,17 +55,17 @@ export default function AdminLoginPage() {
             return;
         }
 
-        dispatch(loginStart());
+        dispatch(adminLoginStart());
         axios.post('http://localhost:4000/api/admin/login', data)
             .then((res) => {
                 setMessageState({type: 'success', message: res.data.message});
-                dispatch(loginSuccess(res.data.payload));
+                dispatch(adminLoginSuccess(res.data.payload));
                 navigate('/admin/dashboard', {state: {type: 'success', message: res.data.message}});
             })
             .catch((err) => {
                 console.log(err);
                 setMessageState({type: 'error', message: err.response.data.message});
-                dispatch(loginFailure());
+                dispatch(adminLoginFailure());
                 
             });
 
