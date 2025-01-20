@@ -1,41 +1,59 @@
-import { useDispatch, useSelector } from "react-redux"
-import { updateUser } from "../store/slices/authSlice"
-import { useState, useEffect } from "react"
-import { FileUpload } from 'primereact/fileupload';
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-import Autocomplete from "../components/autocomplete";
+import { FileUpload } from "primereact/fileupload";
 import Button from "../components/button";
+import Autocomplete from "../components/autocomplete";
 
-export default function EditUserProfilePage() {
+export default function AdminUserEditPage() {
+
+    const adminState = useSelector((state) => state.admin);
+
+    const {userId} = useParams();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-
-    const authState = useSelector((state) => state.auth);
-
-    const [bgImage, setBgImage] = useState(authState.user.bgImage);
-    const [avatar, setAvatar] = useState(authState.user.avatar);
-
-    const [bgPreview, setBgPreview] = useState(authState.user.bgImage);
-    const [avatarPreview, setAvatarPreview] = useState(authState.user.avatar);
 
     const [userInfo, setUserInfo] = useState({
-        firstName: authState.user.firstName,
-        lastName: authState.user.lastName,
-        companyName: authState.user.companyName,
-        address: authState.user.address,
-        about: authState.user.about,
-        phoneNumber: authState.user.phoneNumber,
-        website: authState.user.website,
+        firstName: '',
+        lastName: '',
+        companyName: '',
+        address: '',
+        about: '',
+        phoneNumber: '',
+        website: '',
         socialMedia: {
-            twitter: authState.user.socialMedia.twitter,
-            instagram: authState.user.socialMedia.instagram,
-            github: authState.user.socialMedia.github,
+            twitter: '',
+            instagram: '',
+            github: ''
         },
-        bgImage: authState.user.bgImage,
-        avatar: authState.user.avatar,
+        bgImage: 'default_bg.png',
+        avatar: 'default_profile.svg',
     });
+
+    const [bgImage, setBgImage] = useState(userInfo.bgImage);
+    const [avatar, setAvatar] = useState(userInfo.avatar);
+
+    const [bgPreview, setBgPreview] = useState(userInfo.bgImage);
+    const [avatarPreview, setAvatarPreview] = useState(userInfo.avatar);
+
+    useEffect(() => {
+        axios.get(`http://localhost:4000/api/admin/edit/${userId}`,{
+            headers: {
+                Authorization: `Bearer ${adminState.adminToken}`
+            }
+        })
+            .then((res) => {
+                setUserInfo(res.data.payload.user);
+                setBgPreview(res.data.payload.user.bgImage);
+                setAvatarPreview(res.data.payload.user.avatar);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [userId]);
 
     const handleUserInfoChange = (e) => {
         const { name, value } = e.target;
@@ -89,9 +107,12 @@ export default function EditUserProfilePage() {
         }
       };
 
+
+
     const handleEditForm = (e) => {
         e.preventDefault();
-        // Create a FormData object for sending files
+
+
         const formData = new FormData();
         
         // Add all userInfo fields to formData
@@ -114,27 +135,32 @@ export default function EditUserProfilePage() {
             formData.append('avatar', avatar);
         }
 
-
-        axios.put(`http://localhost:4000/api/profile/edit/${authState.user._id}`, formData, {
+        axios.put(`http://localhost:4000/api/admin/edit/${userId}`, formData, {
             headers: {
-                Authorization: `Bearer ${authState.token}`,
-            },
+                Authorization: `Bearer ${adminState.adminToken}`
+            }
         })
-        .then((response) => {
-            dispatch(updateUser(response.data.payload.user));
-            navigate(`/profile/${authState.user._id}`, { state: { message: response.data.message, type: 'success' }});
-        }).catch((error) => {
-            navigate(`/profile/${authState.user._id}`, { state: { message: error.response.data.message, type: 'error' } });
-        });
+            .then((res) => {
+                console.log(res.data);
+                navigate(`/admin/users`, {state: {type: 'success', message: 'User updated successfully'}});
+            })
+            .catch((err) => {
+                console.log(err);
+                navigate(`/admin/users`, {state: {type: 'error', message: err.response.data.message}});
+            }
+        )
+
+        
     }
-    
-    
+
+
+
     return (
-        <section className="bg-custom_bg_gray py-8">
-            <form className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white" onSubmit={handleEditForm}>
+        <section className="flex flex-col items-center justify-center bg-custom_bg_gray">
+            <form className="container mx-auto  border rounded-lg shadow-md bg-white my-8" onSubmit={handleEditForm}>
                 <div>
                     <div className="w-full object-fill flex end flex-col">
-                        <img className="w-full max-h-[250px] rounded-t" src={authState.user.bgImage === bgPreview ? `http://localhost:4000/public/background/${userInfo?.bgImage}`:`${bgPreview}`} alt="" />
+                        <img className="w-full max-h-[250px] rounded-t" src={userInfo.bgImage === bgPreview ? `http://localhost:4000/public/background/${userInfo?.bgImage}`:`${bgPreview}`} alt="" />
                         <hr className="bg-black"/>
                     </div>
                     <div className="flex m-4 ml-auto justify-end gap-4">
@@ -148,7 +174,7 @@ export default function EditUserProfilePage() {
                             onSelect={onSelectBg}
                             className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer"
                         />
-                        {bgImage !== authState.user.bgImage ? <Button type="button" onClick={() => {setBgImage(authState.user.bgImage)}} style="red-default">Delete</Button>: null}
+                        {bgPreview !== userInfo.bgImage ? <Button type="button" onClick={() => {setBgPreview(userInfo.bgImage)}} style="red-default">Delete</Button>: null}
                     </div>
                 </div>
                 <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Personal Information</h2>
@@ -170,6 +196,10 @@ export default function EditUserProfilePage() {
                             
                         </div>
                         <div className="flex flex-col mb-4">
+                            <label className="text-custom_gray text-xl font-bold" htmlFor="email">Email</label>
+                            <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.email || ''} onChange={handleUserInfoChange}  type="email" name="email" id="email"/>
+                        </div>
+                        <div className="flex flex-col mb-4">
                             <label className="text-custom_gray text-xl font-bold" htmlFor="address">Address</label>
                             <Autocomplete
                                 value={userInfo.address || ''}  
@@ -182,7 +212,7 @@ export default function EditUserProfilePage() {
                         </div>
                     </div>
                     <div className="basis-1/3 m-8 flex flex-col gap-4 pt-8">
-                        <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center" src={authState.user.avatar === avatarPreview ? `http://localhost:4000/public/avatar/${userInfo?.avatar}`:`${avatarPreview}`} alt="" />
+                        <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center" src={userInfo.avatar === avatarPreview ? `http://localhost:4000/public/avatar/${userInfo?.avatar}`:`${avatarPreview}`} alt="" />
                         <div className="flex justify-center gap-4">
                             <FileUpload 
                                 mode="basic" 
@@ -195,10 +225,10 @@ export default function EditUserProfilePage() {
                                 className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer" 
                             />
                             {
-                            avatar !== authState.user.avatar ?
+                            avatar !== userInfo.avatar ?
                                 <Button 
                                     type="button" 
-                                    onClick={() => {setAvatar(authState.user.avatar);}} 
+                                    onClick={() => {setAvatar(userInfo.avatar);}} 
                                     style="red-default"
                                 >
                                     Delete
@@ -244,7 +274,7 @@ export default function EditUserProfilePage() {
                             style="red-hover"
                             type="button"
                             onClick={() => {
-                                navigate(`/profile/${authState.user._id}`);
+                                navigate(`/admin/users`);
                             }}
                         >
                             Cancel

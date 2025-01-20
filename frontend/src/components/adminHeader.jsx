@@ -21,7 +21,7 @@ export default function AdminHeader() {
     function handleClick() {
         axios.post('http://localhost:4000/api/admin/logout', {}, {
             headers: {
-                Authorization: `Bearer ${adminState.token}`,
+                Authorization: `Bearer ${adminState.adminToken}`,
             }
         })
         .then((response) => {

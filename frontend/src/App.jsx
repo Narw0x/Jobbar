@@ -30,6 +30,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminUsersPage from './pages/AdminUsers';
 
 import { checkAdminLoader } from './util/auth';
+import AdminUserEditPage from './pages/AdminUserEdit';
+import AdminJobsPage from './pages/AdminJobs';
 
 
 const userRoutes = {
@@ -100,11 +102,14 @@ const adminRoutes = {
     },
     {
       path: 'users',
-      element: <AdminUsersPage />,
+      children: [
+        {index: true, element: <AdminUsersPage />},
+        {path: ':userId', element: <AdminUserEditPage />},
+      ]
     },
     {
       path: 'jobs',
-      element: <AdminDashboard />,
+      element: <AdminJobsPage />,
     },
     {
       path: 'reports',

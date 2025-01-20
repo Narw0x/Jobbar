@@ -3,10 +3,17 @@ import { useState } from "react";
 import Button from "../components/button"
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router";
+import { useEffect } from "react";
+import { useRef } from "react";
+import { Toast } from "primereact/toast";
+
 
 export default function AdminUsersPage() {
 
     const [email, setEmail] = useState('');
+    const toast = useRef(null);
 
 
 
@@ -16,7 +23,8 @@ export default function AdminUsersPage() {
 
     const [user, setUser] = useState(null);
 
-    const authState = useSelector((state) => state.auth);
+    const adminState = useSelector((state) => state.admin);
+    const navigate = useNavigate();
 
 
     const handleSubmit = (e) => {
@@ -24,13 +32,14 @@ export default function AdminUsersPage() {
 
         axios.get(`http://localhost:4000/api/admin/user/${email}`,{
             headers: {
-                Authorization: `Bearer ${authState.token}`
+                Authorization: `Bearer ${adminState.adminToken}`
             }
         })
             .then((res) => {
                 console.log(res.data.payload.user);
                 
                 setUser({
+                    _id: res.data.payload.user._id,
                     userName: res.data.payload.user.userName,
                     email: res.data.payload.user.email
                 });
@@ -41,12 +50,45 @@ export default function AdminUsersPage() {
         
     }
 
-    console.log(user);
+    const handleEdit = () => {
+        navigate(`/admin/users/${user._id}`);
+    }
+
+    const location = useLocation();
+        const [messageState, setMessageState] = useState(location.state || null);
+    
+        useEffect(() => {
+            if (location.state) {
+                setMessageState(location.state);
+                // Clear the location state
+                window.history.replaceState({}, document.title);
+            }
+        }, [location.state]);
+    
+        useEffect(() => {
+            if (messageState) {
+                const timer = setTimeout(() => {
+                    switch (messageState.type) {
+                        case 'success':
+                            toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                            break;
+                        case 'error':
+                            toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                            break;
+                        default:
+                            break;
+                    }
+                }, 100);
+                return () => clearTimeout(timer);
+            }
+        }, [messageState]);
+
     
 
 
     return (
         <section className="flex flex-col items-center justify-center bg-custom_bg_gray">
+            <Toast ref={toast} />
             <div className="container border rounded-lg shadow-md bg-white m-8 p-8">
                 <h1  className="text-2xl text-custom_gray font-bold">Find User</h1>
                 <form className="flex flex-row gap-4 mt-8 w-full" onSubmit={handleSubmit}>
@@ -69,7 +111,7 @@ export default function AdminUsersPage() {
                             <p className="text-custom_gray text-lg">Email: <span className="text-custom_red">{user.email}</span></p>
                         </div>
                         <div className="flex basis-2/5 justify-end gap-4">
-                            <Button style={'red-default'}>Edit</Button>
+                            <Button style={'red-default'} onClick={handleEdit}>Edit</Button>
                             <Button style={'red-hover'}>Delete</Button>
                         </div>
                     </div>
