@@ -104,8 +104,8 @@ export default function AdminLoginPage() {
     return (
         <section className="bg-custom_bg_gray h-screen">
             <Toast ref={toast} />
-            <div className="flex justify-center items-center h-full">
-                <div className="border border-gray-300 p-8 xl:max-w-[40%] container mx-8">
+            <div className="flex justify-center items-center h-full ">
+                <div className="border border-gray-300 p-8 xl:max-w-[40%] container mx-8 rounded-lg shadow-md bg-white">
                     <h1 className="text-4xl font-bold text-custom_gray text-center py-4">Admin Login</h1>
                     <form onSubmit={handleSubmit}>
                          <div className="flex flex-col mb-4">

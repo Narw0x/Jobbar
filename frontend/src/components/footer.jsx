@@ -5,7 +5,7 @@ export default function Footer() {
     return (
         <footer className="flex flex-col bg-white w-[100%]">
             <hr className="h-1 bg-custom_gray"/>
-            <div className="flex felx-row max-w-[1440px] w-[70%] m-auto mt-16 mb-2 gap-4 justify-between">
+            <div className="flex felx-row max-w-[1440px] w-[70%] m-auto mt-16 mb-16 gap-4 justify-between">
                 <div>
                     <img src={path_logo} alt="Jobbar logo"  className="h-40 p-2"/>
                 </div>

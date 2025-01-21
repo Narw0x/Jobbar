@@ -49,7 +49,6 @@ export default function EditJobOfferPage() {
             axios.get(`http://localhost:4000/api/job/edit/${params.jobId}`, {
                 headers: {
                     Authorization: `Bearer ${authState.token}`,
-                    id: authState.user._id
                 }
             }).then((response) => {
                 if (response.status === 200) {
@@ -61,8 +60,6 @@ export default function EditJobOfferPage() {
                     }));
                 }
             }).catch((error) => {
-                console.log('neviem');
-                
                 console.log(error);
             });
         }
@@ -159,7 +156,6 @@ export default function EditJobOfferPage() {
         axios.put(`http://localhost:4000/api/job/edit/${params.jobId}`, data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
-                id: authState.user._id
             }
         }).then((response) => {
             if (response.status === 201) {

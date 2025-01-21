@@ -186,7 +186,8 @@ export default function EditEducationPage() {
                                             style="red-hover"
                                             type="button"
                                             onClick={() => {
-                                                navigate(`/`);
+                                                console.log(`/profile/${authState.user._id}`);
+                                                // navigate(`/profile/${authState.user._id}`);
                                             }}
                                         >
                                             Back

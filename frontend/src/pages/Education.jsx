@@ -180,7 +180,7 @@ export default function EducationPage(){
                                     style="red-hover"
                                     type="button"
                                     onClick={() => {
-                                        navigate(`/`);
+                                        navigate(`/profile/${authState.user._id}`);
                                     }}
                                 >
                                     Back

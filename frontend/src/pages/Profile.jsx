@@ -1,9 +1,10 @@
-import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import {  useParams, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { logout } from "../store/slices/authSlice";
 import axios from "axios";
 import { Toast } from 'primereact/toast';
+import ReportModal from "../components/reportModal";
 
 import Button from "../components/button";
 import ErrorPage from "./Error";
@@ -11,6 +12,7 @@ import ErrorPage from "./Error";
 
 export default function ProfilePage() {
     const toast = useRef(null);
+    const modal = useRef();
     const { id } = useParams();
     const authState = useSelector((state) => state.auth);
     const [profileData, setProfileData] = useState(null); 
@@ -117,6 +119,10 @@ export default function ProfilePage() {
         }).format(date);
     };
 
+    const handleOpenModal = () => {
+        modal.current.open();
+    }
+
     
 
     if(error) {
@@ -149,6 +155,16 @@ export default function ProfilePage() {
                                 {profileData.address}
                             </p>}
                             
+                        </div>
+                        <div>
+                            {!isCurrentUser && (
+                                <div className="flex flex-row m-2">
+                                    <Button style="red-hover" onClick={handleOpenModal}>
+                                        Report
+                                    </Button>
+                                    <ReportModal ref={modal} setMessage={setMessageState}></ReportModal>
+                                </div>
+                            )}
                         </div>
                     </div>
                     
@@ -339,7 +355,7 @@ export default function ProfilePage() {
                         {jobOffers.length !== 0  ? (
                             <>
                                 <h2 className="text-lg text-custom_gray font-semibold">Job Offers</h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 pt-2">
                                 {jobOffers.map((job, idx) => (
                                     <div key={job._id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 ">
                                         <h3 className="text-md text-custom_gray font-semibold text-xl">{job.jobTitle}</h3>

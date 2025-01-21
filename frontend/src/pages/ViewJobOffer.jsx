@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 import Button from "../components/button";
@@ -165,15 +166,17 @@ export default function ViewJobOfferPage() {
                             ))}
                         </div>
                     </div>
-                    <div className="flex flex-col basis-1/3 justify-center items-center">
-                        <div className="w-full aspect-square object-cover rounded">
-                            <img className={`w-full aspect-square object-cover rounded-2xl p-2 ${job.companyId.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${job.companyId.avatar}`} alt="" />
+                        <div className="flex flex-col basis-1/3 justify-center items-center">
+                                <div className="w-full aspect-square object-cover rounded">
+                                    <Link to={`/profile/${job.companyId._id}`}>
+                                        <img className={`w-full aspect-square object-cover rounded-2xl p-2 ${job.companyId.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${job.companyId.avatar}`} alt="" />
+                                    </Link>
+                                </div>
+                                <div className="flex flex-col text-left mt-4 w-full p-2">
+                                    <h3 className="text-xl text-custom_gray font-semibold">{job.companyId.companyName}</h3>
+                                    <p className="text-custom_gray">{job.companyId.about}</p>
+                                </div>
                         </div>
-                        <div className="flex flex-col text-left mt-4 w-full p-2">
-                            <h3 className="text-xl text-custom_gray font-semibold">{job.companyId.companyName}</h3>
-                            <p className="text-custom_gray">{job.companyId.about}</p>
-                        </div>
-                    </div>
                 </div>
                 <div className="flex flex-row px-8 py-8 gap-4">
                     {authState.user.role === 'user' ? (
@@ -185,11 +188,18 @@ export default function ViewJobOfferPage() {
                             {applied ? 'Applied' : 'Apply'}
                         </Button>
                     ) : null}
+                        
                         <Button 
                             style="red-default"
                             redirectPath={`${authState.user.role === 'user' ? '/job/search' : (`/profile/${authState.user._id}`)}`}
                         >
                             Back
+                        </Button>
+                        <Button
+                            style="red-default"
+                            redirectPath={`/profile/${job.companyId._id}`}
+                        >
+                            To company profile
                         </Button>
                 </div>
             </div>
