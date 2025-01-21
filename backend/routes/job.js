@@ -283,11 +283,10 @@ router.get('/job/edit/:jobId', checkAuth, async (req, res) => {
 
 router.put('/job/edit/:jobId', checkAuth, async (req, res) => {
     const { jobTitle, companyId, employmentType, experience, date, description, address, skills, requirements, salary } = req.body;
-    const {id} = req.headers;
     const { jobId } = req.params;
 
     try {
-        const profile = await Company.findById(id);
+        const profile = await Company.findById(companyId);
         if (!profile) return res.status(400).json({ message: 'Company not found' });
 
         const jobOffer = await JobOffer.findById(jobId);
