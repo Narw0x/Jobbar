@@ -3,6 +3,8 @@ import { useRef } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useEffect } from "react";
+import { useLocation } from "react-router";
 
 import Button from "../components/button";
 
@@ -40,9 +42,41 @@ export default function AdminJobsPage() {
             })
             .catch((err) => {
                 console.log(err);
+                if (err.response.status === 404) {
+                    toast.current.show({severity: 'error', summary: 'Error', detail: 'No jobs found for this company', life: 3000});
+                }
             });
         
     }
+
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
 
     return (
         <section className="flex flex-col items-center justify-center bg-custom_bg_gray">
@@ -87,7 +121,7 @@ export default function AdminJobsPage() {
                                         <div className="flex flex-grow">
                                             <Button
                                                 style="red-default"
-                                                redirectPath={`/admin/job/edit/${job._id}`}
+                                                redirectPath={`/admin/jobs/edit/${job._id}`}
                                             >
                                                 Edit
                                             </Button>
@@ -95,7 +129,7 @@ export default function AdminJobsPage() {
                                         <div>
                                             <Button
                                                 style="red-hover"
-                                                redirectPath={`/admin/job/${job._id}`}
+                                                redirectPath={`/admin/jobs/${job._id}`}
                                             >
                                                 View
                                             </Button>

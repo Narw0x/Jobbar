@@ -32,6 +32,7 @@ import AdminUsersPage from './pages/AdminUsers';
 import { checkAdminLoader } from './util/auth';
 import AdminUserEditPage from './pages/AdminUserEdit';
 import AdminJobsPage from './pages/AdminJobs';
+import AdminJobsEditPage from './pages/AdminJobsEdit';
 
 
 const userRoutes = {
@@ -112,7 +113,7 @@ const adminRoutes = {
       children: [
         {index: true, element: <AdminJobsPage />},
         {path: ':jobId'},
-        {path: 'edit/:jobId'},
+        {path: 'edit/:jobId', element: <AdminJobsEditPage/>},
       ]
     },
     {
