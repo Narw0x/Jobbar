@@ -30,6 +30,7 @@ import profileRoutes from "./routes/profile.js";
 import Autocomplete from './routes/autocomplete.js';
 import jobRoutes from './routes/job.js';
 import adminRoutes from './routes/admin.js';
+import reportRoutes from './routes/report.js';
 
 app.setMaxListeners(30);
 
@@ -39,6 +40,7 @@ app.use('/api', companyRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', Autocomplete);
 app.use('/api', jobRoutes);
+app.use('/api', reportRoutes);
 app.use('/api/admin', adminRoutes);
 
 

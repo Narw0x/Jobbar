@@ -6,15 +6,14 @@ const reportSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        description: {
+        reason: {
             type: String,
             required: true,
         },
-        status: {
-            type: String,
-            enum: ["pending", "completed"],
-            default: "pending",
-        },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true
+        }
     },
     { timestamps: true }
 );
