@@ -51,8 +51,8 @@ const AcceptModal = forwardRef(function AcceptModal( { userName, userEmail, user
                 <h2 className="text-xl font-bold text-custom_gray my-4">Accept User</h2>
                 <div>
                     <p className="text-sm text-custom_gray">Are you sure?</p>
-                    <p>Name: <span>{userName}</span></p>
-                    <p>Email: <span>{userEmail}</span></p>
+                    <p className="text-sm text-custom_gray">Name: <span className="text-custom_red">{userName}</span></p>
+                    <p className="text-sm text-custom_gray">Email: <span className="text-custom_red">{userEmail}</span></p>
                     
                 </div>
                 <div className="flex justify-end gap-4 mt-4">

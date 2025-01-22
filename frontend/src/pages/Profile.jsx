@@ -162,7 +162,7 @@ export default function ProfilePage() {
                                     <Button style="red-hover" onClick={handleOpenModal}>
                                         Report
                                     </Button>
-                                    <ReportModal ref={modal} setMessage={setMessageState}></ReportModal>
+                                    <ReportModal ref={modal} type={profileData.role} setMessage={setMessageState}></ReportModal>
                                 </div>
                             )}
                         </div>

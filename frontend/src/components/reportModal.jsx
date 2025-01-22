@@ -7,7 +7,7 @@ import Button from "./button"
 import axios from "axios";
 import { useLocation, useParams } from "react-router-dom";
 
-const ReportModal = forwardRef(function ReportModal({setMessage} ,ref) {
+const ReportModal = forwardRef(function ReportModal({type, setMessage} ,ref) {
     const {id} = useParams();
     const dialog = useRef();
     useImperativeHandle(ref, () => {
@@ -20,7 +20,6 @@ const ReportModal = forwardRef(function ReportModal({setMessage} ,ref) {
 
     const [reason, setReason] = useState('');
     const authState = useSelector((state) => state.auth);
-    const location = useLocation();
 
     const handleChange = (e) => {
         setReason(e.target.value);
@@ -33,8 +32,13 @@ const ReportModal = forwardRef(function ReportModal({setMessage} ,ref) {
     const handleSumbit = (e) => {
         e.preventDefault();
 
+        
+
         const data = {
-            _id: id,
+            reportedEntity: id,
+            reportedEntityType: type,
+            reportedBy: authState.user._id,
+            reportedByType: authState.user.role,
             reason
         }
 

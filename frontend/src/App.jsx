@@ -34,6 +34,7 @@ import AdminUserEditPage from './pages/AdminUserEdit';
 import AdminJobsPage from './pages/AdminJobs';
 import AdminJobsEditPage from './pages/AdminJobsEdit';
 import AdminReportsPage from './pages/AdminReports';
+import AdminReportPage from './pages/AdminReport';
 
 
 const userRoutes = {
@@ -119,7 +120,10 @@ const adminRoutes = {
     },
     {
       path: 'reports',
-      element: <AdminReportsPage />,
+      children: [
+        {index: true, element: <AdminReportsPage />},
+        {path: ':reportId', element: <AdminReportPage />}
+      ]
     }
   ]
 };
