@@ -269,6 +269,30 @@ router.post('/job/create', checkAuth, async (req, res) => {
 
 });
 
+router.post('/job/accept', checkAuth, async (req, res) => {
+    const { userId, jobId } = req.body;
+
+    try {
+        const jobApplicant = await JobApplicant.findOne({ applicant: userId, jobOffer: jobId });
+        if (!jobApplicant) return res.status(400).json({ message: 'Application not found' });
+
+        jobApplicant.status = 'Accepted';
+        await jobApplicant.save();
+
+        const rejectedApplications = await JobApplicant.find({ applicant: {$ne: userId}, jobOffer: jobId });
+        if (rejectedApplications.length > 0){
+            rejectedApplications.forEach(async (applicant) => {
+                applicant.status = 'Rejected';
+                await applicant.save();
+            });
+        }
+
+        res.status(200).json({ message: 'Application accepted' });
+    }catch (error) {
+        res.status(500).send({ message: error });
+    }
+});
+
 router.get('/job/edit/:jobId', checkAuth, async (req, res) => {
     const { jobId } = req.params;
     try {
