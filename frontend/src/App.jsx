@@ -33,6 +33,7 @@ import { checkAdminLoader } from './util/auth';
 import AdminUserEditPage from './pages/AdminUserEdit';
 import AdminJobsPage from './pages/AdminJobs';
 import AdminJobsEditPage from './pages/AdminJobsEdit';
+import AdminReportsPage from './pages/AdminReports';
 
 
 const userRoutes = {
@@ -118,7 +119,7 @@ const adminRoutes = {
     },
     {
       path: 'reports',
-      element: <AdminDashboard />,
+      element: <AdminReportsPage />,
     }
   ]
 };

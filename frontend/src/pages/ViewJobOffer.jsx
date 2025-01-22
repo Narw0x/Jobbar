@@ -26,7 +26,7 @@ export default function ViewJobOfferPage() {
         employmentType: 'Full-time',
         date: new Date(),
         description: '',
-        expereince: '0-1',
+        experience: '0-1',
         skills: [
             {
                 skillName: '',
@@ -151,7 +151,7 @@ export default function ViewJobOfferPage() {
                         </div>
                         <div className="flex flex-row mt-4 w-[50%] justify-between">
                             <h3 className="text-xl text-custom_gray">Experience</h3>
-                            <p className="text-custom_gray">{job.expereince} years</p>
+                            <p className="text-custom_gray">{job.experience} years</p>
                         </div>
                         <div className="flex flex-col mt-4 w-[50%]">
                             <h3 className="text-xl text-custom_gray">Requirements</h3>

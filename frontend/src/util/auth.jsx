@@ -68,11 +68,7 @@ function getAdmin(){
     const admin = localStorage.getItem('admin');
     if(!admin) return null;
 
-    console.log(admin);
-    
-
     const isAdmin = JSON.parse(admin).role === "admin";
-
 
     return isAdmin;
 }

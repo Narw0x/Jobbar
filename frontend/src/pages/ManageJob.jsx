@@ -6,37 +6,43 @@ import Button from "../components/button";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../store/slices/authSlice";
 import { Toast } from "primereact/toast";
+import AcceptModal from "../components/acceptModal";
 
 export default function ManageJobPage() {
     const toast = useRef(null);
+    const modal = useRef(null);
     const {jobId} = useParams();
     const navigate = useNavigate();
     const [applicants, setApplicants] = useState([]);
+    const [selectedApplicant, setSelectedApplicant] = useState(null);
+    const [acceptedApplicant, setAcceptedApplicant] = useState(null);
     const dispatch = useDispatch();
 
     const authState = useSelector(state => state.auth);
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
 
-    useEffect(() => {
+    const fetchApplicants = () => {
         axios.get(`http://localhost:4000/api/job/applicants/${jobId}`)
-        .then(response => {
-            setApplicants(response.data.payload.applicants);
-        }).catch(err => {
-            console.log(err);
-        });
-            
-    }, [jobId]);
-
-    const handleAccept = (id) => {
-        return () => {
-            axios.post(`http://localhost:4000/api/job/accept/${jobId}`, {
-                applicantId: id
-            }).then(response => {
-                setApplicants(applicants.filter(applicant => applicant.applicant._id !== id));
-            }).catch(err => {
+            .then(response => {
+                if(response.data.payload.applicants.length !== 0){
+                    response.data.payload.applicants.map(applicant => {
+                        if(applicant.status === 'Accepted'){
+                            setAcceptedApplicant(applicant);
+                        }
+                    });
+                }
+                setApplicants(response.data.payload.applicants);
+            })
+            .catch(err => {
                 console.log(err);
             });
-        }
-    }
+    };
+
+    useEffect(() => {
+        fetchApplicants();
+    }, [jobId]);
+
 
     const handleAddFavorite = (userId) => {
         axios.put(`http://localhost:4000/api/profile/favorite/${userId}`, userId,
@@ -55,8 +61,7 @@ export default function ManageJobPage() {
         });
     }
 
-    const location = useLocation();
-    const [messageState, setMessageState] = useState(location.state || null);
+    
 
     useEffect(() => {
         if (location.state) {
@@ -84,12 +89,54 @@ export default function ManageJobPage() {
         }
     }, [messageState]);
 
+    const handleOpenModal = (userName, userEmail, applicantId, jobId) => {
+        
+        setSelectedApplicant({userName, userEmail, applicantId, jobId});
+        modal.current.open();
+    };
+
+
     return(
-        <section className="bg-custom_bg_gray py-8">
+        <section className="bg-custom_bg_gray py-8 ">
             <Toast ref={toast} />
+            <AcceptModal
+                ref={modal}
+                userId={selectedApplicant?.applicantId}
+                jobId={selectedApplicant?.jobId}
+                userName={selectedApplicant?.userName}
+                userEmail={selectedApplicant?.userEmail}
+                setMessage={setMessageState}
+                fetchApplicants={fetchApplicants}
+            />
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white">
                 <form className="p-8">
                     <div className="flex flex-col gap-4">
+                        {acceptedApplicant && (
+                            <div>
+                                <h2 className="text-xl font-bold text-custom_gray my-4">Accepted Applicant</h2>
+                                
+                                <div className="flex flex-row gap-4 border-b py-2 justify-between">
+                                    <div className="flex flex-row justify-between basis-1/2 items-center">
+                                        <div className="flex basis-1/2 text-left">
+                                            {acceptedApplicant.applicant.firstName} {acceptedApplicant.applicant.lastName}
+                                        </div>
+                                        <div className="flex basis-1/2 text-left">
+                                            {acceptedApplicant.applicant.email}
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="flex gap-4 justify-end basis-1/2">
+                                        <Button
+                                            style='red-default'
+                                            onClick={() => navigate(`/profile/${acceptedApplicant.applicant._id}`)}
+                                        >
+                                            View Profile
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                        }
                         <div>
                             <div className="flex flex-row gap-4 justify-between">
                                 <div  className="flex flex-row justify-between basis-1/2">
@@ -126,12 +173,17 @@ export default function ManageJobPage() {
                                     >
                                         View Profile
                                     </Button>
-                                    <Button
-                                        style='red-hover'
-                                        onClick={handleAccept(applicant.applicant._id)}
-                                    >
-                                        Accept
-                                    </Button>
+                                    {!acceptedApplicant && (
+                                        <Button
+                                            style='red-hover'
+                                            type="button"
+                                            onClick={() =>
+                                                handleOpenModal(applicant.applicant.firstName, applicant.applicant.email, applicant.applicant._id, jobId)
+                                            }
+                                        >
+                                            Accept
+                                        </Button>
+                                    )}
                                     <div className="flex items-center">
                                         <button className="flex items-center justify-center text-custom_red h-6 w-6" type="button" onClick={() => handleAddFavorite(applicant.applicant._id)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={authState.user.favoriteApplicants?.includes(applicant.applicant._id) ? 'currentColor': 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

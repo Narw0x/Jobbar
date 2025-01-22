@@ -102,7 +102,6 @@ export default function LoginPage() {
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="password">Password</label>
                         <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password" value={data.password} onChange={handleChange} />
-                        <label className="text-custom_red text-s" htmlFor="password">Forgot your password?</label>
                     </div>
                     <div className="flex flex-col text-xl">
                         <Button style={'red-hover'}>Sign in</Button>
