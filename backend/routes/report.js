@@ -4,13 +4,16 @@ import Report from '../models/report.model.js';
 const router = express.Router();
 
 router.post('/report', async (req, res) => {
-    const { _id, reason } = req.body;
+    const { reportedEntity, reportedBy, reason, reportedEntityType, reportedByType} = req.body;
 
     try {
         const newReport = new Report({
-            title: 'Report User',
+            title: 'Report Entity',
             reason,
-            userId: _id
+            reportedEntity,
+            reportedBy,
+            reportedEntityType,
+            reportedByType
         });
 
         await newReport.save();

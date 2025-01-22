@@ -199,6 +199,77 @@ router.put('/edit/:userId', checkAuth, upload, async (req, res) => {
 }
 );
 
+router.get('/reports', checkAuth, async (req, res) => {
+    try {
+      const reports = await Report.find();
+  
+      // Dynamically populate based on reportedEntityType and reportedByType
+      for (let report of reports) {
+        const reportedEntityModel = report.reportedEntityType === 'user' ? 'User' : 'Company';
+        const reportedByModel = report.reportedByType === 'user' ? 'User' : 'Company';
+  
+        // Populate the 'reportedEntity' and 'reportedBy' fields based on the model
+        await report.populate('reportedEntity', 'firstName lastName email companyName');
+        await report.populate('reportedBy', 'firstName lastName email companyName');
+        
+        // Now replace the `reportedEntity` and `reportedBy` with the correct model data
+        await report.populate({
+          path: 'reportedEntity',
+          model: reportedEntityModel,
+          select: 'firstName lastName email companyName'
+        });
+        await report.populate({
+          path: 'reportedBy',
+          model: reportedByModel,
+          select: 'firstName lastName email companyName'
+        });
+      }
+  
+      res.status(200).json({
+        message: 'Reports fetched successfully',
+        payload: { reports },
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+router.get('/reports/:reportId', checkAuth, async (req, res) => {
+    const { reportId } = req.params;
+    try {
+        const report = await Report.findById(reportId);
+
+        const reportedEntityModel = report.reportedEntityType === 'user' ? 'User' : 'Company';
+        const reportedByModel = report.reportedByType === 'user' ? 'User' : 'Company';
+  
+        // Populate the 'reportedEntity' and 'reportedBy' fields based on the model
+        await report.populate('reportedEntity', 'firstName lastName email companyName');
+        await report.populate('reportedBy', 'firstName lastName email companyName');
+        
+        // Now replace the `reportedEntity` and `reportedBy` with the correct model data
+        await report.populate({
+          path: 'reportedEntity',
+          model: reportedEntityModel,
+          select: 'firstName lastName email companyName'
+        });
+        await report.populate({
+          path: 'reportedBy',
+          model: reportedByModel,
+          select: 'firstName lastName email companyName'
+        });
+            
+        if (!report) return res.status(404).json({ message: 'Report not found' });
+
+        res.status(200).json({ message: 'Report fetched successfully', payload: { report } });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+});
+  
+  
+
 router.post('/logout', async (req, res) => {
     try{
         const token = req.headers.authorization?.split(' ')[1];
