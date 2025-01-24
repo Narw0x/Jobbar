@@ -7,12 +7,15 @@ import { useEffect } from "react";
 import { useLocation } from "react-router";
 
 import Button from "../components/button";
+import { bouncy } from "ldrs";
 
 export default function AdminJobsPage() {
     const toast = useRef(null);
 
     const [email, setEmail] = useState('');
     const [jobOffers, setJobOffers] = useState([]);
+    const [isLoading, setIsLoading] = useState(false)
+    bouncy.register();
 
     const adminState = useSelector((state) => state.admin);
 
@@ -31,6 +34,7 @@ export default function AdminJobsPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         axios.get(`http://localhost:4000/api/admin/jobOffer/${email}`,{
             headers: {
@@ -39,12 +43,15 @@ export default function AdminJobsPage() {
         })
             .then((res) => {
                 setJobOffers(res.data.payload.jobs);
+                setIsLoading(false);
+
             })
             .catch((err) => {
                 console.log(err);
                 if (err.response.status === 404) {
                     toast.current.show({severity: 'error', summary: 'Error', detail: 'No jobs found for this company', life: 3000});
                 }
+                setIsLoading(false)
             });
         
     }
@@ -78,6 +85,7 @@ export default function AdminJobsPage() {
         }
     }, [messageState]);
 
+
     return (
         <section className="flex flex-col items-center justify-center bg-custom_bg_gray">
             <Toast ref={toast} />
@@ -92,6 +100,15 @@ export default function AdminJobsPage() {
                         <Button style={'red-hover'}>Search</Button>
                     </div>
                 </form>
+                {isLoading && (
+                    <div className="flex justify-center p-8">
+                        <l-bouncy
+                        size="45"
+                        speed="1.75" 
+                        color="gray" 
+                        ></l-bouncy>
+                    </div>
+                )}
                 {jobOffers.length !== 0  && (
                     <div className="mt-8">
                         <h2 className="text-xl text-custom_gray font-bold ">Job Offers</h2>

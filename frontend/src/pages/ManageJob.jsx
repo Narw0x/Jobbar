@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../store/slices/authSlice";
 import { Toast } from "primereact/toast";
 import AcceptModal from "../components/acceptModal";
+import { bouncy } from "ldrs";
 
 export default function ManageJobPage() {
     const toast = useRef(null);
@@ -16,7 +17,10 @@ export default function ManageJobPage() {
     const [applicants, setApplicants] = useState([]);
     const [selectedApplicant, setSelectedApplicant] = useState(null);
     const [acceptedApplicant, setAcceptedApplicant] = useState(null);
+    const [jobName, setJobName] = useState('');
     const dispatch = useDispatch();
+    bouncy.register();
+
 
     const authState = useSelector(state => state.auth);
     const location = useLocation();
@@ -60,6 +64,18 @@ export default function ManageJobPage() {
             console.log(err);
         });
     }
+
+    useEffect(() => {
+        axios.get(`http://localhost:4000/api/job/name/${jobId}`, {
+            headers: {
+                Authorization: `Bearer ${authState.token}`,
+            }
+        }).then( response => {
+            setJobName(response.data.payload.jobName);
+        }).catch(err => {
+            console.log(err);
+        });
+    }, [jobId])
 
     
 
@@ -110,7 +126,17 @@ export default function ManageJobPage() {
             />
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white">
                 <form className="p-8">
-                    <div className="flex flex-col gap-4">
+                    {applicants.length === 0  && (
+                        <div className="flex justify-center">
+                            <l-bouncy
+                            size="45"
+                            speed="1.75" 
+                            color="gray" 
+                            ></l-bouncy>
+                        </div>
+                    )}
+                    {applicants.length !== 0  && (<div className="flex flex-col gap-4">
+                        <h1 className="text-custom_gray font-bold text-4xl">Job: {jobName.jobTitle}</h1>
                         {acceptedApplicant && (
                             <div>
                                 <h2 className="text-xl font-bold text-custom_gray my-4">Accepted Applicant</h2>
@@ -196,7 +222,7 @@ export default function ManageJobPage() {
                                 </div>
                             </div>
                         ))}
-                    </div>
+                    </div>)}
                 </form>
             </div>
         </section>

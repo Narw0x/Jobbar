@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Button from './button';
+import { bouncy } from 'ldrs';
 
 
 
@@ -11,6 +12,7 @@ export default function SearchBookmarksView() {
     const [jobs, setJobs] = useState([]);
 
     const authState = useSelector(state => state.auth);
+    bouncy.register();
 
     useEffect(() => {
         axios.get(`http://localhost:4000/api/job/user/${authState.user._id}`, {
@@ -42,6 +44,15 @@ export default function SearchBookmarksView() {
             <h1 className="text-custom_gray text-4xl font-bold">Your applies for job</h1>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 pt-2">
+                    {jobs.length === 0 && (
+                        <div className="flex justify-center">
+                            <l-bouncy
+                            size="45"
+                            speed="1.75" 
+                            color="gray" 
+                            ></l-bouncy>
+                        </div>
+                    )}
                     {jobs.map((job, idx) => (
                         <div key={job._id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 ">
                             <h3 className="text-md text-custom_gray font-semibold text-xl">{job.jobOffer.jobTitle}</h3>

@@ -2,27 +2,31 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Button from "../components/button";
+import { bouncy } from "ldrs";
 
 
 export default function AdminReportsPage() {
 
     const [reports, setReports] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    bouncy.register();
 
     const adminState = useSelector((state) => state.admin);
 
     useEffect(() => {
+        setIsLoading(true);
         axios.get('http://localhost:4000/api/admin/reports', {
             headers: {
                 Authorization: `Bearer ${adminState.adminToken}`
             }
         })
             .then((res) => {
-                console.log(res.data.payload.reports);
-                
                 setReports(res.data.payload.reports);
+                setIsLoading(false);
             })
             .catch((err) => {
                 console.log(err);
+                setIsLoading(false);
             });
     }, [adminState.adminToken]);
 
@@ -32,6 +36,15 @@ export default function AdminReportsPage() {
             <div className="container border rounded-lg shadow-md bg-white m-8 p-8">
                 <h1 className="text-2xl font-bold text-custom_gray">Reports</h1>
                 <div>
+                    {reports.length === 0 && (
+                        <div className="flex justify-center p-8">
+                            <l-bouncy
+                            size="45"
+                            speed="1.75" 
+                            color="gray" 
+                            ></l-bouncy>
+                        </div>
+                    )}
                     {reports.length !== 0  && (
                         <div className="mt-8">
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">

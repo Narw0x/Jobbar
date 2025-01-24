@@ -8,11 +8,13 @@ import { useLocation } from "react-router-dom"
 
 import Button from "../components/button"
 import { useNavigate } from "react-router-dom"
+import { bouncy } from "ldrs"
 
 
 export default function FavoritePage() {
     const toast = useRef(null);
     const dispatch = useDispatch();
+    bouncy.register();
 
     const authState = useSelector(state => state.auth);
     const [favorites, setFavorites] = useState([]);
@@ -83,9 +85,19 @@ export default function FavoritePage() {
     return (
          <section className="bg-custom_bg_gray py-8">
             <Toast ref={toast}/>
+            
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white p-8">
                 <h2 className="text-4xl font-bold text-custom_gray mb-4">Your Favorite Users</h2>
-                <div>
+                {favorites.length === 0 && (
+                    <div className="flex justify-center">
+                        <l-bouncy
+                        size="45"
+                        speed="1.75" 
+                        color="gray" 
+                        ></l-bouncy>
+                    </div>
+                )}
+               {favorites.length !== 0 && (<div>
                     <div className="flex flex-row gap-4 justify-between  ">
                         <div  className="flex flex-row justify-between basis-1/2">
                             <div className="flex basis-1/2 text-left  font-semibold text-xl text-custom_gray">
@@ -102,8 +114,8 @@ export default function FavoritePage() {
                         </div>
                         
                     </div>
-                </div>
-                {favorites && favorites.map((favorite) => (
+                </div>)}
+                {favorites.length !== 0  && favorites.map((favorite) => (
                     <div key={favorite._id} className="flex items-center justify-between py-2  border-b border-gray-200">
                         <div  className="flex flex-row justify-between basis-1/2">
                             <div className="flex basis-1/2 text-left text-custom_gray">

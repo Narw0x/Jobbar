@@ -8,6 +8,7 @@ import { useLocation } from "react-router";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { Toast } from "primereact/toast";
+import { bouncy } from "ldrs";
 
 
 export default function AdminUsersPage() {
@@ -22,6 +23,8 @@ export default function AdminUsersPage() {
     }
 
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(false)
+    bouncy.register();
 
     const adminState = useSelector((state) => state.admin);
     const navigate = useNavigate();
@@ -29,6 +32,7 @@ export default function AdminUsersPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         axios.get(`http://localhost:4000/api/admin/user/${email}`,{
             headers: {
@@ -36,16 +40,17 @@ export default function AdminUsersPage() {
             }
         })
             .then((res) => {
-                console.log(res.data.payload.user);
                 
                 setUser({
                     _id: res.data.payload.user._id,
                     userName: res.data.payload.user.userName,
                     email: res.data.payload.user.email
                 });
+                isLoading(false);
             })
             .catch((err) => {
                 console.log(err);
+                setIsLoading(false)
             });
         
     }
@@ -100,6 +105,15 @@ export default function AdminUsersPage() {
                         <Button style={'red-hover'}>Search</Button>
                     </div>
                 </form>
+                {isLoading && (
+                    <div className="flex justify-center p-8">
+                        <l-bouncy
+                        size="45"
+                        speed="1.75" 
+                        color="gray" 
+                        ></l-bouncy>
+                    </div>
+                )}
                 {user && <div className="flex flex-col gap-4 mt-8">
                     <h2 className="text-xl text-custom_gray font-bold">User Information</h2>
                     

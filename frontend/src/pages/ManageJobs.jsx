@@ -4,12 +4,14 @@ import { logout } from "../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/button";
+import { bouncy } from "ldrs";
 
 export default function ManageJobsPage() {
 
     const authState = useSelector((state) => state.auth);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    bouncy.register();
 
     const [jobOffers, setJobOffers] = useState([]);
 
@@ -52,6 +54,16 @@ export default function ManageJobsPage() {
          <section className="bg-custom_bg_gray py-8">
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white">
                 <div className="p-8">
+                    {!jobOffers && (
+                            <div className="flex justify-center">
+                                <l-bouncy
+                                size="45"
+                                speed="1.75" 
+                                color="gray" 
+                                ></l-bouncy>
+                            </div>
+                            
+                        )}
                     {jobOffers.length !== 0 && (
                         <>
                             <h2 className="text-2xl text-custom_gray font-semibold">Your Job Offers</h2>

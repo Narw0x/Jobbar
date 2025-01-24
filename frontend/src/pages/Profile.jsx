@@ -5,6 +5,8 @@ import { logout } from "../store/slices/authSlice";
 import axios from "axios";
 import { Toast } from 'primereact/toast';
 import ReportModal from "../components/reportModal";
+import { tailspin, bouncy } from 'ldrs'
+
 
 import Button from "../components/button";
 import ErrorPage from "./Error";
@@ -19,6 +21,10 @@ export default function ProfilePage() {
     const [jobOffers, setJobOffers] = useState([]);
     const [isCurrentUser, setIsCurrentUser] = useState(false);
     const [error, setError] = useState(null);
+    tailspin.register();
+    bouncy.register();
+
+
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -132,7 +138,13 @@ export default function ProfilePage() {
     }
 
     if (!profileData) {
-        return <p>Loading...</p>;
+        return (
+            <section className="bg-custom_bg_gray py-8">
+                <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white flex justify-center p-8">
+                    <l-tailspin size="40"stroke="5"speed="0.9" color='gray' ></l-tailspin>
+                </div>
+            </section>
+        );
     }
 
     return (
@@ -140,10 +152,10 @@ export default function ProfilePage() {
             <Toast ref={toast}/>
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white">
                 <div className="w-full object-fill">
-                    <img className="w-full max-h-[250px]" src={`http://localhost:4000/public/background/${profileData?.bgImage}`} alt="" />
+                    <img className="w-full max-h-[250px] rounded-t" src={`http://localhost:4000/public/background/${profileData?.bgImage}`} alt="" />
                 </div>
                 <div className="flex items-center">
-                    <div className="w-60 h-60 rounded  m-8 ">
+                    <div className="w-60 h-60 rounded m-8 ">
                         <img className={`w-full h-full object-cover rounded-2xl p-2 ${profileData?.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${profileData?.avatar}`} alt="" />
                     </div>
                     <div className="flex flex-grow  justify-between">
@@ -352,6 +364,16 @@ export default function ProfilePage() {
                 )}
                 {profileData.jobOffers && (
                     <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
+                        {!jobOffers && (
+                            <div className="flex justify-center">
+                                <l-bouncy
+                                size="45"
+                                speed="1.75" 
+                                color="gray" 
+                                ></l-bouncy>
+                            </div>
+                            
+                        )}
                         {jobOffers.length !== 0  ? (
                             <>
                                 <h2 className="text-lg text-custom_gray font-semibold">Job Offers</h2>
