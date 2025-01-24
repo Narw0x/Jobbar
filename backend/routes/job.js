@@ -166,6 +166,17 @@ router.post('/jobs', async (req, res) => {
     }
 });
 
+router.get('/job/name/:jobId', checkAuth, async (req, res) => {
+    const { jobId } = req.params;
+
+    try{
+        const jobName = await JobOffer.findById(jobId).select('jobTitle');
+        res.status(200).json({ message: 'Job Name Found', payload: {jobName}});
+    }catch (error) {
+        res.status(500).send({ message: error });
+    }
+});
+
 router.get('/job/:jobId', async (req, res) => {
     const { jobId } = req.params;
     try {

@@ -26,6 +26,11 @@ const reportSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    reportStatus: {
+      type: String,
+      enum: ['Pending', 'Approved', 'Declined'],
+      default: 'Pending',
+    }
   },
   { timestamps: true }
 );
