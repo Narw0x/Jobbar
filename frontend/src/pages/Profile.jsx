@@ -10,11 +10,13 @@ import { tailspin, bouncy } from 'ldrs'
 
 import Button from "../components/button";
 import ErrorPage from "./Error";
+import DeleteAccountModal from "../components/deleteModal";
 
 
 export default function ProfilePage() {
     const toast = useRef(null);
-    const modal = useRef();
+    const reportModal = useRef();
+    const deleteModal = useRef();
     const { id } = useParams();
     const authState = useSelector((state) => state.auth);
     const [profileData, setProfileData] = useState(null); 
@@ -125,8 +127,12 @@ export default function ProfilePage() {
         }).format(date);
     };
 
-    const handleOpenModal = () => {
-        modal.current.open();
+    const handleReport = () => {
+        reportModal.current.open();
+    }
+
+    const handleDeleteAccount = () => {
+        deleteModal.current.open();
     }
 
     
@@ -171,10 +177,18 @@ export default function ProfilePage() {
                         <div>
                             {!isCurrentUser && (
                                 <div className="flex flex-row m-2">
-                                    <Button style="red-hover" onClick={handleOpenModal}>
+                                    <Button style="red-hover" onClick={handleReport}>
                                         Report
                                     </Button>
-                                    <ReportModal ref={modal} type={profileData.role} setMessage={setMessageState}></ReportModal>
+                                    <ReportModal ref={reportModal} type={profileData.role} setMessage={setMessageState}></ReportModal>
+                                </div>
+                            )}
+                            {isCurrentUser && (
+                                <div className="flex flex-row m-2">
+                                    <Button style="red-hover" onClick={handleDeleteAccount}>
+                                        Delete Account
+                                    </Button>
+                                    <DeleteAccountModal ref={deleteModal}></DeleteAccountModal>
                                 </div>
                             )}
                         </div>
