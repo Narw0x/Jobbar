@@ -14,6 +14,7 @@ import { bouncy } from "ldrs"
 export default function FavoritePage() {
     const toast = useRef(null);
     const dispatch = useDispatch();
+    const [isLoading, setIsLoading] = useState(false);
     bouncy.register();
 
     const authState = useSelector(state => state.auth);
@@ -21,15 +22,21 @@ export default function FavoritePage() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setIsLoading(true);
         axios.get(`http://localhost:4000/api/profile/favorite`, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 id: `${authState.user._id}`
             }
         }).then(response => {
+            if(response.data.payload.favoriteUsers.length === 0){
+                toast.current?.show({severity: 'info', summary: 'Info', detail: 'You have no favorite users', life: 2000});
+            }
             setFavorites(response.data.payload.favoriteUsers);
+            setIsLoading(false);
         }).catch(err => {
             console.log(err);
+            setIsLoading(false);
         });
     }, [authState.token, authState.user.favoriteApplicants]);
 
@@ -88,7 +95,7 @@ export default function FavoritePage() {
             
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white p-8">
                 <h2 className="text-4xl font-bold text-custom_gray mb-4">Your Favorite Users</h2>
-                {favorites.length === 0 && (
+                {isLoading === 0 && (
                     <div className="flex justify-center">
                         <l-bouncy
                         size="45"

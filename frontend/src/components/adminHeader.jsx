@@ -39,7 +39,11 @@ export default function AdminHeader() {
         <header className="flex flex-col bg-white w-[100%]">
             <div className="flex container mx-auto justify-between items-center p-4">
                 <div>
-                    <img className="max-w-40 max-h-40 object-contain cursor-pointer" src={path_logo} alt="" />
+                    <NavLink 
+                        to={'/admin/dashboard'}
+                        >
+                        <img className="max-w-40 max-h-40 object-contain cursor-pointer" src={path_logo} alt="" />
+                    </NavLink>
                 </div>
                 <div className="flex items-center">
                     <ul className="flex space-x-8 items-center my-auto">

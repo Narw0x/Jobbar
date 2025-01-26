@@ -16,8 +16,6 @@ export default function AdminUsersPage() {
     const [email, setEmail] = useState('');
     const toast = useRef(null);
 
-
-
     const handleChange = (e) => {
         setEmail(e.target.value);
     }
@@ -28,7 +26,6 @@ export default function AdminUsersPage() {
 
     const adminState = useSelector((state) => state.admin);
     const navigate = useNavigate();
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -55,12 +52,8 @@ export default function AdminUsersPage() {
         
     }
 
-    const handleEdit = () => {
-        navigate(`/admin/users/${user._id}`);
-    }
-
     const location = useLocation();
-        const [messageState, setMessageState] = useState(location.state || null);
+    const [messageState, setMessageState] = useState(location.state || null);
     
         useEffect(() => {
             if (location.state) {
@@ -125,7 +118,8 @@ export default function AdminUsersPage() {
                             <p className="text-custom_gray text-lg">Email: <span className="text-custom_red">{user.email}</span></p>
                         </div>
                         <div className="flex basis-2/5 justify-end gap-4">
-                            <Button style={'red-default'} onClick={handleEdit}>Edit</Button>
+                            <Button style={'red-default'} redirectPath={`/admin/users/${user._id}`}>View Profile</Button>
+                            <Button style={'red-default'} redirectPath={`/admin/users/edit/${user._id}`}>Edit</Button>
                             <Button style={'red-hover'}>Delete</Button>
                         </div>
                     </div>

@@ -33,7 +33,7 @@ export default function ManageJobsPage() {
             })
             .then((response) => {
                 if (response.status === 200) {
-                    setJobOffers(response.data.payload.jobs); // Update state with fetched job offers
+                    setJobOffers(response.data.payload.jobs); 
                 }
             })
             .catch((error) => {

@@ -86,6 +86,11 @@ export default function RegisterCompanyPage() {
             return;
         }
 
+        if(user.password !== user.password_2){
+            setMessageState({type: 'error', message: 'Passwords do not match.'});
+            return;
+        }
+
         if (!isValidAddress(data.address)) {
             setMessageState({type: 'error', message: 'Invalid address. Please enter a valid location.'});
             return;
@@ -99,7 +104,7 @@ export default function RegisterCompanyPage() {
             })
             .catch((error) => {
                 console.error('Error:', error.response?.data || error.message); // Handle error
-                setMessageState({type: 'error', message: error.response?.data.message || error.message});   
+                setMessageState({type: 'error', message: error.response?.data?.message || 'An error occurred. Please try again.'});
             });
     }
 
