@@ -10,19 +10,23 @@ import { bouncy } from 'ldrs';
 export default function SearchBookmarksView() {
 
     const [jobs, setJobs] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const authState = useSelector(state => state.auth);
     bouncy.register();
 
     useEffect(() => {
+        setIsLoading(true);
         axios.get(`http://localhost:4000/api/job/user/${authState.user._id}`, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
             }
         })
         .then(response => {
+            setIsLoading(false);
             setJobs(response.data.payload.jobs);
         }).catch(err => {
+            setIsLoading(false);
             console.log(err);
         });
     }, [authState.token, authState.user.searchConfig]);
@@ -44,7 +48,7 @@ export default function SearchBookmarksView() {
             <h1 className="text-custom_gray text-4xl font-bold">Your applies for job</h1>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 pt-2">
-                    {jobs.length === 0 && (
+                    {isLoading && (
                         <div className="flex justify-center">
                             <l-bouncy
                             size="45"
@@ -93,6 +97,11 @@ export default function SearchBookmarksView() {
                             </div>
                         </div>
                     ))}
+                    {jobs.length === 0 && !isLoading && (
+                        <div className="flex justify-center p-8">
+                            <p className="text-custom_gray">No applies found</p>
+                        </div>
+                    )}
                 </div> 
         </div>
     )

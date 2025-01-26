@@ -11,22 +11,26 @@ import { bouncy } from 'ldrs';
 export default function SearchJobView() {
 
     const [jobs, setJobs] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const authState = useSelector(state => state.auth);
     bouncy.register();
 
     useEffect(() => {
-        if(authState.user.role === 'user') {
-        axios.post('http://localhost:4000/api/jobs',{searchConfig: authState.user.searchConfig} ,  {
-            headers: {
-                Authorization: `Bearer ${authState.token}`
-            }
-        })
-        .then(response => {
-            setJobs(response.data.payload.jobs);
-        }).catch(err => {
-            console.log(err);
-        });
+        setIsLoading(true);
+            if(authState.user.role === 'user') {
+            axios.post('http://localhost:4000/api/jobs',{searchConfig: authState.user.searchConfig} ,  {
+                headers: {
+                    Authorization: `Bearer ${authState.token}`
+                }
+            })
+            .then(response => {
+                setIsLoading(false);
+                setJobs(response.data.payload.jobs);
+            }).catch(err => {
+                setIsLoading(false);
+                console.log(err);
+            });
     }}, [authState.token, authState.user.searchConfig]);
 
     
@@ -39,14 +43,12 @@ export default function SearchJobView() {
         }).format(date);
     };
 
-    
-
     return (
         <div>
             <h1 className="text-custom_gray text-4xl font-bold">Search</h1>
             <p className="text-custom_gray">Find your dream job</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 pt-2">
-                    {jobs.length === 0 && (
+                    {isLoading && (
                         <div className="flex justify-center">
                             <l-bouncy
                             size="45"
@@ -89,6 +91,11 @@ export default function SearchJobView() {
                             </div>
                         </div>
                     ))}
+                    {jobs.length === 0 && !isLoading && (
+                        <div className="flex justify-center p-8">
+                            <p className="text-custom_gray">No jobs found</p>
+                        </div>
+                    )}
                 </div>
         </div>
     )

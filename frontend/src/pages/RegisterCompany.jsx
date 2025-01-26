@@ -86,7 +86,7 @@ export default function RegisterCompanyPage() {
             return;
         }
 
-        if(user.password !== user.password_2){
+        if(data.password !== companyProfile.password_2){
             setMessageState({type: 'error', message: 'Passwords do not match.'});
             return;
         }

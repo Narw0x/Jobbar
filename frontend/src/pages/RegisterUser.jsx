@@ -104,7 +104,7 @@ export default function RegisterUserPage() {
             })
             .catch((error) => {
                 console.error('Error:', error.response?.data || error.message);
-                setError('An error occurred during registration. Please try again.');
+                setMessageState({type: 'error', message: error.response?.data?.message || error.message});
             });
     }
 

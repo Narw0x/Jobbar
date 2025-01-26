@@ -1,9 +1,9 @@
-import { Link  } from "react-router-dom";
+import { Link, useNavigate, useParams  } from "react-router-dom";
 import Button from "../components/button";
 import Features from "../components/features";
 import { useSelector } from "react-redux";
 
-const pathManAtTable = "./Man_at_table.svg";
+const pathManAtTable = "../Man_at_table.svg";
 
 
 

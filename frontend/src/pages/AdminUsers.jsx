@@ -43,11 +43,13 @@ export default function AdminUsersPage() {
                     userName: res.data.payload.user.userName,
                     email: res.data.payload.user.email
                 });
-                isLoading(false);
+                setIsLoading(false);
+                setMessageState({type: 'success', message: 'User found'});
             })
             .catch((err) => {
                 console.log(err);
                 setIsLoading(false)
+                navigate('/admin/users', {state: {type: 'error', message: err.response.data.message}});
             });
         
     }
@@ -81,8 +83,23 @@ export default function AdminUsersPage() {
             }
         }, [messageState]);
 
-    
-
+        const handleDelete = (id) => {
+            axios.post(`http://localhost:4000/api/admin/delete/${id}`, {},
+            {
+                headers: {
+                    Authorization: `Bearer ${adminState.adminToken}`
+                }
+            })
+                .then((res) => {
+                    setUser(null);
+                    setEmail('');
+                    navigate('/admin/users', {state: {type: 'success', message: res.data.message}});
+                })
+                .catch((err) => {
+                    console.log(err);
+                    navigate('/admin/users', {state: {type: 'error', message: err.response.data.message}});
+                });
+        }
 
     return (
         <section className="flex flex-col items-center justify-center bg-custom_bg_gray">
@@ -120,10 +137,11 @@ export default function AdminUsersPage() {
                         <div className="flex basis-2/5 justify-end gap-4">
                             <Button style={'red-default'} redirectPath={`/admin/users/${user._id}`}>View Profile</Button>
                             <Button style={'red-default'} redirectPath={`/admin/users/edit/${user._id}`}>Edit</Button>
-                            <Button style={'red-hover'}>Delete</Button>
+                            <Button style={'red-hover'} onClick={() => handleDelete(user._id)}>Delete</Button>
                         </div>
                     </div>
-                </div>}
+                </div>
+                }
                         
             </div>
         </section>

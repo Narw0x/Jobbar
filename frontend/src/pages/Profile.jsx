@@ -172,6 +172,11 @@ export default function ProfilePage() {
                             {profileData.address && <p className="text-sm text-gray-500">
                                 {profileData.address}
                             </p>}
+                            {!profileData.isVerified && (
+                                <p className="text-sm text-custom_red">
+                                    Your account is not verified
+                                </p>
+                            )}
                             
                         </div>
                         <div>

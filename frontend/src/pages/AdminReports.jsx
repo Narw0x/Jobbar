@@ -36,7 +36,7 @@ export default function AdminReportsPage() {
             <div className="container border rounded-lg shadow-md bg-white m-8 p-8">
                 <h1 className="text-2xl font-bold text-custom_gray">Reports</h1>
                 <div>
-                    {reports.length === 0 && (
+                    {isLoading && (
                         <div className="flex justify-center p-8">
                             <l-bouncy
                             size="45"
@@ -63,17 +63,25 @@ export default function AdminReportsPage() {
 
                                         </div>
                                         <div className="flex flex-row gap-2 mt-2 justify-end">
-                                            <Button
+                                            {rep.reportStatus === 'Pending' && (<Button
                                                 style="red-hover"
                                                 redirectPath={`/admin/reports/${rep._id}`}
                                             >
                                                 View
-                                            </Button>
+                                            </Button>)}
+                                            {rep.reportStatus !== 'Pending' && (
+                                                <p className="text-custom_gray">Status: {rep.reportStatus}</p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             ))}
                             </div>
+                        </div>
+                    )}
+                    {reports.length === 0 && (
+                        <div className="flex justify-center p-8">
+                            <p className="text-custom_gray">No reports found</p>
                         </div>
                     )}
                 </div>

@@ -37,6 +37,23 @@ export default function AdminReportPage() {
 
     console.log(report);
 
+    const handleResponse = (status) => {
+        axios.put(`http://localhost:4000/api/admin/reports/${reportId}`, {status},
+            {
+                headers: {
+                    Authorization: `Bearer ${adminState.adminToken}`
+                }
+            }
+        )
+            .then((res) => {
+                navigate('/admin/reports');
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+    
+
 
     return(
         <section className="flex flex-col items-center justify-center bg-custom_bg_gray">
@@ -46,7 +63,7 @@ export default function AdminReportPage() {
                     <div className="flex flex-col space-y-4 basis-1/2 justify-between">
                         <div className="flex flex-col space-y-4">
                             <h2 className="text-lg font-bold text-custom_gray">Reported {report.reportedEntityType} name: <span className="text-custom_red font-normal">{report.reportedEntityType === 'user' ? report.reportedEntity.firstName : report.reportedEntity.companyName}</span></h2>
-                            <h2 className="text-lg font-bold text-custom_gray">Reported by name: <span className="text-custom_red font-normal">{report.reportedByType === 'user' ? report.reportedBy.firstName : report.reportedBy.companyName}</span></h2>
+                            <h2 className="text-lg font-bold text-custom_gray">Reported by: <span className="text-custom_red font-normal">{report.reportedByType === 'user' ? report.reportedBy.firstName : report.reportedBy.companyName}</span></h2>
                             <div>
                                 <p className="text-custom_gray font-bold text-lg">Reason:</p>
                                 <div  className="border border-gray-300 p-4 rounded-lg">
@@ -71,13 +88,13 @@ export default function AdminReportPage() {
                         <div className="flex flex-row gap-4 justify-start">
                             <Button
                                 style={'red-hover'}
-                                redirectPath={`/admin/users/edit/${report.reportedEntity._id}`}
+                                onClick={() => handleResponse('Approved')}
                             >
                                 Approve
                             </Button>
                             <Button
                                 style={'red-default'}
-                                redirectPath={`/admin/users/${report.reportedEntity._id}`}
+                                onClick={() => handleResponse('Declined')}
                             >
                                 Decline
                             </Button>  

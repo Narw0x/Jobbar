@@ -198,16 +198,6 @@ export default function AdminProfilePage() {
                                                     <p className="text-sm text-gray-500">{formatDate(exp.date[0])} - {formatDate(exp.date[1])}</p>
                                                     <p className="text-sm text-gray-500">{exp.employmentType}</p>
                                                 </div>
-                                                {isCurrentUser && (
-                                                    <div>
-                                                        <Button
-                                                            style="red-default"
-                                                            redirectPath={`/profile/experience/edit/${exp.experienceId}`}
-                                                        >
-                                                            Edit
-                                                        </Button>
-                                                    </div>
-                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -240,16 +230,6 @@ export default function AdminProfilePage() {
                                                     <h3 className="text-md text-custom_gray font-semibold">{edu.schoolName}</h3>
                                                     <p className="text-sm text-custom_red">{formatDate(edu.date[0])} - {formatDate(edu.date[1])}</p>
                                                 </div>
-                                                {isCurrentUser && (
-                                                    <div>
-                                                        <Button
-                                                            style="red-default"
-                                                            redirectPath={`/profile/education/edit/${edu.educationId}`}
-                                                        >
-                                                            Edit
-                                                        </Button>
-                                                    </div>
-                                                )}
                                             </div>
                                         </div>
                                     ))} 
@@ -264,16 +244,6 @@ export default function AdminProfilePage() {
                                                     <p className="text-sm text-custom_gray">{edu.company}</p>
                                                     <p className="text-sm text-custom_red">{formatDateBetter(edu.date)}</p>
                                                 </div>
-                                                {isCurrentUser && (
-                                                    <div className=" mt-auto">
-                                                        <Button
-                                                            style="red-default"
-                                                            redirectPath={`/profile/education/edit/${edu.educationId}`}
-                                                        >
-                                                            Edit
-                                                        </Button>
-                                                    </div>
-                                                )}
                                             </div>
                                         </div>
                                     ))} 
@@ -287,16 +257,6 @@ export default function AdminProfilePage() {
                                                     <h3 className="text-md text-custom_gray font-semibold">{edu.skillName}</h3>
                                                     <p className="text-sm text-custom_red">{edu.level}</p>
                                                 </div>
-                                                {isCurrentUser && (
-                                                    <div>
-                                                        <Button
-                                                            style="red-default"
-                                                            redirectPath={`/profile/education/edit/${edu.educationId}`}
-                                                        >
-                                                            Edit
-                                                        </Button>
-                                                    </div>
-                                                )}
                                             </div>
                                         </div>
                                     ))}
@@ -342,17 +302,6 @@ export default function AdminProfilePage() {
                                                 
                                             </div>
                                             <div className="flex flex-row gap-4 mt-2 justify-end">
-                                                
-                                                {isCurrentUser && (
-                                                    <div className="flex flex-grow">
-                                                        <Button
-                                                            style="red-default"
-                                                            redirectPath={`/profile/job/edit/${job._id}`}
-                                                        >
-                                                            Edit
-                                                        </Button>
-                                                    </div>
-                                                )}
                                                 <div>
                                                     <Button
                                                         style="red-hover"

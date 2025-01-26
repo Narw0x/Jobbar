@@ -9,10 +9,9 @@ import { Link } from "react-router-dom";
 import Button from "../components/button";
 import { Toast } from "primereact/toast";
 
-export default function ViewJobOfferPage() {
+export default function AdminJobViewPage() {
     const toast = useRef(null);
     const { jobId } = useParams();
-    const [applied, setApplied] = useState(false);
 
     const [job, setJob] = useState({
         jobTitle: '',
@@ -46,24 +45,21 @@ export default function ViewJobOfferPage() {
         applicants: []
     });
 
-    const authState = useSelector((state) => state.auth);
+    const adminState = useSelector((state) => state.admin);
 
 
     useEffect(() => {
         axios.get(`http://localhost:4000/api/job/${jobId}`, {
             headers: {
-                Authorization: `Bearer ${authState.token}`
+                Authorization: `Bearer ${adminState.adminToken}`
             }
         }).then((response) => {
             const date = new Date(response.data.payload.job.date);
-
             setJob((prev) => ({
                 ...prev,
                 ...response.data.payload.job,
                 date
             }));
-            setApplied(response.data.payload.job.applicants.includes(authState.user._id));
-        
         }).catch((error) => {
             console.log(error);
         });
@@ -107,21 +103,6 @@ export default function ViewJobOfferPage() {
         }
     }, [messageState]);
 
-    const handleApply = () => {
-        axios.post(`http://localhost:4000/api/job/apply/${jobId}`, {}, {
-            headers: {
-                Authorization: `Bearer ${authState.token}`,
-                id: authState.user._id
-            }
-            }).then((response) => {
-                setApplied(true);
-                setMessageState({type: 'success', message: response.data.message});
-            }).catch((error) => {
-                setMessageState({type: 'error', message: error.response.data.message});
-            }
-        );
-    }
- 
 
     return (
         <section className="bg-custom_bg_gray py-8">
@@ -177,25 +158,15 @@ export default function ViewJobOfferPage() {
                         </div>
                 </div>
                 <div className="flex flex-row px-8 py-8 gap-4">
-                    {authState.user.role === 'user' ? (
-                        <Button
-                            style="red-hover"
-                            onClick={handleApply}
-                            disabled={applied}
-                        >
-                            {applied ? 'Applied' : 'Apply'}
-                        </Button>
-                    ) : null}
-                        
                         <Button 
                             style="red-default"
-                            redirectPath={`${authState.user.role === 'user' ? '/job/search' : (`/profile/${authState.user._id}`)}`}
+                            redirectPath={`/admin/jobs`}
                         >
                             Back
                         </Button>
                         <Button
                             style="red-default"
-                            redirectPath={`/profile/${job.companyId._id}`}
+                            redirectPath={`/admin/users/${job.companyId._id}`}
                         >
                             To company profile
                         </Button>
