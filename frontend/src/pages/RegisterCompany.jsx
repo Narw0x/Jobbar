@@ -1,14 +1,18 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useRef } from 'react'; 
+import { Toast } from 'primereact/toast';
 
-import { isValidText, isValidEmail, isValidPassword, isValidPhoneNumber, isValidAddress } from "../util/validation";
+import { isValidText, isValidEmail, isValidPassword, isValidAddress } from "../util/validation";
 
 import Autocomplete from "../components/autocomplete";
 import Button from "../components/button"
 
 export default function RegisterCompanyPage() {
-    const [error, setError] = useState(null);
+    const toast = useRef(null);
     const navigate = useNavigate();
 
     const [companyProfile, setCompanyProfile] = useState({
@@ -28,6 +32,35 @@ export default function RegisterCompanyPage() {
         }));
     }
 
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
+
     function handleSubmit(e) {
         e.preventDefault(); 
 
@@ -39,22 +72,22 @@ export default function RegisterCompanyPage() {
         };
 
         if (!isValidText(data.companyName)) {
-            setError('Company name is required.');
+            setMessageState({type: 'error', message: 'Company name is required.'});
             return;
         }
 
         if (!isValidEmail(data.email)) {
-            setError('Email is invalid.');
+            setMessageState({type: 'error', message: 'Email is required.'});
             return;
         }
 
         if (!isValidPassword(data.password)) {
-            setError('Password must be at least 8 characters long.');
+            setMessageState({type: 'error', message: 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.'});
             return;
         }
 
         if (!isValidAddress(data.address)) {
-            setError('Address is required.');
+            setMessageState({type: 'error', message: 'Invalid address. Please enter a valid location.'});
             return;
         }
 
@@ -66,18 +99,14 @@ export default function RegisterCompanyPage() {
             })
             .catch((error) => {
                 console.error('Error:', error.response?.data || error.message); // Handle error
-                setError('An error occurred during registration. Please try again.');
+                setMessageState({type: 'error', message: error.response?.data.message || error.message});   
             });
     }
 
 
     return(
         <section className="bg-custom_bg_gray p-16">
-            {error && 
-                <div className="text-custom_red border border-custom_red max-w-[1000px] flex justify-center m-auto text-center bg-red-100 rounded-lg p-4">
-                    <p>{error}</p>
-                </div>
-            }
+            <Toast ref={toast} />
             <div className="flex justify-center flex-col max-w-[1000px] w-[60%] m-auto border border-black rounded-lg bg-white p-16 mt-16">
                 <h1 className="text-center text-6xl text-custom_gray font-bold m-8">Sign up as Company</h1>
                 <form onSubmit={handleSubmit}>

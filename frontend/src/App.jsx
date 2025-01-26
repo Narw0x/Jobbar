@@ -11,6 +11,7 @@ import EditUserProfilePage from './pages/EditUserProfile';
 import ExperiencePage from './pages/Experience';
 import EditExperiencePage from './pages/EditExperience';
 import { checkAuthLoader, checkCompanyLoader } from './util/auth';
+import { checkVerifyTokenLoader } from './util/verify';
 
 import { PrimeReactProvider } from "primereact/api";
 import ErrorPage from './pages/Error';
@@ -35,6 +36,7 @@ import AdminJobsPage from './pages/AdminJobs';
 import AdminJobsEditPage from './pages/AdminJobsEdit';
 import AdminReportsPage from './pages/AdminReports';
 import AdminReportPage from './pages/AdminReport';
+import AdminProfilePage from './pages/AdminProfile';
 
 
 const userRoutes = {
@@ -45,6 +47,7 @@ const userRoutes = {
   children: [
     {index: true, element: <HomePage />},
     {path: 'about', element: <AboutPage />},
+    {path: 'verify/:token', element: <HomePage />, loader: checkVerifyTokenLoader},
     {
       path: 'login',
       element: <LoginPage />
@@ -107,7 +110,8 @@ const adminRoutes = {
       path: 'users',
       children: [
         {index: true, element: <AdminUsersPage />},
-        {path: ':userId', element: <AdminUserEditPage />},
+        {path:':userId', element: <AdminProfilePage />},
+        {path: 'edit/:userId', element: <AdminUserEditPage />},
       ]
     },
     {

@@ -1,11 +1,16 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { isValidText, isValidEmail, isValidPassword, isValidPhoneNumber } from "../util/validation";
+import { isValidText, isValidEmail, isValidPassword } from "../util/validation";
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useRef } from 'react';
+import { Toast } from 'primereact/toast';
+
 import Button from "../components/button"
 
 export default function RegisterUserPage() {
-    const [error, setError] = useState(null);
+    const toast = useRef(null);
     const [user, setUser] = useState({
         firstName: '',
         lastName: '',
@@ -24,32 +29,60 @@ export default function RegisterUserPage() {
     }
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
 
     function handleSubmit(e) {
         e.preventDefault();
 
         if(!isValidText(user.firstName)){
-            setError('First name is required.');
+            setMessageState({type: 'error', message: 'First name is required.'});
             return;
         }
 
         if(!isValidText(user.lastName)){
-            setError('Last name is required.');
+            setMessageState({type: 'error', message: 'Last name is required.'});
             return;
         }
 
         if(!isValidEmail(user.email)){
-            setError('Email is invalid.');
+            setMessageState({type: 'error', message: 'Email is invalid.'});
             return;
         }
 
         if(!isValidPassword(user.password)){
-            setError('Password must be at least 8 characters long.');
+            setMessageState({type: 'error', message: 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.'});
             return;
         }
 
         if(user.password !== user.password_2){
-            setError('Passwords do not match.');
+            setMessageState({type: 'error', message: 'Passwords do not match.'});
             return;
         }
 
@@ -77,11 +110,7 @@ export default function RegisterUserPage() {
 
     return(
         <section className="bg-custom_bg_gray p-16">
-            {error && 
-                <div className="text-custom_red border border-custom_red max-w-[1000px] flex justify-center m-auto text-center bg-red-100 rounded-lg p-4">
-                    <p>{error}</p>
-                </div>
-            }
+            <Toast ref={toast} />
             <div className="flex justify-center flex-col max-w-[1000px] w-[60%] m-auto border border-black rounded-lg bg-white p-16 mt-16">
                 <h1 className="text-center text-6xl text-custom_gray font-bold m-8">Sign up as User</h1>
                 <form onSubmit={handleSubmit}>
