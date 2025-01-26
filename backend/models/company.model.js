@@ -60,6 +60,13 @@ const companySchema = new mongoose.Schema({
     favoriteApplicants: {
         type: Array,
         default: []
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationToken: {
+        type: String,
     }
 }, {
     timestamps: true,

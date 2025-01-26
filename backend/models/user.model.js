@@ -87,6 +87,13 @@ const userSchema = new mongoose.Schema({
             salary: 0,
             experience: '0-1'
         }
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationToken: {
+        type: String,
     }
 }, {
     timestamps: true,
