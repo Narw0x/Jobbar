@@ -3,6 +3,7 @@ import Admin from '../models/admin.model.js';
 import jwt from 'jsonwebtoken';
 import Blacklist from '../models/blackList.model.js';
 import JobOffer from '../models/jobOffer.model.js';
+import JobApplicant from '../models/jobApplicant.model.js';
 
 import { checkAuth, createJSONToken, isValidPassword } from '../utils/auth.js';
 import User from '../models/user.model.js';
@@ -267,6 +268,23 @@ router.get('/reports/:reportId', checkAuth, async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+router.put('/reports/:reportId', checkAuth, async (req, res) => {
+    const { reportId } = req.params;
+    const { status } = req.body;
+    try {
+        const report = await Report.findById(reportId);
+        if (!report) return res.status(404).json({ message: 'Report not found' });
+
+        report.reportStatus = status;
+        await report.save();
+
+        res.status(200).json({ message: 'Report updated successfully' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+});
   
   
 
@@ -292,6 +310,56 @@ router.post('/logout', async (req, res) => {
     
         res.status(200).json({ message: 'Logged out successfully' });
     }catch(error){
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+router.post('/delete/:userId', checkAuth, async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const user = await User.findById(userId);
+        if(user) {
+            await JobApplicant.deleteMany({ applicant: user._id });
+            await JobOffer.updateMany(
+              { applicants: user._id },
+              { $pull: { applicants: user._id } }
+            );
+        
+            await Report.deleteMany({ 
+              $or: [
+                { reportedBy: user._id },
+                { reportedEntity: user._id }
+              ]
+            });
+
+            await User.deleteOne({ _id: userId });
+            return res.status(200).json({ message: 'Profile deleted successfully' });
+        }
+
+        const company = await Company.findById(userId);
+        if(company) {
+            const jobOffers = await JobOffer.find({ companyId: company._id });
+            const jobOfferIds = jobOffers.map(offer => offer._id);
+        
+            await JobApplicant.deleteMany({ jobOffer: { $in: jobOfferIds } });
+            await JobOffer.deleteMany({ companyId: company._id });
+        
+            await Report.deleteMany({ 
+              $or: [
+                { reportedBy: company._id },
+                { reportedEntity: company._id }
+              ]
+            });
+
+            await Company.deleteOne({ _id: userId });
+
+            return res.status(200).json({ message: 'Profile deleted successfully' });
+        }
+
+        res.status(404).json({ message: 'Profile not found' });
+    } catch (error) {
         console.log(error);
         res.status(500).json({ message: error.message });
     }

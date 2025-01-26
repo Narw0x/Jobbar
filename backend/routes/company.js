@@ -7,6 +7,9 @@ import { isValidPassword } from '../utils/auth.js';
 import JobOffer from '../models/jobOffer.model.js';
 import JobApplicant from '../models/jobApplicant.model.js';
 import crypto  from 'crypto';
+import Report from '../models/report.model.js';
+import Blacklist from '../models/blackList.model.js';
+import jwt from 'jsonwebtoken';
 
 
 
@@ -70,11 +73,38 @@ router.post('/company/delete', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
+    const token = req.headers.authorization?.split(' ')[1];
+  
+    if (!token) {
+      return res.status(400).json({ message: 'Token is required' });
+    }
+  
+    // Decode the token to get its expiration time
+    const decoded = jwt.decode(token);
+  
+    if (!decoded || !decoded.exp) {
+      return res.status(400).json({ message: 'Invalid token' });
+    }
+  
+    const expiryDate = new Date(decoded.exp * 1000); // Convert exp from seconds to milliseconds
+  
+    // Save token in the blacklist with expiration
+    await Blacklist.create({ token, createdAt: expiryDate });
+    await Blacklist.deleteMany({ createdAt: { $lte: new Date() } });
+
+
     const jobOffers = await JobOffer.find({ companyId: company._id });
     const jobOfferIds = jobOffers.map(offer => offer._id);
 
     await JobApplicant.deleteMany({ jobOffer: { $in: jobOfferIds } });
     await JobOffer.deleteMany({ companyId: company._id });
+
+    await Report.deleteMany({ 
+      $or: [
+        { reportedBy: company._id },
+        { reportedEntity: company._id }
+      ]
+    });
     
     await Company.deleteOne({ email });
 
