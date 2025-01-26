@@ -4,8 +4,6 @@ import cors from 'cors';
 import path from 'path';
 const app = express();
 const port = 4000;
-import bcrypt from 'bcryptjs';
-import Admin from './models/admin.model.js';
 
 
 
@@ -22,6 +20,8 @@ app.use(cors({
 
 const __dirname = path.resolve();
 app.use('/public', express.static(path.join(__dirname, 'public')));
+
+import sendEmail from './utils/email.js';
 
 // Import routes
 import userRoutes from "./routes/user.js";
@@ -46,9 +46,11 @@ app.use('/api/admin', adminRoutes);
 
 app.listen(port, () => {
   connectDB();
+  // sendEmail({
+  //   email:'jakubgeleta1@gmail.com',
+  //   subject: 'Jobbar Registration',
+  //   message: 'Welcome to Jobbar',
+  //   userName: 'Tomas'
+  // });
   console.log(`Server running on http://localhost:${port}`);
 });
-
-// BKGVK2jsHYsaPHJ9
-// martin_synak
-// mongodb+srv://martin_synak:BKGVK2jsHYsaPHJ9@cluster0.kyph2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0

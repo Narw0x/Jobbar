@@ -15,6 +15,27 @@ import { createJSONToken } from '../utils/auth.js';
 const router = express.Router();
 
 
+router.post('/verify', async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    let user = await User.findOne({ verificationToken: token });
+    if (!user) user = await Company.findOne({ verificationToken: token });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    user.isVerified = true;
+    user.verificationToken = null;
+    await user.save();
+
+    res.status(200).json({ message: 'User verified successfully' });
+  } catch (error) {
+    console.error('Error verifying user:', error);
+    res.status(500).json({ message: 'Error verifying user', error: error.message });
+  }
+});
+
+
+
 router.post('/profile/login', async (req, res) => {
   const { email, password } = req.body;
   try {
