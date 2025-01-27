@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import Button from "./button";
 import Autocomplete from "./autocomplete";
 import { Toast } from "primereact/toast";
+import { isValidAddress } from "../util/validation";
 
 
 
@@ -48,6 +49,16 @@ export default function SearchPageConfig(){
 
         const data = {
             ...requestConfig
+        }
+
+        if(!isValidAddress(data.address)){
+            setMessageState({type: 'error', message: 'Please provide a valid address'});
+            return;
+        }
+
+        if(data.salary < 0){
+            setMessageState({type: 'error', message: 'Please provide a valid salary'});
+            return;
         }
 
         axios.put('http://localhost:4000/api/profile/config', data, {

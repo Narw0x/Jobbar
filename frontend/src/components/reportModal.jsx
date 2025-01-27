@@ -6,6 +6,7 @@ import { useSelector } from "react-redux"
 import Button from "./button"
 import axios from "axios";
 import { useLocation, useParams } from "react-router-dom";
+import { isValidText } from "../util/validation";
 
 const ReportModal = forwardRef(function ReportModal({type, setMessage} ,ref) {
     const {id} = useParams();
@@ -32,6 +33,13 @@ const ReportModal = forwardRef(function ReportModal({type, setMessage} ,ref) {
     const handleSumbit = (e) => {
         e.preventDefault();
 
+
+        if(!isValidText(reason)){
+            resetReport();
+            dialog.current.close();
+            setMessage({type: 'error', message: 'Please provide a valid reason'});
+            return;
+        }
         
 
         const data = {

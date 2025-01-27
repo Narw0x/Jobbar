@@ -94,9 +94,6 @@ export default function RegisterUserPage() {
             gender: user.gender
         }
 
-        console.log(data);
-        
-       
         axios
             .post('http://localhost:4000/api/user/register', data)
             .then((response) => {

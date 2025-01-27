@@ -7,6 +7,7 @@ import Button from "./button"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../store/slices/authSlice";
+import { isValidPassword } from "../util/validation";
 
 const DeleteAccountModal = forwardRef(function DeleteAccountModal( _,ref) {
     const dialog = useRef();
@@ -30,6 +31,13 @@ const DeleteAccountModal = forwardRef(function DeleteAccountModal( _,ref) {
 
     const handleSumbit = (e) => {
         e.preventDefault();
+
+        if(!isValidPassword(password)){
+            resetModal();
+            dialog.current.close();
+            return navigate(`/profile/${authState.user._id}`, { state: { type: 'error', message: 'Password is invalid!' } });
+        }
+
 
         const data = {
             email: authState.user.email,

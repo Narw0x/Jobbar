@@ -1,13 +1,16 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { FileUpload } from "primereact/fileupload";
 import Button from "../components/button";
 import Autocomplete from "../components/autocomplete";
+import { useLocation } from "react-router";
+import { isValidAddress, isValidEmail, isValidPhoneNumber, isValidText } from "../util/validation";
+import { Toast } from "primereact/toast";
 
 export default function AdminUserEditPage() {
 
@@ -15,6 +18,7 @@ export default function AdminUserEditPage() {
 
     const {userId} = useParams();
     const navigate = useNavigate();
+    const toast = useRef(null);
 
     const [userInfo, setUserInfo] = useState({
         firstName: '',
@@ -31,6 +35,7 @@ export default function AdminUserEditPage() {
         },
         bgImage: 'default_bg.png',
         avatar: 'default_profile.svg',
+        role: ''
     });
 
     const [bgImage, setBgImage] = useState(userInfo.bgImage);
@@ -112,6 +117,49 @@ export default function AdminUserEditPage() {
     const handleEditForm = (e) => {
         e.preventDefault();
 
+        if(userInfo.role === 'user' && (!isValidText(userInfo.firstName) || !isValidText(userInfo.lastName))){
+            setMessageState({type: 'error', message: 'Please provide a valid name'});
+            return;
+        }
+
+        if(userInfo.role === 'company' && !isValidText(userInfo.companyName)){
+            setMessageState({type: 'error', message: 'Please provide a valid company name'});
+            return;
+        }
+
+        if(!isValidEmail(userInfo.email)){
+            setMessageState({type: 'error', message: 'Please provide a valid email'});
+            return;
+        }
+
+        if(!isValidText(userInfo.about)){
+            setMessageState({type: 'error', message: 'Please provide a valid about section'});
+            return;
+        }
+
+        if(!isValidAddress(userInfo.address)){
+            setMessageState({type: 'error', message: 'Please provide a valid address'});
+            return;
+        }
+
+        if(userInfo.phoneNumber && !isValidPhoneNumber(userInfo.phoneNumber)){
+            setMessageState({type: 'error', message: 'Please provide a valid phone number'});
+            return;
+        }
+
+        if(userInfo.website && !isValidText(userInfo.website)){
+            setMessageState({type: 'error', message: 'Please provide a valid website'});
+            return;
+        }
+
+        for (const key in userInfo.socialMedia) {
+            if (userInfo.socialMedia[key] && !isValidText(userInfo.socialMedia[key])) {
+                setMessageState({type: 'error', message: 'Please provide a valid social media link'});
+                return;
+            }
+        }
+
+        
 
         const formData = new FormData();
         
@@ -125,6 +173,8 @@ export default function AdminUserEditPage() {
                 formData.append(key, userInfo[key]);
             }
         }
+
+        
 
         // Add the image files if they exist
         if (bgImage) {
@@ -154,9 +204,41 @@ export default function AdminUserEditPage() {
     }
 
 
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
+    
+
+
 
     return (
         <section className="flex flex-col items-center justify-center bg-custom_bg_gray">
+            <Toast ref={toast} />
             <form className="container mx-auto  border rounded-lg shadow-md bg-white my-8" onSubmit={handleEditForm}>
                 <div>
                     <div className="w-full object-fill flex end flex-col">
@@ -181,15 +263,15 @@ export default function AdminUserEditPage() {
                 <div className="flex rounded-lg border border-black m-8 justify-between mt-4">
                     <div className="basis-2/3 flex flex-col m-8">
                         <div className="flex justify-between  mb-4">
-                            {userInfo.firstName && <div className="flex flex-col w-[45%]">
+                            {userInfo.role === 'user' && <div className="flex flex-col w-[45%]">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="firstName">First Name</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.firstName || ''} onChange={handleUserInfoChange} type="text" name="firstName" id="firstName" />    
                             </div>}
-                            {userInfo.lastName && <div className="flex flex-col w-[45%]">
+                            {userInfo.role === 'user' && <div className="flex flex-col w-[45%]">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="lastName">Last Name</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.lastName || ''} onChange={handleUserInfoChange}  type="text" name="lastName" id="lastName" />
                             </div>}
-                            {userInfo.companyName && <div className="flex flex-col w-full">
+                            {userInfo.role === 'company' && <div className="flex flex-col w-full">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="companyName">Company Name</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.companyName || ''} onChange={handleUserInfoChange}  type="text" name="companyName" id="companyName" />
                             </div>}

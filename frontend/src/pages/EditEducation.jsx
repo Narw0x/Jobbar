@@ -10,6 +10,10 @@ import { updateUser } from "../store/slices/authSlice"
 import { useDispatch } from "react-redux";
 
 import Button  from "../components/button";
+import { isValidText } from "../util/validation";
+import { Toast } from "primereact/toast";
+import { useRef } from "react";
+import { useLocation } from "react-router";
 
 const pathEducationImage = "../../../experienceImage.svg";
 
@@ -18,6 +22,7 @@ export default function EditEducationPage() {
     const [education, setEducation] = useState({});
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const toast = useRef(null);
 
     const authState = useSelector((state) => state.auth);
 
@@ -37,8 +42,6 @@ export default function EditEducationPage() {
             ) : (
                 formatedDate = new Date(education.date)
             )
-            console.log(formatedDate);
-            
             setEducation(
                 {
                     educationId: education.educationId,
@@ -48,7 +51,6 @@ export default function EditEducationPage() {
                 }
             );
         }
-        console.log(education);
         
     }, [educationId]);
 
@@ -61,7 +63,48 @@ export default function EditEducationPage() {
             ...education,
         }
 
-        console.log(data);
+
+        if(data.educationType === 'school') {
+            if(!isValidText(data.schoolName)) {
+                setMessageState({type: 'error', message: 'Please provide a valid school name'});
+                return;
+            }
+            if(data.date === null || data.date.length === 0 || data.date[0] === null || data.date[1] === null) {
+                setMessageState({type: 'error', message: 'Please provide a valid date'});
+                return;
+            }
+        }
+
+
+        if(data.educationType === 'certificate') {
+            if(!isValidText(data.certificateName)) {
+                setMessageState({type: 'error', message: 'Please provide a valid certificate name'});
+                return;
+            }
+            if(!isValidText(data.company)) {
+                setMessageState({type: 'error', message: 'Please provide a valid company name'});
+                return;
+            }
+            if(data.date === null || data.date.length === 0 || data.date[0] === null) {
+                setMessageState({type: 'error', message: 'Please provide a valid date'});
+                return;
+            }
+        }
+
+
+        if(data.educationType === 'skill') {
+            if(!isValidText(data.skillName)) {
+                setMessageState({type: 'error', message: 'Please provide a valid skill name'});
+                return;
+            }
+            if(data.level === '') {
+                setMessageState({type: 'error', message: 'Please provide a valid skill level'});
+                return;
+            }
+        }
+            
+
+
         
         axios.put(`http://localhost:4000/api/profile/education/edit/${educationId}`, data, {
             headers: {
@@ -102,9 +145,41 @@ export default function EditEducationPage() {
         });
     }
 
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
+
+
+
 
     return (
         <section className="bg-custom_bg_gray py-8">
+            <Toast ref={toast} />
                     <div className="max-w-[1440px] mx-auto bg-white p-8 rounded-lg shadow-md">
                         <h1 className="text-4xl text-custom_gray font-bold ">Add your Education </h1>
                         <div>

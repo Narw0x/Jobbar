@@ -7,6 +7,12 @@ import { updateUser } from "../store/slices/authSlice"
 import Button from "../components/button";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { Toast } from "primereact/toast";
+import { useRef } from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router";
+import { isValidText } from "../util/validation";
+
 
 
 const pathExperienceImage = "../../../experienceImage.svg";
@@ -14,10 +20,8 @@ const pathExperienceImage = "../../../experienceImage.svg";
 
 export default function EducationPage(){
 
-    const [error, setError] = useState(null);
-
+    const toast = useRef(null);
     const dispatch = useDispatch();
-    
 
     const navigate = useNavigate();
     const authState = useSelector((state) => state.auth);
@@ -26,7 +30,6 @@ export default function EducationPage(){
     const [education, setEducation] = useState({});
 
     const handleTypeChange = (e) => {
-        setError(null);
         e.target.value === 'school' && setEducation({
             educationType: 'school',
             date: [],
@@ -57,10 +60,54 @@ export default function EducationPage(){
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const data = education;
+        if(type === '') {
+            setMessageState({type: 'error', message: 'Please select education type'});
+            return;
+        }
 
-        console.log(data);
-        
+        const data = {
+            ...education
+        };
+
+        if(data.educationType === 'school') {
+            if(!isValidText(data.schoolName)) {
+                setMessageState({type: 'error', message: 'Please provide a valid school name'});
+                return;
+            }
+            if(data.date === null || data.date.length === 0 || data.date[0] === null || data.date[1] === null) {
+                setMessageState({type: 'error', message: 'Please provide a valid date'});
+                return;
+            }
+        }
+
+
+        if(data.educationType === 'certificate') {
+            if(!isValidText(data.certificateName)) {
+                setMessageState({type: 'error', message: 'Please provide a valid certificate name'});
+                return;
+            }
+            if(!isValidText(data.company)) {
+                setMessageState({type: 'error', message: 'Please provide a valid company name'});
+                return;
+            }
+            if(data.date === null || data.date.length === 0 || data.date[0] === null) {
+                setMessageState({type: 'error', message: 'Please provide a valid date'});
+                return;
+            }
+        }
+
+
+        if(data.educationType === 'skill') {
+            if(!isValidText(data.skillName)) {
+                setMessageState({type: 'error', message: 'Please provide a valid skill name'});
+                return;
+            }
+            if(data.level === '') {
+                setMessageState({type: 'error', message: 'Please provide a valid skill level'});
+                return;
+            }
+        }
+
 
         axios.post(`http://localhost:4000/api/profile/education/add`, data, {
             headers: {
@@ -78,6 +125,35 @@ export default function EducationPage(){
         });
 
     }
+
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
         
 
 
@@ -85,6 +161,7 @@ export default function EducationPage(){
         
     return (
         <section className="bg-custom_bg_gray py-8">
+            <Toast ref={toast} />
             <div className="max-w-[1440px] mx-auto bg-white p-8 rounded-lg shadow-md">
                 <h1 className="text-4xl text-custom_gray font-bold ">Add your Education </h1>
                 <div>
@@ -102,14 +179,13 @@ export default function EducationPage(){
                                     name="educationType"
                                     value={type}
                                     onChange={handleTypeChange}
-                                    className={`border border-black p-2 bg-white rounded  text-xl my-2 text-custom_gray ${error ? 'border-custom_red text-custom_red' : 'mb-4'}`}
+                                    className={`border border-black p-2 bg-white rounded  text-xl my-2 text-custom_gray`}
                                 >
                                     <option value="" disabled>Select education type</option>
                                     <option value="school">School</option>
                                     <option value="certificate">Certificate</option>
                                     <option value="skill">Skill</option>
                                 </select>
-                                {error && <p className="text-custom_red text-sm mb-4">{error}</p>}
                             </div>
 
                             {type === "school" && (

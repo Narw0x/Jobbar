@@ -2,7 +2,13 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Button from "../components/button";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, updateUser } from "../store/slices/authSlice";
+import {  updateUser } from "../store/slices/authSlice";
+import { isValidText, isValidAddress } from "../util/validation";
+import { useEffect } from "react";
+import { useRef } from "react";
+import { Toast } from "primereact/toast";
+import { useLocation } from 'react-router-dom';
+
 
 import { Calendar } from "primereact/calendar";
 
@@ -15,6 +21,7 @@ const pathExperienceImage = "../../../experienceImage.svg";
 
 export default function JobOfferPage() {
 
+    const toast = useRef(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -117,8 +124,55 @@ export default function JobOfferPage() {
             ...jobOffer,
         }
 
-        console.log(data);
+        if(!isValidText(data.jobTitle)){
+            setMessageState({type: 'error', message: 'Please provide a valid job title'});
+            return;
+        }
+
+        if(!isValidAddress(data.address)){
+            setMessageState({type: 'error', message: 'Please provide a valid address'});
+            return;
+        }
         
+        if(!isValidText(data.description)){
+            setMessageState({type: 'error', message: 'Please provide a valid description'});
+            return;
+        }
+
+        if(!isValidText(data.experience)){
+            setMessageState({type: 'error', message: 'Please provide a valid experience'});
+            return;
+        }
+
+        if(+data.salary.amount < 1){
+            setMessageState({type: 'error', message: 'Please provide a valid salary'});
+            return;
+        }
+
+        if(data.date === null || data.date.length === 0){
+            setMessageState({type: 'error', message: 'Please provide a valid date'});
+            return;
+        }
+
+        if(data.skills.length < 1){
+            for (const skill of data.skills) {
+                if(!isValidText(skill.skillName)){
+                    setMessageState({type: 'error', message: 'Please provide a valid skill name'});
+                    return;
+                }
+            }
+        }
+
+        if(data.requirements.length < 1){
+            for (const requirement of data.requirements) {
+                if(!isValidText(requirement.requirementName)){
+                    setMessageState({type: 'error', message: 'Please provide a valid requirement name'});
+                    return;
+                }
+            }
+        }
+
+
 
         axios.post(`http://localhost:4000/api/job/create`, data, {
             headers: {
@@ -138,9 +192,39 @@ export default function JobOfferPage() {
 
     };
 
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
+
 
   return (
     <section className="bg-custom_bg_gray py-8">
+        <Toast ref={toast} />
         <div className="max-w-[1440px] mx-auto bg-white p-8 rounded-lg shadow-md">
             <h1 className="text-4xl text-custom_gray font-bold ">Create a Job Offer</h1>
             <div>

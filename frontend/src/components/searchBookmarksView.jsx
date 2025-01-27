@@ -40,9 +40,6 @@ export default function SearchBookmarksView() {
         }).format(date);
     };
 
-    
-
-
     return (
         <div>
             <h1 className="text-custom_gray text-4xl font-bold">Your applies for job</h1>

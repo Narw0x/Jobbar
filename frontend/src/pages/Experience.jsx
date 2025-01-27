@@ -3,8 +3,13 @@ import { Calendar } from "primereact/calendar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { updateUser } from "../store/slices/authSlice"
+import { updateUser } from "../store/slices/authSlice";
+import { useLocation } from "react-router";
+import { useEffect } from "react";
+import { useRef } from "react";
+import { Toast } from "primereact/toast";
 
+import { isValidText } from "../util/validation";
 
 import Button from "../components/button";
 
@@ -12,6 +17,7 @@ const pathExperienceImage = "../../../experienceImage.svg";
 
 
 export default function EditExperiencePage() {
+    const toast = useRef(null);
 
     const [experience, setExperience] = useState({
         jobTitle: '',
@@ -42,6 +48,31 @@ export default function EditExperiencePage() {
             ...experience,
         }
 
+        if(!isValidText(data.jobTitle)){
+            setMessageState({type: 'error', message: 'Please provide a valid job title'});
+            return;
+        }
+
+        if(!isValidText(data.company)){
+            setMessageState({type: 'error', message: 'Please provide a valid company name'});
+            return;
+        }
+
+        if(!isValidText(data.employmentType)){
+            setMessageState({type: 'error', message: 'Please provide a valid employment type'});
+            return;
+        }
+
+        if(data.date === null || data.date.length === 0){
+            setMessageState({type: 'error', message: 'Please provide a valid date'});
+            return;
+        }
+
+        if(!isValidText(data.description)){
+            setMessageState({type: 'error', message: 'Please provide a valid description'});
+            return;
+        }
+
         axios.put(`http://localhost:4000/api/profile/experience/add`, data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
@@ -58,8 +89,38 @@ export default function EditExperiencePage() {
         
     }
 
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
+
     return (
         <section className="bg-custom_bg_gray py-8">
+            <Toast ref={toast} />
             <div className="max-w-[1440px] mx-auto bg-white p-8 rounded-lg shadow-md">
                 <h1 className="text-4xl text-custom_gray font-bold ">Add Experience</h1>
                 <div>

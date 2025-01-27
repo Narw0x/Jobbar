@@ -7,10 +7,16 @@ import axios from "axios";
 
 import Autocomplete from "../components/autocomplete";
 import Button from "../components/button";
+import { Toast } from "primereact/toast";
+import { useRef } from "react";
+import { isValidAddress, isValidEmail, isValidPhoneNumber, isValidText } from "../util/validation";
+import { useLocation } from "react-router";
 
 export default function EditUserProfilePage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const toast = useRef(null);
+
 
     const authState = useSelector((state) => state.auth);
 
@@ -35,6 +41,7 @@ export default function EditUserProfilePage() {
         },
         bgImage: authState.user.bgImage,
         avatar: authState.user.avatar,
+        role: authState.user.role,
     });
 
     const handleUserInfoChange = (e) => {
@@ -91,6 +98,51 @@ export default function EditUserProfilePage() {
 
     const handleEditForm = (e) => {
         e.preventDefault();
+
+        if(userInfo.role === 'user' && (!isValidText(userInfo.firstName) || !isValidText(userInfo.lastName))){
+            setMessageState({type: 'error', message: 'Please provide a valid name'});
+            return;
+        }
+
+        if(userInfo.role === 'company' && !isValidText(userInfo.companyName)){
+            setMessageState({type: 'error', message: 'Please provide a valid company name'});
+            return;
+        }
+
+        if(!isValidEmail(userInfo.email)){
+            setMessageState({type: 'error', message: 'Please provide a valid email'});
+            return;
+        }
+
+        if(!isValidText(userInfo.about)){
+            setMessageState({type: 'error', message: 'Please provide a valid about section'});
+            return;
+        }
+
+        if(!isValidAddress(userInfo.address)){
+            setMessageState({type: 'error', message: 'Please provide a valid address'});
+            return;
+        }
+
+        if(userInfo.phoneNumber && !isValidPhoneNumber(userInfo.phoneNumber)){
+            setMessageState({type: 'error', message: 'Please provide a valid phone number'});
+            return;
+        }
+
+        if(userInfo.website && !isValidText(userInfo.website)){
+            setMessageState({type: 'error', message: 'Please provide a valid website'});
+            return;
+        }
+
+        for (const key in userInfo.socialMedia) {
+            if (userInfo.socialMedia[key] && !isValidText(userInfo.socialMedia[key])) {
+                setMessageState({type: 'error', message: 'Please provide a valid social media link'});
+                return;
+            }
+        }
+
+
+
         // Create a FormData object for sending files
         const formData = new FormData();
         
@@ -127,10 +179,40 @@ export default function EditUserProfilePage() {
             navigate(`/profile/${authState.user._id}`, { state: { message: error.response.data.message, type: 'error' } });
         });
     }
+
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
+
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            // Clear the location state
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
     
     
     return (
         <section className="bg-custom_bg_gray py-8">
+            <Toast ref={toast} />
             <form className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white" onSubmit={handleEditForm}>
                 <div>
                     <div className="w-full object-fill flex end flex-col">
@@ -155,15 +237,15 @@ export default function EditUserProfilePage() {
                 <div className="flex rounded-lg border border-black m-8 justify-between mt-4">
                     <div className="basis-2/3 flex flex-col m-8">
                         <div className="flex justify-between  mb-4">
-                            {userInfo.firstName && <div className="flex flex-col w-[45%]">
+                            {userInfo.role === 'user' && <div className="flex flex-col w-[45%]">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="firstName">First Name</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.firstName || ''} onChange={handleUserInfoChange} type="text" name="firstName" id="firstName" />    
                             </div>}
-                            {userInfo.lastName && <div className="flex flex-col w-[45%]">
+                            {userInfo.role === 'user' && <div className="flex flex-col w-[45%]">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="lastName">Last Name</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.lastName || ''} onChange={handleUserInfoChange}  type="text" name="lastName" id="lastName" />
                             </div>}
-                            {userInfo.companyName && <div className="flex flex-col w-full">
+                            {userInfo.role === 'company' && <div className="flex flex-col w-full">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="companyName">Company Name</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.companyName || ''} onChange={handleUserInfoChange}  type="text" name="companyName" id="companyName" />
                             </div>}

@@ -4,12 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { logout } from "../store/slices/authSlice";
 import axios from "axios";
 import { Toast } from 'primereact/toast';
-import ReportModal from "../components/reportModal";
 import { tailspin, bouncy } from 'ldrs'
 
-
 import Button from "../components/button";
-import ErrorPage from "./Error";
 
 
 export default function AdminProfilePage() {
@@ -19,7 +16,6 @@ export default function AdminProfilePage() {
     const adminState = useSelector((state) => state.admin);
     const [profileData, setProfileData] = useState(null); 
     const [jobOffers, setJobOffers] = useState([]);
-    const [isCurrentUser, setIsCurrentUser] = useState(true);
     tailspin.register();
     bouncy.register();
 
@@ -112,10 +108,6 @@ export default function AdminProfilePage() {
         }).format(date);
     };
 
-    const handleOpenModal = () => {
-        modal.current.open();
-    }
-
 
     if (!profileData) {
         return (
@@ -147,16 +139,6 @@ export default function AdminProfilePage() {
                                 {profileData.address}
                             </p>}
                             
-                        </div>
-                        <div>
-                            {!isCurrentUser && (
-                                <div className="flex flex-row m-2">
-                                    <Button style="red-hover" onClick={handleOpenModal}>
-                                        Report
-                                    </Button>
-                                    <ReportModal ref={modal} type={profileData.role} setMessage={setMessageState}></ReportModal>
-                                </div>
-                            )}
                         </div>
                     </div>
                     

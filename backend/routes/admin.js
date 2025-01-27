@@ -131,10 +131,10 @@ router.get('/jobOffer/:companyEmail', checkAuth, async (req, res) => {
 router.get('/edit/:userId', checkAuth, async (req, res) => {
     const { userId } = req.params;
     try {
-        const user = await User.findById(userId).select('firstName lastName address about avatar bgImage email phoneNumber socialMedia website');
+        const user = await User.findById(userId).select('firstName lastName address about avatar bgImage email phoneNumber socialMedia website role');
         if(user) return res.status(200).json({ message: 'User fetched successfully', payload: { user } });
 
-        const company = await Company.findById(userId).select('companyName address about avatar bgImage email phoneNumber socialMedia website');
+        const company = await Company.findById(userId).select('companyName address about avatar bgImage email phoneNumber socialMedia website role');
         if(company) return res.status(200).json({ message: 'Company fetched successfully', payload: { user: company } });
 
         res.status(404).json({ message: 'User not found' });

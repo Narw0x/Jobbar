@@ -8,6 +8,7 @@ import { useLocation } from "react-router";
 
 import Button from "../components/button";
 import { bouncy } from "ldrs";
+import { isValidEmail } from "../util/validation";
 
 export default function AdminJobsPage() {
     const toast = useRef(null);
@@ -34,8 +35,13 @@ export default function AdminJobsPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setIsLoading(true);
 
+        if(!isValidEmail(email)){
+            setMessageState({severity: 'error', summary: 'Error', detail: 'Please provide a valid email', life: 3000});
+            return;
+        }
+
+        setIsLoading(true);
         axios.get(`http://localhost:4000/api/admin/jobOffer/${email}`,{
             headers: {
                 Authorization: `Bearer ${adminState.adminToken}`

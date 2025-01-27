@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
 import SearchPageSelect from '../components/searchPageSelect';
 import SearchPageConfig from '../components/searchConfig';
 import SearchJobView from '../components/searchJobView';
@@ -11,36 +10,6 @@ import SearchBookmarksView from '../components/searchBookmarksView';
 
 export default function SearchPage(){
     const [subPage, setSubPage] = useState('job offers');
-
-    const authState = useSelector(state => state.auth);
-
-    
-
-    
-
-
-    // const config = {
-    //     ...authState.user.searchConfig
-    // }
-
-    // useEffect(() => {
-    //     axios.get('http://localhost:4000/api/jobs', {
-    //         headers: {
-    //             Authorization: `Bearer ${authState.token}`,
-    //             config
-    //         }
-    //     }).then(response => {
-    //         setJobOffers(response.data.payload);
-    //     }).catch(err => {
-    //         console.log(err);
-    //     });
-    // }, [authState.token, config]);
-
-
-
-
-   
-
 
     return (
         <section className="bg-custom_bg_gray py-8">
