@@ -51,7 +51,9 @@ router.post('/company/register', async (req, res) => {
 
       res.status(201).json({ message: 'Company registered successfully', company: newCompany });
     } catch (error) {
-      res.status(500).send({ message: {error} });
+      res.status(500).json({ 
+        message: error.message || 'An error occurred during registration' 
+      });
     }
 });
 
