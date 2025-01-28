@@ -13,7 +13,7 @@ dotenv.config();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow only your frontend origin
+  origin: 'https://jobbar.scriptbase.eu', // Allow only your frontend origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   credentials: true // Include cookies if needed
 }));
