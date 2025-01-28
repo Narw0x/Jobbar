@@ -163,14 +163,6 @@ export default function AdminJobsPage() {
                             </div>
                         ))}
                         </div>
-                        <div className="flex justify-end mt-4">
-                            <Button
-                                style="red-hover"
-                                redirectPath="/profile/job/add"
-                            >
-                                Add new
-                            </Button>
-                        </div>
                     </div>
                 )}
             </div>

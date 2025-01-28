@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { adminLogout } from "../store/slices/adminSlice";
-
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 const path_logo = "/jobbar_logo.svg";
 
@@ -15,6 +16,7 @@ const path_logo = "/jobbar_logo.svg";
 export default function AdminHeader() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const adminState = useSelector((state) => state.admin);
 
@@ -35,18 +37,28 @@ export default function AdminHeader() {
         navigate('/');
     }
 
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    }
+
     return (
         <header className="flex flex-col bg-white w-[100%]">
-            <div className="flex container mx-auto justify-between items-center p-4">
-                <div>
+            <div className="flex md:flex-row flex-col container mx-auto justify-between items-center p-4 gap-4 md:gap-0">
+                <div className="flex items-center justify-between w-full">
                     <NavLink 
                         to={'/admin/dashboard'}
                         >
                         <img className="max-w-40 max-h-40 object-contain cursor-pointer" src={path_logo} alt="" />
                     </NavLink>
+                    <button 
+                        className="md:hidden text-custom_gray hover:text-custom_red transition-all duration-300 ease-in-out border border-custom_gray rounded p-2"
+                        onClick={toggleMenu}
+                    >
+                        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
                 </div>
-                <div className="flex items-center">
-                    <ul className="flex space-x-8 items-center my-auto">
+                <div className={`${isMenuOpen ? 'block' : 'hidden'} md:flex md:flex-row md:items-center  w-full justify-end`}>
+                    <ul className="flex space-x-4 lg:space-x-8 items-center my-auto justify-between md:justify-end">
                         <li className="items-center">
                             <NavLink 
                                 to="/admin/dashboard" 

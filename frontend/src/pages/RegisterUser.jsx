@@ -106,13 +106,13 @@ export default function RegisterUserPage() {
     }
 
     return(
-        <section className="bg-custom_bg_gray p-16">
+        <section className="bg-custom_bg_gray lg:p-16 py-16">
             <Toast ref={toast} />
-            <div className="flex justify-center flex-col max-w-[1000px] w-[60%] m-auto border border-black rounded-lg bg-white p-16 mt-16">
-                <h1 className="text-center text-6xl text-custom_gray font-bold m-8">Sign up as User</h1>
+            <div className="flex justify-center flex-col max-w-[1000px] md:w-[60%] w-[90%] m-auto border border-black rounded-lg bg-white p-16 md:mt-16">
+                <h1 className="text-center lg:text-6xl text-4xl text-custom_gray font-bold m-8">Sign up as User</h1>
                 <form onSubmit={handleSubmit}>
-                    <div className="flex justify-between">
-                        <div className="flex flex-col w-[45%]">
+                    <div className="flex flex-col md:flex-row justify-between">
+                        <div className="flex flex-col md:w-[45%]">
                             <label className="text-custom_gray text-2xl font-bold" htmlFor="firstName">First Name</label>
                             <input 
                                 className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg w-full" 
@@ -123,7 +123,7 @@ export default function RegisterUserPage() {
                                 onChange={handleChange}
                             />
                         </div>
-                        <div className="flex flex-col w-[45%]">
+                        <div className="flex flex-col md:w-[45%]">
                             <label className="text-custom_gray text-2xl font-bold" htmlFor="lastName">Last Name</label>
                             <input 
                                 className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" 

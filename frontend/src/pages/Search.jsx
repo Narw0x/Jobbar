@@ -13,8 +13,8 @@ export default function SearchPage(){
 
     return (
         <section className="bg-custom_bg_gray py-8">
-            <div className="max-w-[1440px] w-[70%] mx-auto flex flex-row gap-8">
-                <div className="basis-3/4 border shadow-lg bg-white rounded-lg p-8">
+            <div className="max-w-[1440px] lg:w-[70%] w-[90%] mx-auto flex lg:flex-row flex-col-reverse gap-8">
+                <div className="lg:basis-3/4 border shadow-lg bg-white rounded-lg p-8">
                     <div className="mt-8">
                         {subPage === 'job offers' && (
                             <SearchJobView />
@@ -28,7 +28,7 @@ export default function SearchPage(){
                     </div>
 
                 </div>
-                <div className="basis-1/4 border shadow-lg bg-white rounded-lg p-8">
+                <div className="lg:basis-1/4 border shadow-lg bg-white rounded-lg p-8">
                     <div className="flex flex-col gap-4 ">
                         <SearchPageSelect
                             subPage={subPage} 

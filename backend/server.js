@@ -21,7 +21,6 @@ app.use(cors({
 const __dirname = path.resolve();
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-import sendEmail from './utils/email.js';
 
 // Import routes
 import userRoutes from "./routes/user.js";
@@ -46,11 +45,5 @@ app.use('/api/admin', adminRoutes);
 
 app.listen(port, () => {
   connectDB();
-  // sendEmail({
-  //   email:'jakubgeleta1@gmail.com',
-  //   subject: 'Jobbar Registration',
-  //   message: 'Welcome to Jobbar',
-  //   userName: 'Tomas'
-  // });
   console.log(`Server running on http://localhost:${port}`);
 });

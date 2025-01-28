@@ -14,6 +14,7 @@ export default function ManageJobPage() {
     const modal = useRef(null);
     const {jobId} = useParams();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const [applicants, setApplicants] = useState([]);
     const [selectedApplicant, setSelectedApplicant] = useState(null);
     const [acceptedApplicant, setAcceptedApplicant] = useState(null);
@@ -27,8 +28,10 @@ export default function ManageJobPage() {
     const [messageState, setMessageState] = useState(location.state || null);
 
     const fetchApplicants = () => {
+        setIsLoading(true);
         axios.get(`http://localhost:4000/api/job/applicants/${jobId}`)
             .then(response => {
+                setIsLoading(false);
                 if(response.data.payload.applicants.length !== 0){
                     response.data.payload.applicants.map(applicant => {
                         if(applicant.status === 'Accepted'){
@@ -39,6 +42,7 @@ export default function ManageJobPage() {
                 setApplicants(response.data.payload.applicants);
             })
             .catch(err => {
+                setIsLoading(false);
                 console.log(err);
             });
     };
@@ -124,9 +128,9 @@ export default function ManageJobPage() {
                 setMessage={setMessageState}
                 fetchApplicants={fetchApplicants}
             />
-            <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white">
+            <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto border rounded-lg shadow-md bg-white">
                 <form className="p-8">
-                    {applicants.length === 0  && (
+                    {isLoading && (
                         <div className="flex justify-center">
                             <l-bouncy
                             size="45"
@@ -136,7 +140,7 @@ export default function ManageJobPage() {
                         </div>
                     )}
                     {applicants.length !== 0  && (<div className="flex flex-col gap-4">
-                        <h1 className="text-custom_gray font-bold text-4xl">Job: {jobName.jobTitle}</h1>
+                        <h1 className="text-custom_gray font-bold md:text-4xl text-2xl">Job: {jobName.jobTitle}</h1>
                         {acceptedApplicant && (
                             <div>
                                 <h2 className="text-xl font-bold text-custom_gray my-4">Accepted Applicant</h2>
@@ -165,29 +169,28 @@ export default function ManageJobPage() {
                         }
                         <div>
                             <div className="flex flex-row gap-4 justify-between">
-                                <div  className="flex flex-row justify-between basis-1/2">
-                                    <div className="flex basis-1/2 text-left  font-bold text-xl text-custom_gray">
-                                        Applicant Name
+                                <div  className="flex flex-row justify-between w-full lg:basis-1/2">
+                                    <div className="flex lg:basis-1/2 text-left  font-bold lg:text-xl text-custom_gray">
+                                        Name
                                     </div>
-                                    <div className="flex basis-1/2 text-left font-bold text-xl text-custom_gray">
+                                    <div className="flex lg:basis-1/2 text-left font-bold lg:text-xl text-custom_gray">
                                         Email
                                     </div>
                                 </div>
-                                <div className="flex flex-row justify-end basis-1/2">
-                                    <div className="  font-bold text-xl text-custom_gray">
+                                <div className="hidden lg:flex flex-row justify-end lg:basis-1/2">
+                                    <div className="  font-bold md:text-xl text-custom_gray">
                                         Actions
                                     </div>
                                 </div>
-                                
                             </div>
                         </div>
                         {applicants && applicants.map(applicant => (
-                            <div key={applicant.applicant._id} className="flex flex-row gap-4 border-b py-2 justify-between">
+                            <div key={applicant.applicant._id} className="flex lg:flex-row flex-col gap-4 border-b py-2 justify-between">
                                 <div className="flex flex-row justify-between basis-1/2 items-center">
                                     <div className="flex basis-1/2 text-left">
-                                        {applicant.applicant.firstName} {applicant.applicant.lastName}
+                                        {applicant.applicant.firstName}
                                     </div>
-                                    <div className="flex basis-1/2 text-left">
+                                    <div className="flex basis-1/2 text-left justify-end lg:justify-start">
                                         {applicant.applicant.email}
                                     </div>
                                 </div>
@@ -216,13 +219,16 @@ export default function ManageJobPage() {
                                                 <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>
                                             </svg>
                                         </button>
-                                        
                                     </div>
-                                    
                                 </div>
                             </div>
                         ))}
                     </div>)}
+                    {applicants.length === 0 && !isLoading && (
+                        <div className="flex justify-center">
+                            <h1 className="text-xl text-custom_gray">No applicants for this job</h1>
+                        </div>
+                    )}
                 </form>
             </div>
         </section>

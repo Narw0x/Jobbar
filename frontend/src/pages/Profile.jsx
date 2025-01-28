@@ -156,32 +156,32 @@ export default function ProfilePage() {
     return (
         <section className="bg-custom_bg_gray py-8">
             <Toast ref={toast}/>
-            <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white">
+            <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto border rounded-lg shadow-md bg-white">
                 <div className="w-full object-fill">
-                    <img className="w-full max-h-[250px] rounded-t" src={`http://localhost:4000/public/background/${profileData?.bgImage}`} alt="" />
+                    <img className="w-full min-h-[150px] max-h-[250px] rounded-t" src={`http://localhost:4000/public/background/${profileData?.bgImage}`} alt="" />
                 </div>
-                <div className="flex items-center">
-                    <div className="w-60 h-60 rounded m-8 ">
+                <div className="flex md:flex-row flex-col">
+                    <div className="w-60 h-60 rounded m-8 md:m-8 my-8 mx-auto flex justify-start">
                         <img className={`w-full h-full object-cover rounded-2xl p-2 ${profileData?.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${profileData?.avatar}`} alt="" />
                     </div>
-                    <div className="flex flex-grow  justify-between">
-                        <div className="ml-4 flex-1">
-                            <h2 className="text-lg text-custom_gray font-semibold" id="UserName">
+                    <div className="flex flex-grow sm:flex-row flex-col  justify-between p-8 md:p-0 pt-0 gap-2 md:gap-0">
+                        <div className="sm:ml-4 flex-1 flex flex-col justify-center">
+                            <h2 className="text-lg text-custom_gray font-semibold text-center sm:text-left" id="UserName">
                                 {profileData?.firstName || profileData?.companyName}
                             </h2>
-                            {profileData.address && <p className="text-sm text-gray-500">
+                            {profileData.address && <p className="text-sm text-gray-500 text-center sm:text-left">
                                 {profileData.address}
                             </p>}
                             {!profileData.isVerified && (
-                                <p className="text-sm text-custom_red">
+                                <p className="text-sm text-custom_red text-center sm:text-left">
                                     Your account is not verified
                                 </p>
                             )}
                             
                         </div>
-                        <div>
+                        <div className="flex flex-col justify-end md:justify-center md:mx-4">
                             {!isCurrentUser && (
-                                <div className="flex flex-row m-2">
+                                <div className="flex flex-row justify-center">
                                     <Button style="red-hover" onClick={handleReport}>
                                         Report
                                     </Button>
@@ -189,7 +189,7 @@ export default function ProfilePage() {
                                 </div>
                             )}
                             {isCurrentUser && (
-                                <div className="flex flex-row m-2">
+                                <div className="flex flex-row justify-center sm:justify-none">
                                     <Button style="red-hover" onClick={handleDeleteAccount}>
                                         Delete Account
                                     </Button>
@@ -203,13 +203,13 @@ export default function ProfilePage() {
             </div>
             <div>
                 {profileData.about && (
-                    <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
+                    <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
                         <h2 className="text-lg text-custom_gray font-semibold">About</h2>
                         <p className="text-sm text-gray-500">{profileData.about}</p>
                     </div>
                 )}
                 {profileData.experience && (
-                    <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
+                    <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
                         {Array.isArray(profileData.experience) && profileData.experience.length === 0 ? (
                             <>
                                 <div className="flex justify-between align-middle">
@@ -239,7 +239,7 @@ export default function ProfilePage() {
                                                 <p className="text-sm text-custom_red">{exp.jobTitle}</p>
                                                 <p className="text-sm text-gray-500">{exp.description}</p>
                                             </div>
-                                            <div className="flex flex-row justify-end text-end gap-4">
+                                            <div className="flex sm:flex-row flex-col justify-end text-end gap-4">
                                                 <div className="flex flex-col justify-end text-end">
                                                     <p className="text-sm text-gray-500">{formatDate(exp.date[0])} - {formatDate(exp.date[1])}</p>
                                                     <p className="text-sm text-gray-500">{exp.employmentType}</p>
@@ -273,7 +273,7 @@ export default function ProfilePage() {
                     </div>
                 )}
                 {profileData.education && (
-                    <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
+                    <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
                         {(profileData.education.school.length === 0 && profileData.education.certificate.length === 0 && profileData.education.skill.length === 0) ? (
                             <div className="flex justify-between align-middle">
                                 <div>
@@ -382,7 +382,7 @@ export default function ProfilePage() {
                     </div>
                 )}
                 {profileData.jobOffers && (
-                    <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
+                    <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
                         {!jobOffers && (
                             <div className="flex justify-center">
                                 <l-bouncy
@@ -401,15 +401,15 @@ export default function ProfilePage() {
                                     <div key={job._id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 ">
                                         <h3 className="text-md text-custom_gray font-semibold text-xl">{job.jobTitle}</h3>
                                         <div className="flex flex-col justify-between">
-                                            <div className="flex flex-col items-start space-y-2">
-                                                <div className="flex flex-row w-full gap-16 justify-between">
+                                            <div className="flex flex-col items-center space-y-2">
+                                                <div className="flex flex-row w-full lg:gap-16 justify-between">
                                                     <p className=" text-custom_gray font-semibold">Salary:</p>
-                                                    <p className=" text-custom_red">{job.salary.amount}{job.salary.currency}/<span className="text-sm">Year</span> </p>
+                                                    <p className=" text-custom_red text-sm flex justify-center items-center">{job.salary.amount}{job.salary.currency}/<span className="text-sm">Year</span> </p>
                                                 </div>
-                                                <div className="flex flex-row  w-full justify-between">
+                                                <div className="flex flex-row  w-full items-center justify-between">
                                                     <p className=" text-custom_gray font-semibold">Location:</p>
-                                                    <div className="max-w-32">
-                                                        <p className=" text-custom_red truncate">{job.address}</p>
+                                                    <div className="max-w-24">
+                                                        <p className=" text-custom_red truncate text-sm">{job.address}</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-row  w-full justify-end">
@@ -477,7 +477,7 @@ export default function ProfilePage() {
                     </div>
                 )}
                 {(profileData.phoneNumber || profileData.email || profileData.website) && (
-                    <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
+                    <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
                         <h2 className="text-lg  text-custom_gray font-semibold">Contact</h2>
                         <div className="text-sm text-gray-500">
                             {profileData.phoneNumber && (

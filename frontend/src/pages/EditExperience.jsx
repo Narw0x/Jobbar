@@ -112,7 +112,7 @@ export default function EditExperiencePage() {
             return;
         }
 
-        
+
 
 
         axios.put(`http://localhost:4000/api/profile/experience/edit/${experienceId}`, experienceData, {
@@ -162,10 +162,10 @@ export default function EditExperiencePage() {
     return (
         <section className="bg-custom_bg_gray py-8">
             <Toast ref={toast} />
-            <div className="max-w-[1440px] mx-auto bg-white p-8 rounded-lg shadow-md">
+            <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto bg-white p-8 rounded-lg shadow-md">
                 <h1 className="text-4xl text-custom_gray font-bold ">Edit Experience</h1>
                 <div>
-                    <form className="flex flex-row mt-4" onSubmit={handleSubmit}>
+                    <form className="flex md:flex-row flex-col mt-4 gap-8" onSubmit={handleSubmit}>
                         <div className="flex flex-col flex-1 mt-2">
                             <div className="flex flex-col">
                                 <label htmlFor="jobTitle" className="text-lg text-custom_gray">Job Title</label>

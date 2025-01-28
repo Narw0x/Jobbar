@@ -90,10 +90,10 @@ export default function LoginPage() {
     }
 
     return (
-        <section className="bg-custom_bg_gray p-16">
+        <section className="bg-custom_bg_gray lg:p-16 py-16">
             <Toast ref={toast} />
-            <div className="flex justify-center flex-col max-w-[1000px] w-[60%] m-auto border border-black rounded-lg bg-white p-16 mt-16">
-                <h1 className="text-center text-6xl text-custom_gray font-bold m-8">Sign in</h1>
+            <div className="flex justify-center flex-col max-w-[1000px] md:w-[60%] w-[90%] m-auto border border-black rounded-lg bg-white md:p-16 p-8 md:mt-16">
+                <h1 className="text-center lg:text-6xl text-4xl text-custom_gray font-bold m-8">Sign in</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-col mb-4">
                         <label className="text-custom_gray text-2xl font-bold" htmlFor="email">Email</label>

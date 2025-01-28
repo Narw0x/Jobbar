@@ -87,9 +87,12 @@ router.get('/length', checkAuth, async (req, res) => {
     try {
         const users = await User.countDocuments();
         const companies = await Company.countDocuments();
+        const jobOffers = await JobOffer.countDocuments();
         const reports = await Report.countDocuments();
 
-        res.status(200).json({ message: 'Data length fetched successfully', payload: { users, companies, reports } });
+        const acc = users + companies;
+
+        res.status(200).json({ message: 'Data length fetched successfully', payload: { users: acc, jobOffers, reports } });
 
     } catch (error) {
         res.status(500).json({ message: error.message });

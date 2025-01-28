@@ -111,18 +111,18 @@ export default function SearchPageConfig(){
             <h1 className="text-custom_gray text-4xl font-bold">My Preferencies</h1>
             <form className="flex flex-col gap-4" onSubmit={handleConfigSubmit}>
                 <div className='flex flex-col mt-4'>
-                    <label className="text-custom_gray text-xl" htmlFor="address">Location: </label>
                     <div className='flex flex-row gap-4 justify-between'>
                         <div className='flex flex-col w-full'>
+                            <label className="text-custom_gray text-xl" htmlFor="address">Location: </label>
                             <Autocomplete
                                 value={requestConfig.address}
                                 onChange={handleChange}
                             />   
                         </div>
                         
-                        <div className='flex flex-row gap-4 items-center'>
+                        <div className='flex flex-col justify-between'>
                             <label className="text-custom_gray text-xl" htmlFor="radius">Radius: </label>
-                            <select className="border border-custom_gray bg-white rounded p-2 text-xl text-custom_gray" value={requestConfig.radius} onChange={handleChange} name="radius" id="radius">
+                            <select className="border border-custom_gray bg-white rounded p-2 text-xl text-custom_gray my-2" value={requestConfig.radius} onChange={handleChange} name="radius" id="radius">
                                 <option value="5">5 km</option>
                                 <option value="10">10 km</option>
                                 <option value="25">25 km</option>

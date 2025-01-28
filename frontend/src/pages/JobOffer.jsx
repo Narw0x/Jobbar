@@ -225,10 +225,10 @@ export default function JobOfferPage() {
   return (
     <section className="bg-custom_bg_gray py-8">
         <Toast ref={toast} />
-        <div className="max-w-[1440px] mx-auto bg-white p-8 rounded-lg shadow-md">
+        <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto bg-white p-8 rounded-lg shadow-md">
             <h1 className="text-4xl text-custom_gray font-bold ">Create a Job Offer</h1>
             <div>
-                <form className="flex flex-row mt-4" onSubmit={handleSubmit}>
+                <form className="flex md:flex-row flex-col mt-4" onSubmit={handleSubmit}>
                     <div className="flex flex-col flex-1 mt-2">
                         <div className="flex flex-col">
                             <label htmlFor="jobTitle" className="text-lg text-custom_gray">Job Title</label>
@@ -298,7 +298,7 @@ export default function JobOfferPage() {
                             <label htmlFor="skills"  className="text-lg text-custom_gray">Skills</label>
                             <div>
                                 {jobOffer.skills.map((skill, index) => (
-                                    <div key={index}  className='flex flex-row justify-between gap-4' >
+                                    <div key={index}  className='flex md:flex-row flex-col justify-between md:gap-4' >
                                         <input 
                                             type="text" 
                                             name="skillName" 
@@ -338,7 +338,7 @@ export default function JobOfferPage() {
                                     </div>
                                 ))}
                             </div>
-                            <div className="flex flex-row justify-end">
+                            <div className="flex flex-row justify-end mt-4">
                                 <Button
                                     style="red-hover"
                                     type="button"
@@ -352,7 +352,7 @@ export default function JobOfferPage() {
                             <label htmlFor="requirements" className="text-lg text-custom_gray">Requirements</label>
                             <div>
                                 {jobOffer.requirements.map((requirement, index) => (
-                                    <div key={index}  className='flex flex-row justify-between gap-4' >
+                                    <div key={index}  className='flex md:flex-row flex-col justify-between md:gap-4' >
                                         <input 
                                             type="text" 
                                             name="requirementName" 
@@ -394,7 +394,7 @@ export default function JobOfferPage() {
 
                                 
                             </div>
-                            <div className="flex flex-row justify-end">
+                            <div className="flex flex-row justify-end mt-4">
                                 <Button 
                                     style="red-hover" 
                                     type="button" 

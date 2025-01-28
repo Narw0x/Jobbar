@@ -105,34 +105,33 @@ export default function FavoritePage() {
                     </div>
                 )}
                {favorites.length !== 0 && (<div>
-                    <div className="flex flex-row gap-4 justify-between  ">
-                        <div  className="flex flex-row justify-between basis-1/2">
-                            <div className="flex basis-1/2 text-left  font-semibold text-xl text-custom_gray">
-                                <p>Applicant Name</p>
+                        <div className="flex flex-row gap-4 justify-between">
+                            <div  className="flex flex-row justify-between w-full lg:basis-1/2">
+                                <div className="flex lg:basis-1/2 text-left  font-bold lg:text-xl text-custom_gray">
+                                    Name
+                                </div>
+                                <div className="flex lg:basis-1/2 text-left font-bold lg:text-xl text-custom_gray">
+                                    Email
+                                </div>
                             </div>
-                            <div className="flex basis-1/2 text-left font-semibold text-xl text-custom_gray">
-                                <p>Email</p>
+                            <div className="hidden lg:flex flex-row justify-end lg:basis-1/2">
+                                <div className="  font-bold md:text-xl text-custom_gray">
+                                    Actions
+                                </div>
                             </div>
                         </div>
-                        <div className="flex flex-row justify-end basis-1/2">
-                            <div className="  font-bold text-xl text-custom_gray">
-                                <p>Actions</p>
-                            </div>
-                        </div>
-                        
-                    </div>
                 </div>)}
                 {favorites.length !== 0  && favorites.map((favorite) => (
-                    <div key={favorite._id} className="flex items-center justify-between py-2  border-b border-gray-200">
-                        <div  className="flex flex-row justify-between basis-1/2">
-                            <div className="flex basis-1/2 text-left text-custom_gray">
-                                <p>{favorite.firstName}</p>
+                    <div key={favorite._id} className="flex lg:flex-row flex-col items-center justify-between py-2  border-b border-gray-200">
+                        <div className="flex flex-row justify-between lg:basis-1/2 w-full items-center">
+                            <div className="flex basis-1/2 text-left">
+                                {favorite.firstName}
                             </div>
-                            <div className="flex basis-1/2 text-left  text-custom_gray">
-                                <p>{favorite.email}</p>
+                            <div className="flex basis-1/2 text-left justify-end lg:justify-start">
+                                {favorite.email}
                             </div>
                         </div>
-                        <div className="flex flex-row justify-end basis-1/2 gap-4">
+                        <div className="flex flex-row justify-end lg:basis-1/2 w-full  gap-4">
                             
                             <div className=" text-custom_red flex items-center">
                                 <button onClick={() => handleAddFavorite(favorite._id)} className="text-custom_blue">Remove</button>

@@ -126,48 +126,48 @@ export default function ViewJobOfferPage() {
     return (
         <section className="bg-custom_bg_gray py-8">
             <Toast ref={toast} />
-            <div className="max-w-[1440px] w-[70%] flex flex-col mx-auto border rounded-lg shadow-md bg-white">
-                <div className="flex flex-row px-8 py-8">
-                    <div className="basis-2/3">
+            <div className="max-w-[1440px] md:w-[70%] w-[90%] flex flex-col mx-auto border rounded-lg shadow-md bg-white">
+                <div className="flex lg:flex-row flex-col px-8 py-8">
+                    <div className="lg:basis-2/3 w-full">
                         <h1 className="text-3xl text-custom_gray font-bold">{job.jobTitle}</h1>
                         <p className="text-custom_red text-sm">{job.address}</p>
-                        <div className="flex flex-col justify-between mt-4 w-[50%]"> 
+                        <div className="flex flex-col justify-between mt-4 lg:w-[50%]"> 
                             <h3 className="text-xl text-custom_gray">About the job</h3>
                             <p className="text-custom_gray">{job.description}</p>
                         </div>
-                        <div className="flex flex-row  justify-between mt-4 w-[50%]">
+                        <div className="flex flex-row  justify-between mt-4 lg:w-[50%] items-c">
                             <h3 className="text-xl text-custom_gray">Salary:</h3>
-                            <p className="text-xl text-custom_gray align-middle mt-auto">{job.salary.currency}{job.salary.amount}/{job.salary.salaryType}</p>
+                            <p className="text-xl text-custom_gray align-middle mt-auto">{job.salary.currency}{job.salary.amount}/year</p>
                         </div>
-                        <div className="flex flex-row justify-between mt-1 w-[50%]">
+                        <div className="flex flex-row justify-between mt-1 lg:w-[50%]">
                             <h3 className="text-xl text-custom_gray">Start Date:</h3>
-                            <p className=" text-custom_gray">{formatDateBetter(job.date)}</p>
+                            <p className=" text-custom_gray my-auto">{formatDateBetter(job.date)}</p>
                         </div>
-                        <div className="flex flex-row mt-4 w-[50%] justify-between">
-                            <h3 className="text-xl text-custom_gray">Employment Type</h3>
-                            <p className="text-custom_red ">{job.employmentType}</p>
+                        <div className="flex flex-row mt-4 lg:w-[50%] justify-between">
+                            <h3 className="text-xl text-custom_gray">Employment Type:</h3>
+                            <p className="text-custom_red my-auto">{job.employmentType}</p>
                         </div>
-                        <div className="flex flex-row mt-4 w-[50%] justify-between">
-                            <h3 className="text-xl text-custom_gray">Experience</h3>
-                            <p className="text-custom_gray">{job.experience} years</p>
+                        <div className="flex flex-row mt-4 lg:w-[50%] justify-between">
+                            <h3 className="text-xl text-custom_gray">Experience:</h3>
+                            <p className="text-custom_gray my-auto">{job.experience} years</p>
                         </div>
-                        <div className="flex flex-col mt-4 w-[50%]">
-                            <h3 className="text-xl text-custom_gray">Requirements</h3>
+                        <div className="flex flex-col mt-4 lg:w-[50%]">
+                            <h3 className="text-xl text-custom_gray">Requirements:</h3>
                             {job.requirements.map((requirement, index) => (
-                                <p className="text-custom_gray" key={index}>{requirement.requirementName} - <span className="text-custom_red">{requirement.requirementType}</span></p>
+                                <p className="text-custom_gray my-auto" key={index}>{requirement.requirementName} - <span className="text-custom_red">{requirement.requirementType}</span></p>
                             ))}
                         </div>
-                        <div className="flex flex-col mt-4 w-96">
-                            <h3 className="text-xl text-custom_gray">Desired skills</h3>
+                        <div className="flex flex-col mt-4 lg:w-96">
+                            <h3 className="text-xl text-custom_gray">Desired skills:</h3>
                             {job.skills.map((skill, index) => (
                                 <p className="text-custom_gray" key={index}>{skill.skillName} - <span className="text-custom_red">{skill.skillLevel}</span></p>
                             ))}
                         </div>
                     </div>
-                        <div className="flex flex-col basis-1/3 justify-center items-center">
-                                <div className="w-full aspect-square object-cover rounded">
+                        <div className="flex flex-col lg:basis-1/3 justify-center lg:items-center items-start">
+                                <div className="w-60 aspect-square object-cover rounded">
                                     <Link to={`/profile/${job.companyId._id}`}>
-                                        <img className={`w-full aspect-square object-cover rounded-2xl p-2 ${job.companyId.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${job.companyId.avatar}`} alt="" />
+                                        <img className={`w-full aspect-square object-cover rounded-2xl p-2 ml-[-0.5rem] ${job.companyId.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${job.companyId.avatar}`} alt="" />
                                     </Link>
                                 </div>
                                 <div className="flex flex-col text-left mt-4 w-full p-2">

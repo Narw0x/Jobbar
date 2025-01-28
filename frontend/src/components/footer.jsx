@@ -5,29 +5,29 @@ export default function Footer() {
     return (
         <footer className="flex flex-col bg-white w-[100%]">
             <hr className="h-1 bg-custom_gray"/>
-            <div className="flex felx-row max-w-[1440px] w-[70%] m-auto mt-16 mb-16 gap-4 justify-between">
-                <div>
+            <div className="flex lg:flex-row flex-col max-w-[1440px] w-[70%] m-auto md:mt-16 md:mb-16 gap-4 justify-between ">
+                <div className="flex flex-col">
                     <img src={path_logo} alt="Jobbar logo"  className="h-40 p-2"/>
                 </div>
-                <div className="text-custom_gray">
-                    <h2 className="font-bold text-3xl">
+                <div className="text-custom_gray flex flex-col justify-center">
+                    <h2 className="font-bold text-3xl text-center">
                         Links
                     </h2>
-                    <div className="flex flex-col text-lg">
+                    <div className="flex flex-col text-lg justify-center">
                         <Link
                             to="/"
-                            className="cursor-pointer hover:text-custom_red transition-colors duration-300 mt-2"
+                            className="cursor-pointer hover:text-custom_red transition-colors duration-300 mt-2 text-center"
                         >
                             Home
                         </Link>
                         <Link
                             to="/about"
-                            className="cursor-pointer hover:text-custom_red transition-colors duration-300"
+                            className="cursor-pointer hover:text-custom_red transition-colors duration-300 text-center"
                         >
                             About us
                         </Link>
                     </div>
-                    <div className="flex felx-row gap-3 mt-6 text-custom_gray">
+                    <div className="flex flex-row gap-3 mt-6 text-custom_gray justify-center">
                         <div className="hover:text-custom_red transition-colors duration-300 cursor-pointer">
                             {/* instagram */}
                             <Link
@@ -73,7 +73,7 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
-                <div className="text-custom_gray">
+                <div className="text-custom_gray text-center">
                     <h2 className="font-bold text-3xl">
                         Contact us
                     </h2>

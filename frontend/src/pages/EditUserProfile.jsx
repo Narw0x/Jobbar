@@ -109,10 +109,6 @@ export default function EditUserProfilePage() {
             return;
         }
 
-        if(!isValidEmail(userInfo.email)){
-            setMessageState({type: 'error', message: 'Please provide a valid email'});
-            return;
-        }
 
         if(!isValidText(userInfo.about)){
             setMessageState({type: 'error', message: 'Please provide a valid about section'});
@@ -213,10 +209,10 @@ export default function EditUserProfilePage() {
     return (
         <section className="bg-custom_bg_gray py-8">
             <Toast ref={toast} />
-            <form className="max-w-[1440px] w-[70%] mx-auto  border rounded-lg shadow-md bg-white" onSubmit={handleEditForm}>
+            <form className="max-w-[1440px] 2xl:w-[60%] xl:w-[80%] w-[90%] mx-auto  border rounded-lg shadow-md bg-white" onSubmit={handleEditForm}>
                 <div>
                     <div className="w-full object-fill flex end flex-col">
-                        <img className="w-full max-h-[250px] rounded-t" src={authState.user.bgImage === bgPreview ? `http://localhost:4000/public/background/${userInfo?.bgImage}`:`${bgPreview}`} alt="" />
+                        <img className="w-full min-h-[150px] max-h-[250px] rounded-t" src={authState.user.bgImage === bgPreview ? `http://localhost:4000/public/background/${userInfo?.bgImage}`:`${bgPreview}`} alt="" />
                         <hr className="bg-black"/>
                     </div>
                     <div className="flex m-4 ml-auto justify-end gap-4">
@@ -234,14 +230,14 @@ export default function EditUserProfilePage() {
                     </div>
                 </div>
                 <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Personal Information</h2>
-                <div className="flex rounded-lg border border-black m-8 justify-between mt-4">
-                    <div className="basis-2/3 flex flex-col m-8">
-                        <div className="flex justify-between  mb-4">
-                            {userInfo.role === 'user' && <div className="flex flex-col w-[45%]">
+                <div className="flex flex-col-reverse lg:flex-row rounded-lg border border-black m-8 justify-between mt-4">
+                    <div className="md:basis-2/3 flex flex-col m-8 md:mb-8 mb-0">
+                        <div className="flex flex-col md:flex-row justify-between  mb-4">
+                            {userInfo.role === 'user' && <div className="flex flex-col md:w-[45%]">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="firstName">First Name</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.firstName || ''} onChange={handleUserInfoChange} type="text" name="firstName" id="firstName" />    
                             </div>}
-                            {userInfo.role === 'user' && <div className="flex flex-col w-[45%]">
+                            {userInfo.role === 'user' && <div className="flex flex-col md:w-[45%]">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="lastName">Last Name</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.lastName || ''} onChange={handleUserInfoChange}  type="text" name="lastName" id="lastName" />
                             </div>}
@@ -263,7 +259,7 @@ export default function EditUserProfilePage() {
                             <textarea className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray p-2 my-2 text-lg w-full resize-none rounded-lg"  onChange={handleUserInfoChange}  value={userInfo.about || ''} name="about" id="about"></textarea>
                         </div>
                     </div>
-                    <div className="basis-1/3 m-8 flex flex-col gap-4 pt-8">
+                    <div className="md:basis-1/3 m-8 my-0 lg:mt-8 flex flex-col gap-4 pt-8">
                         <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center" src={authState.user.avatar === avatarPreview ? `http://localhost:4000/public/avatar/${userInfo?.avatar}`:`${avatarPreview}`} alt="" />
                         <div className="flex justify-center gap-4">
                             <FileUpload 
@@ -293,27 +289,27 @@ export default function EditUserProfilePage() {
                 </div>
                 <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Contact</h2>
                 <div className="flex rounded-lg border border-black m-8 justify-between mt-4 flex-col">
-                    <div className="flex flex-row m-8 mb-4 justify-between">
-                        <div className="w-[30%] flex flex-col mb-4 ">
+                    <div className="flex md:flex-row flex-col m-8 mb-4 justify-between">
+                        <div className="md:w-[30%] flex flex-col mb-4 ">
                             <label className="text-custom_gray text-xl font-bold" htmlFor="phone">Phone</label>
                             <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg "  onChange={handleUserInfoChange}  value={userInfo.phoneNumber || ''} type="phone" name="phoneNumber" id="phoneNumber" placeholder="+421 xxxxxxxxx"/>
                         </div>
-                        <div className="w-[65%] flex flex-col mb-4">
+                        <div className="md:w-[65%] flex flex-col mb-4">
                             <label className="text-custom_gray text-xl font-bold" htmlFor="website">Website</label>
                             <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg w-full"  onChange={handleUserInfoChange} value={userInfo.website || ''} type="text" name="website" id="website" />
                         </div>
                     </div>
                     <div className="flex flex-row m-8 mt-0">
-                        <div className="flex flex-row mb-4 w-full justify-between">
-                            <div className="w-[30%] flex flex-col">
+                        <div className="flex md:flex-row flex-col mb-4 w-full justify-between">
+                            <div className="md:w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="twitter">Twitter</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.twitter || ''} type="text" name="twitter" id="twitter" placeholder="https://x.com/username" />
                             </div>
-                            <div className="w-[30%] flex flex-col">
+                            <div className="md:w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="instagram">Instagram</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.instagram || ''} type="text" name="instagram" id="instagram" placeholder="https://www.instagram.com/username" />
                             </div>
-                            <div className="w-[30%] flex flex-col">
+                            <div className="md:w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="github">Github</label>
                                 <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.github || ''} type="text" name="github" id="github" placeholder="https://github.com/username" />
                             </div>

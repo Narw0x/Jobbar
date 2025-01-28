@@ -45,7 +45,7 @@ export default function Carousel() {
 
     return (
         <div className="carousel ">
-            <h2 className="text-5xl font-bold text-custom_gray text-center">
+            <h2 className="lg:text-5xl text-3xl font-bold text-custom_gray text-center">
                 What people say about us?
             </h2>
             <div className="border w-[70%] max-w-[1440px] flex m-auto my-8 justify-between p-8 rounded-lg shadow-md bg-white">
