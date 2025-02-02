@@ -23,7 +23,7 @@ export default function FavoritePage() {
 
     useEffect(() => {
         setIsLoading(true);
-        axios.get(`http://localhost:4000/api/profile/favorite`, {
+        axios.get(`https://jobbar-5m8u.onrender.com/api/profile/favorite`, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 id: `${authState.user._id}`
@@ -43,7 +43,7 @@ export default function FavoritePage() {
 
 
     const handleAddFavorite = (userId) => {
-        axios.put(`http://localhost:4000/api/profile/favorite/${userId}`, userId,
+        axios.put(`https://jobbar-5m8u.onrender.com/api/profile/favorite/${userId}`, userId,
             {
                 headers: {
                     Authorization: `Bearer ${authState.token}`,

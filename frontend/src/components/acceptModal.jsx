@@ -25,7 +25,7 @@ const AcceptModal = forwardRef(function AcceptModal( { userName, userEmail, user
         }
 
 
-        axios.post('http://localhost:4000/api/job/accept', data, {
+        axios.post('https://jobbar-5m8u.onrender.com/api/job/accept', data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`
             }

@@ -19,7 +19,7 @@ export default function SearchJobView() {
     useEffect(() => {
         setIsLoading(true);
             if(authState.user.role === 'user') {
-            axios.post('http://localhost:4000/api/jobs',{searchConfig: authState.user.searchConfig} ,  {
+            axios.post('https://jobbar-5m8u.onrender.com/api/jobs',{searchConfig: authState.user.searchConfig} ,  {
                 headers: {
                     Authorization: `Bearer ${authState.token}`
                 }

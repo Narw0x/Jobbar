@@ -98,7 +98,7 @@ export default function RegisterCompanyPage() {
 
         // Send a POST request
         axios
-            .post('http://localhost:4000/api/company/register', data)
+            .post('https://jobbar-5m8u.onrender.com/api/company/register', data)
             .then((response) => {
                 navigate('/login', {state: {message: response.data.message, type: 'success'}});
             })

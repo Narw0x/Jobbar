@@ -8,7 +8,7 @@ const Autocomplete = ({ value = undefined, onChange = undefined }) => {
 
   const fetchPlaceSuggestions = async (inputValue) => {
     try {
-      axios.get('http://localhost:4000/api/autocomplete', {
+      axios.get('https://jobbar-5m8u.onrender.com/api/autocomplete', {
         params: {
           search: inputValue,
         },

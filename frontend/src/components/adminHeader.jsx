@@ -21,7 +21,7 @@ export default function AdminHeader() {
     const adminState = useSelector((state) => state.admin);
 
     function handleClick() {
-        axios.post('http://localhost:4000/api/admin/logout', {}, {
+        axios.post('https://jobbar-5m8u.onrender.com/api/admin/logout', {}, {
             headers: {
                 Authorization: `Bearer ${adminState.adminToken}`,
             }

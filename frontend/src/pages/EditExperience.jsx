@@ -64,7 +64,7 @@ export default function EditExperiencePage() {
     }
 
     const handleDelete = async () => {
-        await axios.put(`http://localhost:4000/api/profile/experience/delete/${experienceId}`, {}, {
+        await axios.put(`https://jobbar-5m8u.onrender.com/api/profile/experience/delete/${experienceId}`, {}, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 id: authState.user._id,
@@ -107,7 +107,7 @@ export default function EditExperiencePage() {
             return;
         }
 
-        if(!isValidText(experienceData.description)){
+        if(!isValidText(experienceData.description, 1, 500)){
             setMessageState({type: 'error', message: 'Please provide a valid description'});
             return;
         }
@@ -115,7 +115,7 @@ export default function EditExperiencePage() {
 
 
 
-        axios.put(`http://localhost:4000/api/profile/experience/edit/${experienceId}`, experienceData, {
+        axios.put(`https://jobbar-5m8u.onrender.com/api/profile/experience/edit/${experienceId}`, experienceData, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 Id: authState.user._id

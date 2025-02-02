@@ -29,7 +29,7 @@ export default function ManageJobPage() {
 
     const fetchApplicants = () => {
         setIsLoading(true);
-        axios.get(`http://localhost:4000/api/job/applicants/${jobId}`)
+        axios.get(`https://jobbar-5m8u.onrender.com/api/job/applicants/${jobId}`)
             .then(response => {
                 setIsLoading(false);
                 if(response.data.payload.applicants.length !== 0){
@@ -53,7 +53,7 @@ export default function ManageJobPage() {
 
 
     const handleAddFavorite = (userId) => {
-        axios.put(`http://localhost:4000/api/profile/favorite/${userId}`, userId,
+        axios.put(`https://jobbar-5m8u.onrender.com/api/profile/favorite/${userId}`, userId,
             {
                 headers: {
                     Authorization: `Bearer ${authState.token}`,
@@ -70,7 +70,7 @@ export default function ManageJobPage() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:4000/api/job/name/${jobId}`, {
+        axios.get(`https://jobbar-5m8u.onrender.com/api/job/name/${jobId}`, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
             }

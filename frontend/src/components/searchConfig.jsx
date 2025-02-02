@@ -61,7 +61,7 @@ export default function SearchPageConfig(){
             return;
         }
 
-        axios.put('http://localhost:4000/api/profile/config', data, {
+        axios.put('https://jobbar-5m8u.onrender.com/api/profile/config', data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 id: authState.user._id

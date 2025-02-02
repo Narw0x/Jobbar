@@ -77,7 +77,7 @@ export default function LoginPage() {
         // Send a POST request
         dispatch(loginStart());
         axios
-            .post(`http://localhost:4000/api/profile/login`, data)
+            .post(`https://jobbar-5m8u.onrender.com/api/profile/login`, data)
             .then((response) => {
                 dispatch(loginSuccess(response.data.payload));
                 navigate('/profile/' + response.data.payload.user._id, {state: {message: response.data.message, type: 'success'}});

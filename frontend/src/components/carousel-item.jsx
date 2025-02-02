@@ -2,7 +2,7 @@ export default function CarouselItem({author, title, description, image = "defau
     return(
         <div className="flex md:flex-row flex-col items-center justify-center my-16 mx-auto w-[95%]">
             <div className="">
-                <img className="rounded-full border border-3 border-custom_gray max-w-[85%] p-4 mx-auto md:m-0" src={`http://localhost:4000/public/avatar/${image}`} alt="" />
+                <img className="rounded-full border border-3 border-custom_gray max-w-[85%] p-4 mx-auto md:m-0" src={`https://jobbar-5m8u.onrender.com/public/avatar/${image}`} alt="" />
             </div>
             
             <div className=" mt-4">

@@ -51,7 +51,7 @@ export default function EditJobOfferPage() {
 
     useEffect(() => {
         if (params.jobId) {
-            axios.get(`http://localhost:4000/api/job/edit/${params.jobId}`, {
+            axios.get(`https://jobbar-5m8u.onrender.com/api/job/edit/${params.jobId}`, {
                 headers: {
                     Authorization: `Bearer ${authState.token}`,
                 }
@@ -132,7 +132,7 @@ export default function EditJobOfferPage() {
     };
 
     const handleDelete = async () => {
-        await axios.put(`http://localhost:4000/api/job/delete/${params.jobId}`, {}, {
+        await axios.put(`https://jobbar-5m8u.onrender.com/api/job/delete/${params.jobId}`, {}, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 id: authState.user._id,
@@ -168,7 +168,7 @@ export default function EditJobOfferPage() {
             return;
         }
         
-        if(!isValidText(data.description)){
+        if(!isValidText(data.description, 1, 500)){
             setMessageState({type: 'error', message: 'Please provide a valid description'});
             return;
         }
@@ -206,7 +206,7 @@ export default function EditJobOfferPage() {
             }
         }
 
-        axios.put(`http://localhost:4000/api/job/edit/${params.jobId}`, data, {
+        axios.put(`https://jobbar-5m8u.onrender.com/api/job/edit/${params.jobId}`, data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
             }

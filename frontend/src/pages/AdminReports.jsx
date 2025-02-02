@@ -15,7 +15,7 @@ export default function AdminReportsPage() {
 
     useEffect(() => {
         setIsLoading(true);
-        axios.get('http://localhost:4000/api/admin/reports', {
+        axios.get('https://jobbar-5m8u.onrender.com/api/admin/reports', {
             headers: {
                 Authorization: `Bearer ${adminState.adminToken}`
             }

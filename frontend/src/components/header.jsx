@@ -20,7 +20,7 @@ export default function Header() {
     const authState = useSelector((state) => state.auth);
 
     function handleClick() {
-        axios.post('http://localhost:4000/api/profile/logout', {}, {
+        axios.post('https://jobbar-5m8u.onrender.com/api/profile/logout', {}, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
             }

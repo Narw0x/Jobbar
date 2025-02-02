@@ -106,7 +106,7 @@ export default function EditEducationPage() {
 
 
         
-        axios.put(`http://localhost:4000/api/profile/education/edit/${educationId}`, data, {
+        axios.put(`https://jobbar-5m8u.onrender.com/api/profile/education/edit/${educationId}`, data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 id: authState.user._id
@@ -130,7 +130,7 @@ export default function EditEducationPage() {
     }
 
     const handleDelete = async () => {
-        await axios.put(`http://localhost:4000/api/profile/education/delete/${educationId}`, {}, {
+        await axios.put(`https://jobbar-5m8u.onrender.com/api/profile/education/delete/${educationId}`, {}, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 id: authState.user._id,

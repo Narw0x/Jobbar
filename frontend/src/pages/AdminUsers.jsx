@@ -31,7 +31,7 @@ export default function AdminUsersPage() {
         e.preventDefault();
         setIsLoading(true);
 
-        axios.get(`http://localhost:4000/api/admin/user/${email}`,{
+        axios.get(`https://jobbar-5m8u.onrender.com/api/admin/user/${email}`,{
             headers: {
                 Authorization: `Bearer ${adminState.adminToken}`
             }
@@ -84,7 +84,7 @@ export default function AdminUsersPage() {
         }, [messageState]);
 
         const handleDelete = (id) => {
-            axios.post(`http://localhost:4000/api/admin/delete/${id}`, {},
+            axios.post(`https://jobbar-5m8u.onrender.com/api/admin/delete/${id}`, {},
             {
                 headers: {
                     Authorization: `Bearer ${adminState.adminToken}`

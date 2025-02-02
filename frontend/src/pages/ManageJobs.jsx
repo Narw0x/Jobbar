@@ -26,7 +26,7 @@ export default function ManageJobsPage() {
 
     useEffect(() => {
         if (authState.user.jobOffers.length !== 0) {
-            axios.get(`http://localhost:4000/api/jobs/${authState.user._id}`, {
+            axios.get(`https://jobbar-5m8u.onrender.com/api/jobs/${authState.user._id}`, {
                 headers: {
                     Authorization: `Bearer ${authState.token}`, // Include the token in the Authorization header
                 },

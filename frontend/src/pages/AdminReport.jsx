@@ -20,7 +20,7 @@ export default function AdminReportPage() {
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:4000/api/admin/reports/${reportId}`,
+        axios.get(`https://jobbar-5m8u.onrender.com/api/admin/reports/${reportId}`,
             {
                 headers: {
                     Authorization: `Bearer ${adminState.adminToken}`
@@ -38,7 +38,7 @@ export default function AdminReportPage() {
     console.log(report);
 
     const handleResponse = (status) => {
-        axios.put(`http://localhost:4000/api/admin/reports/${reportId}`, {status},
+        axios.put(`https://jobbar-5m8u.onrender.com/api/admin/reports/${reportId}`, {status},
             {
                 headers: {
                     Authorization: `Bearer ${adminState.adminToken}`

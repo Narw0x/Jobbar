@@ -45,7 +45,7 @@ export default function AdminUserEditPage() {
     const [avatarPreview, setAvatarPreview] = useState(userInfo.avatar);
 
     useEffect(() => {
-        axios.get(`http://localhost:4000/api/admin/edit/${userId}`,{
+        axios.get(`https://jobbar-5m8u.onrender.com/api/admin/edit/${userId}`,{
             headers: {
                 Authorization: `Bearer ${adminState.adminToken}`
             }
@@ -132,7 +132,7 @@ export default function AdminUserEditPage() {
             return;
         }
 
-        if(!isValidText(userInfo.about)){
+        if(!isValidText(userInfo.about, 1, 500)){
             setMessageState({type: 'error', message: 'Please provide a valid about section'});
             return;
         }
@@ -185,7 +185,7 @@ export default function AdminUserEditPage() {
             formData.append('avatar', avatar);
         }
 
-        axios.put(`http://localhost:4000/api/admin/edit/${userId}`, formData, {
+        axios.put(`https://jobbar-5m8u.onrender.com/api/admin/edit/${userId}`, formData, {
             headers: {
                 Authorization: `Bearer ${adminState.adminToken}`
             }
@@ -242,7 +242,7 @@ export default function AdminUserEditPage() {
             <form className="container mx-auto  border rounded-lg shadow-md bg-white my-8" onSubmit={handleEditForm}>
                 <div>
                     <div className="w-full object-fill flex end flex-col">
-                        <img className="w-full max-h-[250px] rounded-t" src={userInfo.bgImage === bgPreview ? `http://localhost:4000/public/background/${userInfo?.bgImage}`:`${bgPreview}`} alt="" />
+                        <img className="w-full max-h-[250px] rounded-t" src={userInfo.bgImage === bgPreview ? `https://jobbar-5m8u.onrender.com/public/background/${userInfo?.bgImage}`:`${bgPreview}`} alt="" />
                         <hr className="bg-black"/>
                     </div>
                     <div className="flex m-4 ml-auto justify-end gap-4">
@@ -294,7 +294,7 @@ export default function AdminUserEditPage() {
                         </div>
                     </div>
                     <div className="basis-1/3 m-8 flex flex-col gap-4 pt-8">
-                        <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center" src={userInfo.avatar === avatarPreview ? `http://localhost:4000/public/avatar/${userInfo?.avatar}`:`${avatarPreview}`} alt="" />
+                        <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center" src={userInfo.avatar === avatarPreview ? `https://jobbar-5m8u.onrender.com/public/avatar/${userInfo?.avatar}`:`${avatarPreview}`} alt="" />
                         <div className="flex justify-center gap-4">
                             <FileUpload 
                                 mode="basic" 

@@ -17,7 +17,7 @@ export default function SearchBookmarksView() {
 
     useEffect(() => {
         setIsLoading(true);
-        axios.get(`http://localhost:4000/api/job/user/${authState.user._id}`, {
+        axios.get(`https://jobbar-5m8u.onrender.com/api/job/user/${authState.user._id}`, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
             }

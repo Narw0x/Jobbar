@@ -34,7 +34,7 @@ const ReportModal = forwardRef(function ReportModal({type, setMessage} ,ref) {
         e.preventDefault();
 
 
-        if(!isValidText(reason)){
+        if(!isValidText(reason, 1, 500)){
             resetReport();
             dialog.current.close();
             setMessage({type: 'error', message: 'Please provide a valid reason'});
@@ -50,7 +50,7 @@ const ReportModal = forwardRef(function ReportModal({type, setMessage} ,ref) {
             reason
         }
 
-        axios.post('http://localhost:4000/api/report', data, {
+        axios.post('https://jobbar-5m8u.onrender.com/api/report', data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`
             }

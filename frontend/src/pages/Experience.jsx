@@ -68,12 +68,12 @@ export default function EditExperiencePage() {
             return;
         }
 
-        if(!isValidText(data.description)){
+        if(!isValidText(data.description, 1, 500)){
             setMessageState({type: 'error', message: 'Please provide a valid description'});
             return;
         }
 
-        axios.put(`http://localhost:4000/api/profile/experience/add`, data, {
+        axios.put(`https://jobbar-5m8u.onrender.com/api/profile/experience/add`, data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 Id: authState.user._id

@@ -45,7 +45,7 @@ const DeleteAccountModal = forwardRef(function DeleteAccountModal( _,ref) {
         }
 
 
-        axios.post(`http://localhost:4000/api/${authState.user.role}/delete`, data, {
+        axios.post(`https://jobbar-5m8u.onrender.com/api/${authState.user.role}/delete`, data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`
             }

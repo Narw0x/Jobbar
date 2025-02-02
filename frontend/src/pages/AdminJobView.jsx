@@ -49,7 +49,7 @@ export default function AdminJobViewPage() {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:4000/api/job/${jobId}`, {
+        axios.get(`https://jobbar-5m8u.onrender.com/api/job/${jobId}`, {
             headers: {
                 Authorization: `Bearer ${adminState.adminToken}`
             }
@@ -148,7 +148,7 @@ export default function AdminJobViewPage() {
                         <div className="flex flex-col basis-1/3 justify-center items-center">
                                 <div className="w-full aspect-square object-cover rounded">
                                     <Link to={`/profile/${job.companyId._id}`}>
-                                        <img className={`w-full aspect-square object-cover rounded-2xl p-2 ${job.companyId.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${job.companyId.avatar}`} alt="" />
+                                        <img className={`w-full aspect-square object-cover rounded-2xl p-2 ${job.companyId.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`https://jobbar-5m8u.onrender.com/public/avatar/${job.companyId.avatar}`} alt="" />
                                     </Link>
                                 </div>
                                 <div className="flex flex-col text-left mt-4 w-full p-2">

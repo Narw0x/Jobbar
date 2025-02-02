@@ -2,6 +2,9 @@ import { Link, useNavigate, useParams  } from "react-router-dom";
 import Button from "../components/button";
 import Features from "../components/features";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { useEffect } from "react";
+
 
 const pathManAtTable = "../Man_at_table.svg";
 
@@ -10,6 +13,29 @@ const pathManAtTable = "../Man_at_table.svg";
 export default function HomePage(){
 
     const authState = useSelector(state => state.auth);
+    const navigate = useNavigate();
+    const {token} = useParams();
+
+    useEffect(() => {
+        if(token){
+            async function checkVerifyToken(){
+                try {
+                    await axios.post('https://jobbar-5m8u.onrender.com/api/verify', { token })
+                    .then((res) => {
+                        return navigate('/');
+                    })
+                } catch (error) {
+                    console.error('Error verifying token:', error);
+                    return navigate('/');
+                }
+            
+                return null;
+            }
+            checkVerifyToken();
+        }
+    }, [token])
+
+
 
     return(
         <>

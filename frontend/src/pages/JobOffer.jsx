@@ -134,7 +134,7 @@ export default function JobOfferPage() {
             return;
         }
         
-        if(!isValidText(data.description)){
+        if(!isValidText(data.description, 1, 500)){
             setMessageState({type: 'error', message: 'Please provide a valid description'});
             return;
         }
@@ -174,7 +174,7 @@ export default function JobOfferPage() {
 
 
 
-        axios.post(`http://localhost:4000/api/job/create`, data, {
+        axios.post(`https://jobbar-5m8u.onrender.com/api/job/create`, data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 id: authState.user._id

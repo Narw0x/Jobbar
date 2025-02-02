@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
         }
 
         dispatch(adminLoginStart());
-        axios.post('http://localhost:4000/api/admin/login', data)
+        axios.post('https://jobbar-5m8u.onrender.com/api/admin/login', data)
             .then((res) => {
                 setMessageState({type: 'success', message: res.data.message});
                 dispatch(adminLoginSuccess(res.data.payload));

@@ -109,7 +109,7 @@ export default function EducationPage(){
         }
 
 
-        axios.post(`http://localhost:4000/api/profile/education/add`, data, {
+        axios.post(`https://jobbar-5m8u.onrender.com/api/profile/education/add`, data, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
                 id: authState.user._id

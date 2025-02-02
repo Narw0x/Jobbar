@@ -42,7 +42,7 @@ export default function AdminJobsPage() {
         }
 
         setIsLoading(true);
-        axios.get(`http://localhost:4000/api/admin/jobOffer/${email}`,{
+        axios.get(`https://jobbar-5m8u.onrender.com/api/admin/jobOffer/${email}`,{
             headers: {
                 Authorization: `Bearer ${adminState.adminToken}`
             }

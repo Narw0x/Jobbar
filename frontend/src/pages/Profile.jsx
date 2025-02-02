@@ -65,7 +65,7 @@ export default function ProfilePage() {
     useEffect(() => {
         if (authState.user._id !== id) {
             setIsCurrentUser(false); // Viewing someone else's profile
-            axios.get(`http://localhost:4000/api/profile/${id}`, {
+            axios.get(`https://jobbar-5m8u.onrender.com/api/profile/${id}`, {
                 headers: {
                     Authorization: `Bearer ${authState.token}`, // Include the token in the Authorization header
                 },
@@ -87,7 +87,7 @@ export default function ProfilePage() {
 
     useEffect(() => {
         if (profileData && profileData.jobOffers){
-            axios.get(`http://localhost:4000/api/jobs/${profileData._id}`, {
+            axios.get(`https://jobbar-5m8u.onrender.com/api/jobs/${profileData._id}`, {
                 headers: {
                     Authorization: `Bearer ${authState.token}`, // Include the token in the Authorization header
                 },
@@ -158,11 +158,11 @@ export default function ProfilePage() {
             <Toast ref={toast}/>
             <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto border rounded-lg shadow-md bg-white">
                 <div className="w-full object-fill">
-                    <img className="w-full min-h-[150px] max-h-[250px] rounded-t" src={`http://localhost:4000/public/background/${profileData?.bgImage}`} alt="" />
+                    <img className="w-full min-h-[150px] max-h-[250px] rounded-t" src={`https://jobbar-5m8u.onrender.com/public/background/${profileData?.bgImage}`} alt="" />
                 </div>
                 <div className="flex md:flex-row flex-col">
                     <div className="w-60 h-60 rounded m-8 md:m-8 my-8 mx-auto flex justify-start">
-                        <img className={`w-full h-full object-cover rounded-2xl p-2 ${profileData?.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`http://localhost:4000/public/avatar/${profileData?.avatar}`} alt="" />
+                        <img className={`w-full h-full object-cover rounded-2xl p-2 ${profileData?.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`https://jobbar-5m8u.onrender.com/public/avatar/${profileData?.avatar}`} alt="" />
                     </div>
                     <div className="flex flex-grow sm:flex-row flex-col  justify-between p-8 md:p-0 pt-0 gap-2 md:gap-0">
                         <div className="sm:ml-4 flex-1 flex flex-col justify-center">

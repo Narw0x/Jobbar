@@ -1,6 +1,6 @@
 import Carousel from '../components/carousel.jsx';
 
-const pathManAbout = "./about_person.svg";
+const pathManAbout = "../about_person.svg";
 
 
 export default function AboutPage(){

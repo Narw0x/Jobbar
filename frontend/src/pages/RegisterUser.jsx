@@ -95,7 +95,7 @@ export default function RegisterUserPage() {
         }
 
         axios
-            .post('http://localhost:4000/api/user/register', data)
+            .post('https://jobbar-5m8u.onrender.com/api/user/register', data)
             .then((response) => {
                 navigate('/login', { state: { message: response.data.message, type: 'success' } });
             })

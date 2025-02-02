@@ -14,7 +14,7 @@ export default function AdminDashboard() {
     const adminState = useSelector((state) => state.admin);
 
     useEffect(() => {
-        axios.get('http://localhost:4000/api/admin/length', {
+        axios.get('https://jobbar-5m8u.onrender.com/api/admin/length', {
             headers: {
                 Authorization: `Bearer ${adminState.adminToken}`
             }
