@@ -13,7 +13,7 @@ dotenv.config();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'https://jobbar.scriptbase.eu', // Allow only your frontend origin
+  origin: '*', // Allow only your frontend origin https://jobbar.scriptbase.eu
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   credentials: true // Include cookies if needed
 }));
