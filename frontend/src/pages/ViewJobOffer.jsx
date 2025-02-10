@@ -124,7 +124,7 @@ export default function ViewJobOfferPage() {
  
 
     return (
-        <section className="bg-custom_bg_gray py-8">
+        <section className="bg-custom_bg_gray py-8  min-h-[61.5vh]">
             <Toast ref={toast} />
             <div className="max-w-[1440px] md:w-[70%] w-[90%] flex flex-col mx-auto border rounded-lg shadow-md bg-white">
                 <div className="flex lg:flex-row flex-col px-8 py-8">

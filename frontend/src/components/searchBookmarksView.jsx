@@ -42,7 +42,7 @@ export default function SearchBookmarksView() {
 
     return (
         <div>
-            <h1 className="text-custom_gray text-4xl font-bold">Your applies for job</h1>
+            <h1 className="text-custom_gray text-4xl font-bold">Your applies</h1>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 pt-2">
                     {isLoading && (

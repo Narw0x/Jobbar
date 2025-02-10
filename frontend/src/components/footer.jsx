@@ -5,7 +5,7 @@ export default function Footer() {
     return (
         <footer className="flex flex-col bg-white w-[100%]">
             <hr className="h-1 bg-custom_gray"/>
-            <div className="flex lg:flex-row flex-col max-w-[1440px] w-[70%] m-auto md:mt-16 md:mb-16 gap-4 justify-between ">
+            <div className="flex lg:flex-row flex-col max-w-[1440px] w-[70%] m-auto my-8 md:mt-16 md:mb-16 gap-4 justify-between ">
                 <div className="flex flex-col">
                     <img src={path_logo} alt="Jobbar logo"  className="h-40 p-2"/>
                 </div>
@@ -31,7 +31,7 @@ export default function Footer() {
                         <div className="hover:text-custom_red transition-colors duration-300 cursor-pointer">
                             {/* instagram */}
                             <Link
-                                to=""
+                                to="https://www.instagram.com/"
                             >
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M17 2H7C4.23858 2 2 4.23858 2 7V17C2 19.7614 4.23858 22 7 22H17C19.7614 22 22 19.7614 22 17V7C22 4.23858 19.7614 2 17 2Z" stroke="currentColor" strokeWidth="2" />
@@ -43,17 +43,17 @@ export default function Footer() {
                         <div className="hover:text-custom_red transition-colors duration-300 cursor-pointer">
                             {/* twitter */}
                             <Link
-                                to=""
+                                to="https://x.com"
                             >
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M22 4.00002C22 4.00002 21.3 6.10002 20 7.40002C21.6 17.4 10.6 24.7 2 19C4.2 19.1 6.4 18.4 8 17C3 15.5 0.5 9.60002 3 5.00002C5.2 7.60002 8.6 9.10002 12 9.00002C11.1 4.80002 16 2.40002 19 5.20002C20.1 5.20002 22 4.00002 22 4.00002Z" stroke="currentColor" strokeWidth="2" />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 30 30" fill="none">
+                                    <path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z" fill="currentColor"/>
                                 </svg>
                             </Link>
                         </div>
                         <div className="hover:text-custom_red transition-colors duration-300 cursor-pointer">
                             {/* youtube */}
                             <Link
-                                to=""
+                                to="https://www.youtube.com"
                             >
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2.50001 17C1.80143 13.7033 1.80143 10.2967 2.50001 7C2.5918 6.66521 2.76914 6.36007 3.01461 6.11461C3.26008 5.86914 3.56522 5.69179 3.90001 5.6C9.26346 4.71146 14.7366 4.71146 20.1 5.6C20.4348 5.69179 20.7399 5.86914 20.9854 6.11461C21.2309 6.36007 21.4082 6.66521 21.5 7C22.1986 10.2967 22.1986 13.7033 21.5 17C21.4082 17.3348 21.2309 17.6399 20.9854 17.8854C20.7399 18.1309 20.4348 18.3082 20.1 18.4C14.7366 19.2887 9.26344 19.2887 3.90001 18.4C3.56522 18.3082 3.26008 18.1309 3.01461 17.8854C2.76914 17.6399 2.5918 17.3348 2.50001 17Z" stroke="currentColor" strokeWidth="2"/>
@@ -64,7 +64,7 @@ export default function Footer() {
                         <div className="hover:text-custom_red transition-colors duration-300 cursor-pointer">
                             {/* facebook */}
                             <Link
-                                to=""
+                                to="https://www.facebook.com/"
                             >
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="currentColor" strokeWidth="2" />

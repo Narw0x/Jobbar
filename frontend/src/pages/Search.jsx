@@ -12,10 +12,10 @@ export default function SearchPage(){
     const [subPage, setSubPage] = useState('job offers');
 
     return (
-        <section className="bg-custom_bg_gray py-8">
+        <section className="bg-custom_bg_gray py-8 min-h-[61.5vh]">
             <div className="max-w-[1440px] lg:w-[70%] w-[90%] mx-auto flex lg:flex-row flex-col-reverse gap-8">
                 <div className="lg:basis-3/4 border shadow-lg bg-white rounded-lg p-8">
-                    <div className="mt-8">
+                    <div className="">
                         {subPage === 'job offers' && (
                             <SearchJobView />
                         )}

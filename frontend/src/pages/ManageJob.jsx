@@ -117,7 +117,7 @@ export default function ManageJobPage() {
 
 
     return(
-        <section className="bg-custom_bg_gray py-8 ">
+        <section className="bg-custom_bg_gray py-8  min-h-[61.5vh]">
             <Toast ref={toast} />
             <AcceptModal
                 ref={modal}
@@ -145,12 +145,12 @@ export default function ManageJobPage() {
                             <div>
                                 <h2 className="text-xl font-bold text-custom_gray my-4">Accepted Applicant</h2>
                                 
-                                <div className="flex flex-row gap-4 border-b py-2 justify-between">
+                                <div className="flex lg:flex-row flex-col gap-4 border-b py-2 justify-between">
                                     <div className="flex flex-row justify-between basis-1/2 items-center">
                                         <div className="flex basis-1/2 text-left">
-                                            {acceptedApplicant.applicant.firstName} {acceptedApplicant.applicant.lastName}
+                                            {acceptedApplicant.applicant.firstName}
                                         </div>
-                                        <div className="flex basis-1/2 text-left">
+                                        <div className="flex basis-1/2 text-left justify-end lg:justify-start">
                                             {acceptedApplicant.applicant.email}
                                         </div>
                                     </div>

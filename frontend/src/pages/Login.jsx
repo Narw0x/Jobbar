@@ -90,7 +90,7 @@ export default function LoginPage() {
     }
 
     return (
-        <section className="bg-custom_bg_gray lg:p-16 py-16">
+        <section className="bg-custom_bg_gray lg:p-16 py-16  min-h-[61.5vh]">
             <Toast ref={toast} />
             <div className="flex justify-center flex-col max-w-[1000px] md:w-[60%] w-[90%] m-auto border border-black rounded-lg bg-white md:p-16 p-8 md:mt-16">
                 <h1 className="text-center lg:text-6xl text-4xl text-custom_gray font-bold m-8">Sign in</h1>

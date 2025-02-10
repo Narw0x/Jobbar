@@ -102,9 +102,9 @@ export default function AdminUsersPage() {
         }
 
     return (
-        <section className="flex flex-col items-center justify-center bg-custom_bg_gray px-8">
+        <section className=" bg-custom_bg_gray px-8 pt-8  min-h-[61.5vh]">
             <Toast ref={toast} />
-            <div className="container border rounded-lg shadow-md bg-white m-8 p-8">
+            <div className="container border rounded-lg shadow-md bg-white m-8 p-8 mt-0 mx-auto">
                 <h1  className="text-2xl text-custom_gray font-bold">Find User</h1>
                 <form className="flex md:flex-row flex-col gap-4 mt-8 w-full" onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-2 basis-[90%]">

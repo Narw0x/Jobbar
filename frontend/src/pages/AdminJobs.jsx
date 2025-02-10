@@ -93,9 +93,9 @@ export default function AdminJobsPage() {
 
 
     return (
-        <section className="flex flex-col items-center justify-center bg-custom_bg_gray">
+        <section className=" bg-custom_bg_gray min-h-[61.5vh] pt-8">
             <Toast ref={toast} />
-            <div className="container border rounded-lg shadow-md bg-white m-8 p-8">
+            <div className="container border rounded-lg shadow-md bg-white m-8 p-8 mt-0 mx-auto">
                 <h1  className="text-2xl text-custom_gray font-bold">Find Company Jobs</h1>
                 <form className="flex flex-row gap-4 mt-8 w-full" onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-2 basis-[90%]">

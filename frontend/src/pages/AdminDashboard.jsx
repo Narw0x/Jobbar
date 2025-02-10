@@ -36,8 +36,8 @@ export default function AdminDashboard() {
 
 
     return (
-        <section className="flex flex-col items-center justify-center bg-custom_bg_gray px-8">
-            <div className="container border rounded-lg shadow-md bg-white m-8 p-8">
+        <section className=" bg-custom_bg_gray p-8 min-h-[61.5vh] mx-auto mb-auto">
+            <div className="container border rounded-lg shadow-md bg-white p-8 mx-auto">
                 <h1 className="text-2xl text-custom_gray font-bold">Admin Dashboard</h1>
                 <p className="text-custom_gray text-lg ">Welcome, Admin!</p>
 

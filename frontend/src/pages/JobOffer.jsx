@@ -223,7 +223,7 @@ export default function JobOfferPage() {
 
 
   return (
-    <section className="bg-custom_bg_gray py-8">
+    <section className="bg-custom_bg_gray py-8 ">
         <Toast ref={toast} />
         <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto bg-white p-8 rounded-lg shadow-md">
             <h1 className="text-4xl text-custom_gray font-bold ">Create a Job Offer</h1>

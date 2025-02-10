@@ -90,11 +90,11 @@ export default function FavoritePage() {
 
 
     return (
-         <section className="bg-custom_bg_gray py-8">
+         <section className="bg-custom_bg_gray py-8 min-h-[61.5vh]">
             <Toast ref={toast}/>
             
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white p-8">
-                <h2 className="text-4xl font-bold text-custom_gray mb-4">Your Favorite Users</h2>
+                <h2 className="lg:text-4xl text-2xl font-bold text-custom_gray mb-4">Your Favorite Users</h2>
                 {isLoading === 0 && (
                     <div className="flex justify-center">
                         <l-bouncy
@@ -127,8 +127,10 @@ export default function FavoritePage() {
                             <div className="flex basis-1/2 text-left">
                                 {favorite.firstName}
                             </div>
-                            <div className="flex basis-1/2 text-left justify-end lg:justify-start">
-                                {favorite.email}
+                            <div className="flex basis-1/2 text-left justify-end lg:justify-start max-w-24 md:max-w-full">
+                                <p className="truncate">
+                                    {favorite.email}
+                                </p>
                             </div>
                         </div>
                         <div className="flex flex-row justify-end lg:basis-1/2 w-full  gap-4">
