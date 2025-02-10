@@ -108,7 +108,7 @@ export default function RegisterUserPage() {
     return(
         <section className="bg-custom_bg_gray lg:p-16 py-16">
             <Toast ref={toast} />
-            <div className="flex justify-center flex-col max-w-[1000px] md:w-[60%] w-[90%] m-auto border border-black rounded-lg bg-white p-16 md:mt-16">
+            <div className="flex justify-center flex-col max-w-[1000px] md:w-[60%] w-[90%] m-auto border border-black rounded-lg bg-white p-16">
                 <h1 className="text-center lg:text-6xl text-4xl text-custom_gray font-bold m-8">Sign up as User</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-col md:flex-row justify-between">
