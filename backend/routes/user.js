@@ -10,6 +10,7 @@ import JobOffer from '../models/jobOffer.model.js';
 import Report from '../models/report.model.js';
 import Blacklist from '../models/blackList.model.js';
 import jwt from 'jsonwebtoken';
+import emailRegistration from '../utils/emailRegistration.js';
 
 const router = express.Router();
 
@@ -41,6 +42,7 @@ router.post('/user/register', async (req, res) => {
         subject: 'Jobbar Registration',
         message: 'Welcome to Jobbar',
         userName: firstName,
+        htmlCode: emailRegistration,
         verificationToken
       });
 

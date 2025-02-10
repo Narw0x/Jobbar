@@ -6,6 +6,8 @@ import User from '../models/user.model.js';
 import JobApplicant from '../models/jobApplicant.model.js';
 
 import  {getCoordinates, createSphere}  from '../utils/helper.js';
+import sendEmail from '../utils/email.js';
+import emailReaction from '../utils/emailReaction.js';
 
 
 const router = express.Router();
@@ -391,7 +393,7 @@ router.post('/job/apply/:jobId', checkAuth, async (req, res) => {
       const profile = await User.findById(id);
       if (!profile) return res.status(404).json({ message: 'User not found' });
   
-      const jobOffer = await JobOffer.findById(jobId);
+      const jobOffer = await JobOffer.findById(jobId).populate('companyId');
       if (!jobOffer) return res.status(404).json({ message: 'Job offer not found' });
   
       const existingApplication = await JobApplicant.findOne({
@@ -406,6 +408,16 @@ router.post('/job/apply/:jobId', checkAuth, async (req, res) => {
         jobOffer: jobOffer._id,
         status: 'Pending'
       });
+
+
+      sendEmail({
+            email: profile.email,
+            subject: `Application Confirmation – ${profile.firstName} – ${jobOffer.jobTitle}`,
+            message: 'Job application',
+            profile,
+            jobOffer,
+            htmlCode: emailReaction,
+      })
   
       // Update job offer with new applicant
       await JobOffer.findByIdAndUpdate(jobId, {

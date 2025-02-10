@@ -10,6 +10,7 @@ import crypto  from 'crypto';
 import Report from '../models/report.model.js';
 import Blacklist from '../models/blackList.model.js';
 import jwt from 'jsonwebtoken';
+import emailRegistration from '../utils/emailRegistration.js';
 
 
 
@@ -46,6 +47,7 @@ router.post('/company/register', async (req, res) => {
         subject: 'Jobbar Registration',
         message: 'Welcome to Jobbar',
         userName: companyName,
+        htmlCode: emailRegistration,
         verificationToken
       });
 

@@ -16,7 +16,7 @@ export default async function sendEmail(options){
         to: options.email,
         subject: options.subject,
         text: options.message,
-        html: emailRegistration(options),
+        html: options.htmlCode(options),
     };
     
     await transporter.sendMail(message);
