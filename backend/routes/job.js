@@ -101,17 +101,22 @@ router.post('/jobs', async (req, res) => {
     try {
         // Parse search configuration from headers
         const {searchConfig} = req.body;
+        const {page} = req.body;
         const { salary, jobType, experience, address, radius } = searchConfig;
         
         // Convert salary to number
         const salaryAmount = Number(salary);
+        const pageNumber = parseInt(page, 10) > 0 ? parseInt(page, 10) : 1;
+        const skip = (pageNumber - 1) * 10;
         
         // Build base query
         const query = {
             'salary.amount': { $gte: salaryAmount },
             'employmentType': { $regex: jobType, $options: 'i' },
-            'experience': { $regex: experience, $options: 'i' }
+            'experience': { $regex: experience, $options: 'i' },
+            'status': 'Open'
         };
+
 
         // Add location search if address and radius are provided
         if (address && radius) {
@@ -125,11 +130,21 @@ router.post('/jobs', async (req, res) => {
                                 coordinates: [searchCoordinates.longitude, searchCoordinates.latitude]
                             },
                             distanceField: "distance",
-                            maxDistance: parseInt(radius) * 1000,
+                            maxDistance: parseInt(radius) * 1000, // Convert radius to meters
                             spherical: true,
                             query: query
                         }
-                    }
+                    },
+                    {
+                        $match: {
+                            'salary.amount': { $gte: salaryAmount },
+                            'employmentType': { $regex: jobType, $options: 'i' },
+                            'experience': { $regex: experience, $options: 'i' },
+                            'status': 'Open'
+                        }
+                    },
+                    { $skip: skip },
+                    { $limit: 10 }
                 ]);
 
                 return res.status(200).json({ 
@@ -170,7 +185,6 @@ router.post('/jobs', async (req, res) => {
 
 router.get('/job/name/:jobId', checkAuth, async (req, res) => {
     const { jobId } = req.params;
-
     try{
         const jobName = await JobOffer.findById(jobId).select('jobTitle');
         res.status(200).json({ message: 'Job Name Found', payload: {jobName}});
@@ -286,11 +300,16 @@ router.post('/job/accept', checkAuth, async (req, res) => {
     const { userId, jobId } = req.body;
 
     try {
-        const jobApplicant = await JobApplicant.findOne({ applicant: userId, jobOffer: jobId });
-        if (!jobApplicant) return res.status(400).json({ message: 'Application not found' });
+        const job = await JobOffer.findById(jobId);
+        if (!job) return res.status(400).json({ message: 'Job offer not found' });
 
-        jobApplicant.status = 'Accepted';
-        await jobApplicant.save();
+        const applicant = await JobApplicant.findOne({ applicant: userId, jobOffer: jobId });
+        if (!applicant) return res.status(400).json({ message: 'Application not found' });
+
+        applicant.status = 'Accepted';
+        job.status = 'Closed';
+        await job.save();
+        await applicant.save();
 
         const rejectedApplications = await JobApplicant.find({ applicant: {$ne: userId}, jobOffer: jobId });
         if (rejectedApplications.length > 0){
@@ -395,6 +414,7 @@ router.post('/job/apply/:jobId', checkAuth, async (req, res) => {
   
       const jobOffer = await JobOffer.findById(jobId).populate('companyId');
       if (!jobOffer) return res.status(404).json({ message: 'Job offer not found' });
+      if (jobOffer.status !== 'Open') return res.status(400).json({ message: 'Job offer is not open for applications' });
   
       const existingApplication = await JobApplicant.findOne({
         applicant: profile._id,
@@ -403,7 +423,7 @@ router.post('/job/apply/:jobId', checkAuth, async (req, res) => {
       if (existingApplication) return res.status(400).json({ message: 'You have already applied for this position' });
   
       // Create application
-      const application = await JobApplicant.create({
+      await JobApplicant.create({
         applicant: profile._id,
         jobOffer: jobOffer._id,
         status: 'Pending'

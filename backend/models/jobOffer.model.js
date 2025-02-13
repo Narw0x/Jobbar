@@ -58,6 +58,11 @@ const jobOfferSchema = new mongoose.Schema({
     date: {
         type: String,
         required: true
+    },
+    status: {
+        type: String,
+        enum: ['Open', 'Closed'],
+        default: 'Open'
     }
 },
     {
