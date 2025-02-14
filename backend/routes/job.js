@@ -116,12 +116,13 @@ router.post('/jobs', async (req, res) => {
             'experience': { $regex: experience, $options: 'i' },
             'status': 'Open'
         };
-
-
-        // Add location search if address and radius are provided
+        
+        // If address and radius are provided, perform a geo search
         if (address && radius) {
             try {
                 const searchCoordinates = await getCoordinates(address);
+        
+                // Perform geo search using $geoNear
                 const jobs = await JobOffer.aggregate([
                     {
                         $geoNear: {
@@ -135,18 +136,10 @@ router.post('/jobs', async (req, res) => {
                             query: query
                         }
                     },
-                    {
-                        $match: {
-                            'salary.amount': { $gte: salaryAmount },
-                            'employmentType': { $regex: jobType, $options: 'i' },
-                            'experience': { $regex: experience, $options: 'i' },
-                            'status': 'Open'
-                        }
-                    },
                     { $skip: skip },
                     { $limit: 10 }
                 ]);
-
+        
                 return res.status(200).json({ 
                     message: 'Jobs found', 
                     payload: { 
@@ -161,19 +154,20 @@ router.post('/jobs', async (req, res) => {
                     error: geocodingError.message 
                 });
             }
-        }
-
-        // If no location search, use regular find
-        const jobs = await JobOffer.find(query);
+        } else {
+            // If no location search, perform a regular find with the other filters
+            const jobs = await JobOffer.find(query)
+                .skip(skip)
+                .limit(10);
         
-        res.status(200).json({ 
-            message: 'Jobs found', 
-            payload: { 
-                jobs,
-                count: jobs.length 
-            } 
-        });
-
+            return res.status(200).json({ 
+                message: 'Jobs found', 
+                payload: { 
+                    jobs,
+                    count: jobs.length 
+                } 
+            });
+        }
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ 
