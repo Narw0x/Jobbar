@@ -53,6 +53,10 @@ export default function ManageJobsPage() {
         }
     }, [authState.user, authState.token]);
 
+    useEffect(() => {
+        document.title = "Manage Jobs | Jobbar";
+    }, []);
+
 
 
     return (

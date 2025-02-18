@@ -32,7 +32,9 @@ export default function AdminDashboard() {
     }
     , [adminState.token]);
 
-
+    useEffect(() => {
+        document.title = "Admin Dashboard | Jobbar";
+    }, []);
 
 
     return (

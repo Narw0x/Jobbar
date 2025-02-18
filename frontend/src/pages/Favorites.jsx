@@ -88,6 +88,10 @@ export default function FavoritePage() {
         }
     }, [messageState]);
 
+    useEffect(() => {
+        document.title = "Favorites | Jobbar";
+    }, []);
+
 
     return (
          <section className="bg-custom_bg_gray py-8 min-h-[61.5vh]">

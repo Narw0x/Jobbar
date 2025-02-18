@@ -112,6 +112,10 @@ export default function AdminUserEditPage() {
         }
       };
 
+    useEffect(() => {
+        document.title = "Edit User | Jobbar";
+    }, []);
+
 
 
     const handleEditForm = (e) => {

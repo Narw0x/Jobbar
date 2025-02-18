@@ -1,9 +1,14 @@
 import Header from "../components/header";
 import Footer from "../components/footer";
+import { useEffect } from "react";
 
 const pathManAtTable = "/../Man_at_table.svg";
 
 export default function ErrorPage({type = undefined}) {
+
+    useEffect(() => {
+        document.title = "Error | Jobbar";
+    }, []);
 
     if(type){
         return(

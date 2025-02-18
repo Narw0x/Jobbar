@@ -108,6 +108,10 @@ export default function AdminProfilePage() {
         }).format(date);
     };
 
+    useEffect(() => {
+        document.title = "Profile | Jobbar";
+    }, []);
+
 
     if (!profileData) {
         return (

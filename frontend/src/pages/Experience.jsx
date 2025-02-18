@@ -40,6 +40,10 @@ export default function EditExperiencePage() {
 
     const authState = useSelector((state) => state.auth);
 
+    useEffect(() => {
+        document.title = "Add Experience | Jobbar";
+    }, []);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();

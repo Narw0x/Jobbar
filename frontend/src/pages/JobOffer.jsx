@@ -221,6 +221,10 @@ export default function JobOfferPage() {
         }
     }, [messageState]);
 
+    useEffect(() => {
+        document.title = "Create a Job Offer | Jobbar";
+    }, []);
+
 
   return (
     <section className="bg-custom_bg_gray py-8 ">

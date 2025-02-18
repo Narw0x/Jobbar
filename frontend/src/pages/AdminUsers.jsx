@@ -83,6 +83,10 @@ export default function AdminUsersPage() {
             }
         }, [messageState]);
 
+        useEffect(() => {
+            document.title = "Users | Jobbar";
+        }, []);
+
         const handleDelete = (id) => {
             axios.post(`https://jobbar-5m8u.onrender.com/api/admin/delete/${id}`, {},
             {

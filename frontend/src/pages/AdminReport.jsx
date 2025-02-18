@@ -35,7 +35,10 @@ export default function AdminReportPage() {
             })
     }, [reportId]);
 
-    console.log(report);
+    useEffect(() => {
+        document.title = "Report | Jobbar";
+    }, []);
+
 
     const handleResponse = (status) => {
         axios.put(`https://jobbar-5m8u.onrender.com/api/admin/reports/${reportId}`, {status},

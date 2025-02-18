@@ -103,6 +103,10 @@ export default function AdminJobViewPage() {
         }
     }, [messageState]);
 
+    useEffect(() => {
+        document.title = "Admin Job View | Jobbar";
+    }, []);
+
 
     return (
         <section className="bg-custom_bg_gray py-8">

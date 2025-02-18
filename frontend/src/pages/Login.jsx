@@ -59,6 +59,10 @@ export default function LoginPage() {
         }
     }, [messageState]);
 
+    useEffect(() => {
+        document.title = "Login | Jobbar";
+    }, []);
+
 
     function handleSubmit(e) {
         e.preventDefault();

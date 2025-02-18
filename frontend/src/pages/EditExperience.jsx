@@ -79,6 +79,10 @@ export default function EditExperiencePage() {
         });
     }
 
+    useEffect(() => {
+        document.title = "Edit Experience | Jobbar";
+    }, []);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();

@@ -252,6 +252,10 @@ export default function AdminJobsEditPage() {
         }
     }, [messageState]);
 
+    useEffect(() => {
+        document.title = "Edit Job Offer | Jobbar";
+    }, []);
+
 
   return (
     <section className="bg-custom_bg_gray py-8">

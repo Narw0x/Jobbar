@@ -30,6 +30,10 @@ export default function AdminReportsPage() {
             });
     }, [adminState.adminToken]);
 
+    useEffect(() => {
+        document.title = "Reports | Jobbar";
+    }, []);
+
 
     return (
         <section className="flex flex-col items-center justify-center bg-custom_bg_gray">

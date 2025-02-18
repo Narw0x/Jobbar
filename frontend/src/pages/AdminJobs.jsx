@@ -91,6 +91,10 @@ export default function AdminJobsPage() {
         }
     }, [messageState]);
 
+    useEffect(() => {
+        document.title = "Admin Jobs | Jobbar";
+    }, []);
+
 
     return (
         <section className=" bg-custom_bg_gray min-h-[61.5vh] pt-8">

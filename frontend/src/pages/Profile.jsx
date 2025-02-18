@@ -135,6 +135,10 @@ export default function ProfilePage() {
         deleteModal.current.open();
     }
 
+    useEffect(() => {
+        document.title = "Profile | Jobbar";
+    }, []);
+
     
 
     if(error) {

@@ -174,6 +174,10 @@ export default function EditEducationPage() {
         }
     }, [messageState]);
 
+    useEffect(() => {
+        document.title = "Edit Education | Jobbar";
+    }, []);
+
 
 
 

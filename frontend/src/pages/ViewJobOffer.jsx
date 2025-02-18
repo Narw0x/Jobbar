@@ -107,6 +107,10 @@ export default function ViewJobOfferPage() {
         }
     }, [messageState]);
 
+    useEffect(() => {
+        document.title = "Job Offer | Jobbar";
+    }, []);
+
     const handleApply = () => {
         axios.post(`https://jobbar-5m8u.onrender.com/api/job/apply/${jobId}`, {}, {
             headers: {

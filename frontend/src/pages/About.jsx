@@ -1,9 +1,15 @@
+import { useEffect } from 'react';
 import Carousel from '../components/carousel.jsx';
 
 const pathManAbout = "../about_person.svg";
 
 
 export default function AboutPage(){
+
+    useEffect(() => {
+        document.title = "About Us | Jobbar";
+    }, []);
+
     return(
         <>
             <section  className="bg-custom_bg_gray w-[100%] pt-16">

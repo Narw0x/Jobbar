@@ -11,7 +11,6 @@ import { isValidPassword, isValidEmail } from "../util/validation";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { adminLoginFailure, adminLoginStart, adminLoginSuccess } from "../store/slices/adminSlice";
-import { use } from "react";
 
 
 export default function AdminLoginPage() {
@@ -99,6 +98,10 @@ export default function AdminLoginPage() {
             return () => clearTimeout(timer);
         }
     }, [messageState]);
+
+    useEffect(() => {
+        document.title = "Admin Login | Jobbar";
+    }, []);
 
 
     return (

@@ -115,6 +115,10 @@ export default function ManageJobPage() {
         modal.current.open();
     };
 
+    useEffect(() => {
+        document.title = "Manage Job | Jobbar";
+    }, []);
+
 
     return(
         <section className="bg-custom_bg_gray py-8  min-h-[61.5vh]">

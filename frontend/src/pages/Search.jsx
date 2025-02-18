@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SearchPageSelect from '../components/searchPageSelect';
 import SearchPageConfig from '../components/searchConfig';
 import SearchJobView from '../components/searchJobView';
@@ -10,6 +10,10 @@ import SearchBookmarksView from '../components/searchBookmarksView';
 
 export default function SearchPage(){
     const [subPage, setSubPage] = useState('job offers');
+
+    useEffect(() => {
+        document.title = "Search | Jobbar";
+    }, []);
 
     return (
         <section className="bg-custom_bg_gray py-8 min-h-[61.5vh]">

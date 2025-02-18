@@ -61,6 +61,10 @@ export default function RegisterCompanyPage() {
         }
     }, [messageState]);
 
+    useEffect(() => {
+        document.title = "Register as Company | Jobbar";
+    }, []);
+
     function handleSubmit(e) {
         e.preventDefault(); 
 

@@ -204,6 +204,10 @@ export default function EditUserProfilePage() {
             return () => clearTimeout(timer);
         }
     }, [messageState]);
+
+    useEffect(() => {
+        document.title = "Settings | Jobbar";
+    }, []);
     
     
     return (

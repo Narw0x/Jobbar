@@ -58,6 +58,10 @@ export default function RegisterUserPage() {
         }
     }, [messageState]);
 
+    useEffect(() => {
+        document.title = "Sign up | Jobbar";
+    }, []);
+
     function handleSubmit(e) {
         e.preventDefault();
 

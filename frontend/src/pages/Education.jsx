@@ -57,6 +57,10 @@ export default function EducationPage(){
         }));
     }
 
+    useEffect(() => {
+        document.title = "Add Education | Jobbar";
+    }, []);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
