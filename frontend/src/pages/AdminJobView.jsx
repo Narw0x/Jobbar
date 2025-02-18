@@ -112,13 +112,13 @@ export default function AdminJobViewPage() {
                     <div className="basis-2/3">
                         <h1 className="text-3xl text-custom_gray font-bold">{job.jobTitle}</h1>
                         <p className="text-custom_red text-sm">{job.address}</p>
-                        <div className="flex flex-col justify-between mt-4 w-[50%]"> 
+                        <div className="flex flex-col justify-between mt-4 w-[80%]"> 
                             <h3 className="text-xl text-custom_gray">About the job</h3>
-                            <p className="text-custom_gray">{job.description}</p>
+                            <p className="text-custom_gray text-justify">{job.description}</p>
                         </div>
                         <div className="flex flex-row  justify-between mt-4 w-[50%]">
                             <h3 className="text-xl text-custom_gray">Salary:</h3>
-                            <p className="text-xl text-custom_gray align-middle mt-auto">{job.salary.currency}{job.salary.amount}/{job.salary.salaryType}</p>
+                            <p className="text-xl text-custom_gray align-middle mt-auto">{job.salary.currency}{job.salary.amount}/Year</p>
                         </div>
                         <div className="flex flex-row justify-between mt-1 w-[50%]">
                             <h3 className="text-xl text-custom_gray">Start Date:</h3>
@@ -153,20 +153,20 @@ export default function AdminJobViewPage() {
                                 </div>
                                 <div className="flex flex-col text-left mt-4 w-full p-2">
                                     <h3 className="text-xl text-custom_gray font-semibold">{job.companyId.companyName}</h3>
-                                    <p className="text-custom_gray">{job.companyId.about}</p>
+                                    <p className="text-custom_gray text-justify">{job.companyId.about}</p>
                                 </div>
                         </div>
                 </div>
                 <div className="flex flex-row px-8 py-8 gap-4">
                         <Button 
                             style="red-default"
-                            redirectPath={`/admin/jobs`}
+                            redirectPath={`/xyz/jobs`}
                         >
                             Back
                         </Button>
                         <Button
                             style="red-default"
-                            redirectPath={`/admin/users/${job.companyId._id}`}
+                            redirectPath={`/xyz/users/${job.companyId._id}`}
                         >
                             To company profile
                         </Button>

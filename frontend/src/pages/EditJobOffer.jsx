@@ -405,10 +405,8 @@ export default function EditJobOfferPage() {
                                             onChange={(e) => handleRequirementChange(index, 'requirementType', e.target.value)}
                                             value={requirement.requirementType}
                                         >
-                                            <option value="Begginer">Begginer</option>
-                                            <option value="Intermediate">Intermediate</option>
-                                            <option value="Advanced">Advanced</option>
-                                            <option value="Expert">Expert</option>
+                                            <option value="required">Required</option>
+                                            <option value="optional">Optional</option>
                                         </select>
                                         {index > 0 && (
                                             <div className="flex flex-col justify-center">   

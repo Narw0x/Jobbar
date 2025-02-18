@@ -261,7 +261,7 @@ export default function EditUserProfilePage() {
                     </div>
                     <div className="md:basis-1/3 m-8 my-0 lg:mt-8 flex flex-col gap-4 pt-8">
                         <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center" src={authState.user.avatar === avatarPreview ? `https://jobbar-5m8u.onrender.com/public/avatar/${userInfo?.avatar}`:`${avatarPreview}`} alt="" />
-                        <div className="flex justify-center gap-4">
+                        <div className="flex justify-center gap-4 lg:mb-12">
                             <FileUpload 
                                 mode="basic" 
                                 name="demo[]" 
@@ -303,15 +303,15 @@ export default function EditUserProfilePage() {
                         <div className="flex md:flex-row flex-col mb-4 w-full justify-between">
                             <div className="md:w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="twitter">Twitter</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.twitter || ''} type="text" name="twitter" id="twitter" placeholder="https://x.com/username" />
+                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.twitter || ''} type="text" name="twitter" id="twitter" placeholder="username" />
                             </div>
                             <div className="md:w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="instagram">Instagram</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.instagram || ''} type="text" name="instagram" id="instagram" placeholder="https://www.instagram.com/username" />
+                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.instagram || ''} type="text" name="instagram" id="instagram" placeholder="username" />
                             </div>
                             <div className="md:w-[30%] flex flex-col">
                                 <label className="text-custom_gray text-xl font-bold" htmlFor="github">Github</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.github || ''} type="text" name="github" id="github" placeholder="https://github.com/username" />
+                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.github || ''} type="text" name="github" id="github" placeholder="username" />
                             </div>
                         </div>
                     </div>

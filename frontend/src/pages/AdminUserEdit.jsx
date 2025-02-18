@@ -192,11 +192,11 @@ export default function AdminUserEditPage() {
         })
             .then((res) => {
                 console.log(res.data);
-                navigate(`/admin/users`, {state: {type: 'success', message: 'User updated successfully'}});
+                navigate(`/xyz/users`, {state: {type: 'success', message: 'User updated successfully'}});
             })
             .catch((err) => {
                 console.log(err);
-                navigate(`/admin/users`, {state: {type: 'error', message: err.response.data.message}});
+                navigate(`/xyz/users`, {state: {type: 'error', message: err.response.data.message}});
             }
         )
 
@@ -356,7 +356,7 @@ export default function AdminUserEditPage() {
                             style="red-hover"
                             type="button"
                             onClick={() => {
-                                navigate(`/admin/users`);
+                                navigate(`/xyz/users`);
                             }}
                         >
                             Cancel

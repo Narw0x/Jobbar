@@ -78,7 +78,7 @@ export default function Footer() {
                         Contact us
                     </h2>
                     <p className="mt-2">
-                        Email: martin.synak123@gmail.com
+                        Email: jobbar@scriptbase.eu
                     </p>
                     <p className="mt-1">
                         Phone: +421 951 508 804

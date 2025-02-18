@@ -144,7 +144,7 @@ export default function AdminJobsPage() {
                                         <div className="flex flex-grow">
                                             <Button
                                                 style="red-default"
-                                                redirectPath={`/admin/jobs/edit/${job._id}`}
+                                                redirectPath={`/xyz/jobs/edit/${job._id}`}
                                             >
                                                 Edit
                                             </Button>
@@ -152,7 +152,7 @@ export default function AdminJobsPage() {
                                         <div>
                                             <Button
                                                 style="red-hover"
-                                                redirectPath={`/admin/jobs/${job._id}`}
+                                                redirectPath={`/xyz/jobs/${job._id}`}
                                             >
                                                 View
                                             </Button>

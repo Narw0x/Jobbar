@@ -46,7 +46,7 @@ export default function AdminReportPage() {
             }
         )
             .then((res) => {
-                navigate('/admin/reports');
+                navigate('/xyz/reports');
             })
             .catch((err) => {
                 console.log(err);
@@ -73,13 +73,13 @@ export default function AdminReportPage() {
                             <div className="flex flex-row gap-4 justify-start">
                                 <Button
                                     style={'red-hover'}
-                                    redirectPath={`/admin/users/edit/${report.reportedEntity._id}`}
+                                    redirectPath={`/xyz/users/edit/${report.reportedEntity._id}`}
                                 >
                                     Edit Reported Profile
                                 </Button>
                                 <Button
                                     style={'red-hover'}
-                                    redirectPath={`/admin/users/${report.reportedEntity._id}`}
+                                    redirectPath={`/xyz/users/${report.reportedEntity._id}`}
                                 >
                                     View Reported Profile
                                 </Button>  
@@ -102,7 +102,7 @@ export default function AdminReportPage() {
                                 style="red-default"
                                 type="button"
                                 onClick={() => {
-                                    navigate(`/admin/reports/${reportId}`);
+                                    navigate(`/xyz/reports/${reportId}`);
                                 }}
                             >
                                 Back

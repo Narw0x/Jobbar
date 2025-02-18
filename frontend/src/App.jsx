@@ -91,12 +91,12 @@ const userRoutes = {
 };
 
 const adminLogin = {
-  path: '/admin/login',
+  path: '/xyz/login',
   element: <AdminLoginPage />
 };
 
 const adminRoutes = {
-  path: '/admin',
+  path: '/xyz',
   element: <AdminRootLayout />,
   errorElement: <ErrorPage />,
   loader: checkAdminLoader,

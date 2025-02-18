@@ -46,7 +46,7 @@ export default function AdminHeader() {
             <div className="flex md:flex-row flex-col container mx-auto justify-between items-center p-4 gap-4 md:gap-0">
                 <div className="flex items-center justify-between w-full">
                     <NavLink 
-                        to={'/admin/dashboard'}
+                        to={'/xyz/dashboard'}
                         >
                         <img className="max-w-40 max-h-40 object-contain cursor-pointer" src={path_logo} alt="" />
                     </NavLink>
@@ -61,7 +61,7 @@ export default function AdminHeader() {
                     <ul className="flex space-x-4 lg:space-x-8 items-center my-auto justify-between md:justify-end">
                         <li className="items-center">
                             <NavLink 
-                                to="/admin/dashboard" 
+                                to="/xyz/dashboard" 
                                 className={({ isActive }) =>
                                     `flex items-center gap-1 cursor-pointer ${
                                     isActive ? 'text-custom_red' : 'hover:text-custom_red transition-colors duration-300'
@@ -73,7 +73,7 @@ export default function AdminHeader() {
                         </li>
                         <li>
                             <NavLink 
-                                to="/admin/users" 
+                                to="/xyz/users" 
                                 className={({ isActive }) =>
                                     `flex items-center gap-1 cursor-pointer ${
                                     isActive ? 'text-custom_red' : 'hover:text-custom_red transition-colors duration-300'
@@ -85,7 +85,7 @@ export default function AdminHeader() {
                         </li>
                         <li>
                             <NavLink 
-                                to="/admin/jobs" 
+                                to="/xyz/jobs" 
                                 className={({ isActive }) =>
                                     `flex items-center gap-1 cursor-pointer ${
                                     isActive ? 'text-custom_red' : 'hover:text-custom_red transition-colors duration-300'
@@ -97,7 +97,7 @@ export default function AdminHeader() {
                         </li>
                         <li>
                             <NavLink 
-                                to="/admin/reports" 
+                                to="/xyz/reports" 
                                 className={({ isActive }) =>
                                     `flex items-center gap-1 cursor-pointer ${
                                     isActive ? 'text-custom_red' : 'hover:text-custom_red transition-colors duration-300'

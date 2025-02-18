@@ -134,7 +134,7 @@ export default function JobOfferPage() {
             return;
         }
         
-        if(!isValidText(data.description, 1, 500)){
+        if(!isValidText(data.description, 1, 5000)){
             setMessageState({type: 'error', message: 'Please provide a valid description'});
             return;
         }

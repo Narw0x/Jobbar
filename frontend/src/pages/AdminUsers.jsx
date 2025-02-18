@@ -49,7 +49,7 @@ export default function AdminUsersPage() {
             .catch((err) => {
                 console.log(err);
                 setIsLoading(false)
-                navigate('/admin/users', {state: {type: 'error', message: err.response.data.message}});
+                navigate('/xyz/users', {state: {type: 'error', message: err.response.data.message}});
             });
         
     }
@@ -93,11 +93,11 @@ export default function AdminUsersPage() {
                 .then((res) => {
                     setUser(null);
                     setEmail('');
-                    navigate('/admin/users', {state: {type: 'success', message: res.data.message}});
+                    navigate('/xyz/users', {state: {type: 'success', message: res.data.message}});
                 })
                 .catch((err) => {
                     console.log(err);
-                    navigate('/admin/users', {state: {type: 'error', message: err.response.data.message}});
+                    navigate('/xyz/users', {state: {type: 'error', message: err.response.data.message}});
                 });
         }
 
@@ -135,8 +135,8 @@ export default function AdminUsersPage() {
                             <p className="text-custom_gray text-lg ">Email: <span className="text-custom_red text-sm md:text-lg">{user.email}</span></p>
                         </div>
                         <div className="flex flex-col md:flex-row basis-2/5 justify-end gap-4">
-                            <Button style={'red-default'} redirectPath={`/admin/users/${user._id}`}>View Profile</Button>
-                            <Button style={'red-default'} redirectPath={`/admin/users/edit/${user._id}`}>Edit</Button>
+                            <Button style={'red-default'} redirectPath={`/xyz/users/${user._id}`}>View Profile</Button>
+                            <Button style={'red-default'} redirectPath={`/xyz/users/edit/${user._id}`}>Edit</Button>
                             <Button style={'red-hover'} onClick={() => handleDelete(user._id)}>Delete</Button>
                         </div>
                     </div>

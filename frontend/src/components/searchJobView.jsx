@@ -12,6 +12,7 @@ export default function SearchJobView() {
 
     const [jobs, setJobs] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [page, setPage] = useState(1);
 
     const authState = useSelector(state => state.auth);
     bouncy.register();
@@ -19,7 +20,7 @@ export default function SearchJobView() {
     useEffect(() => {
         setIsLoading(true);
             if(authState.user.role === 'user') {
-            axios.post('https://jobbar-5m8u.onrender.com/api/jobs',{searchConfig: authState.user.searchConfig} ,  {
+            axios.post('https://jobbar-5m8u.onrender.com/api/jobs',{searchConfig: authState.user.searchConfig, page} ,  {
                 headers: {
                     Authorization: `Bearer ${authState.token}`
                 }
@@ -31,7 +32,7 @@ export default function SearchJobView() {
                 setIsLoading(false);
                 console.log(err);
             });
-    }}, [authState.token, authState.user.searchConfig]);
+    }}, [authState.token, authState.user.searchConfig, page]);
 
     
     const formatDateBetter = (dateString) => {
@@ -90,9 +91,30 @@ export default function SearchJobView() {
                             </div>
                         </div>
                     ))}
+                    
                     {jobs.length === 0 && !isLoading && (
                         <div className="flex justify-center p-8">
-                            <p className="text-custom_gray">No jobs found</p>
+                            {page === 1 && (<p className="text-custom_gray">No jobs found</p>)}
+                            {page !== 1 && (<p className="text-custom_gray">No more jobs found</p>)}
+                        </div>
+                    )}
+                    {jobs && (
+                        <div className="flex justify-between pt-4">
+                            <div>
+                                {page === 1 ? null : <Button
+                                    style="gray-default"
+                                    onClick={() => setPage(page - 1)}
+                                >
+                                    Previous
+                                </Button>}
+                            </div>
+                            
+                            {jobs.length === 10 && <Button
+                                style="red-hover"
+                                onClick={() => setPage(page + 1)}
+                            >
+                                Next
+                            </Button>}
                         </div>
                     )}
                 </div>

@@ -65,7 +65,7 @@ export default function AdminReportsPage() {
                                         <div className="flex flex-row gap-2 mt-2 justify-end">
                                             {rep.reportStatus === 'Pending' && (<Button
                                                 style="red-hover"
-                                                redirectPath={`/admin/reports/${rep._id}`}
+                                                redirectPath={`/xyz/reports/${rep._id}`}
                                             >
                                                 View
                                             </Button>)}

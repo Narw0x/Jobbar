@@ -99,7 +99,6 @@ const DeleteAccountModal = forwardRef(function DeleteAccountModal( _,ref) {
                         Send
                     </Button>  
                 </div>
-                
             </form>
         </dialog>,
         document.getElementById("modal-root")

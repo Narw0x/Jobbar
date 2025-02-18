@@ -137,7 +137,7 @@ export default function AdminJobsEditPage() {
             }
         }).then((response) => {
             if (response.status === 200) {
-                navigate(`/admin/jobs`, { state: { type: 'success', message: 'Job offer deleted successfully' } });
+                navigate(`/xyz/jobs`, { state: { type: 'success', message: 'Job offer deleted successfully' } });
             }
         }).catch((error) => {
             console.log(error);
@@ -207,7 +207,7 @@ export default function AdminJobsEditPage() {
             }
         }).then((response) => {
             if (response.status === 201) {
-                navigate(`/admin/jobs`, { state: { type: 'success', message: 'Job offer updated successfully' } });
+                navigate(`/xyz/jobs`, { state: { type: 'success', message: 'Job offer updated successfully' } });
             }
         }).catch((error) => {
             console.log(error);
@@ -486,7 +486,7 @@ export default function AdminJobsEditPage() {
                                 style="red-hover"
                                 type="button"
                                 onClick={() => {
-                                    navigate(`/admin/jobs`);
+                                    navigate(`/xyz/jobs`);
                                 }}
                             >
                                 Back

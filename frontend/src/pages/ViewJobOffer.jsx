@@ -131,9 +131,9 @@ export default function ViewJobOfferPage() {
                     <div className="lg:basis-2/3 w-full">
                         <h1 className="text-3xl text-custom_gray font-bold">{job.jobTitle}</h1>
                         <p className="text-custom_red text-sm">{job.address}</p>
-                        <div className="flex flex-col justify-between mt-4 lg:w-[50%]"> 
-                            <h3 className="text-xl text-custom_gray">About the job</h3>
-                            <p className="text-custom_gray">{job.description}</p>
+                        <div className="flex flex-col justify-between mt-4 w-[80%]"> 
+                            <h3 className="text-xl text-custom_gray font-bold ">About the job</h3>
+                            <p className="text-custom_gray text-justify">{job.description}</p>
                         </div>
                         <div className="flex flex-row  justify-between mt-4 lg:w-[50%] items-c">
                             <h3 className="text-xl text-custom_gray">Salary:</h3>
@@ -172,12 +172,12 @@ export default function ViewJobOfferPage() {
                                 </div>
                                 <div className="flex flex-col text-left mt-4 w-full p-2">
                                     <h3 className="text-xl text-custom_gray font-semibold">{job.companyId.companyName}</h3>
-                                    <p className="text-custom_gray">{job.companyId.about}</p>
+                                    <p className="text-custom_gray text-justify">{job.companyId.about}</p>
                                 </div>
                         </div>
                 </div>
                 <div className="flex flex-row px-8 py-8 gap-4">
-                    {authState.user.role === 'user' ? (
+                    {(authState.user.role === 'user' && job.status === 'Open') ? (
                         <Button
                             style="red-hover"
                             onClick={handleApply}

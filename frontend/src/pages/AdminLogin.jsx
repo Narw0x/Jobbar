@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
 
     useEffect(() => {
         if(adminToken) {
-            navigate('/admin/dashboard');
+            navigate('/xyz/dashboard');
         }
     }, []);
 
@@ -60,7 +60,7 @@ export default function AdminLoginPage() {
             .then((res) => {
                 setMessageState({type: 'success', message: res.data.message});
                 dispatch(adminLoginSuccess(res.data.payload));
-                navigate('/admin/dashboard', {state: {type: 'success', message: res.data.message}});
+                navigate('/xyz/dashboard', {state: {type: 'success', message: res.data.message}});
             })
             .catch((err) => {
                 console.log(err);
