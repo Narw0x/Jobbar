@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { isValidText, isValidEmail, isValidPassword } from "../util/validation";
+import { isValidText, isValidEmail, isValidPassword } from "../../util/validation";
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useRef } from 'react';
 import { Toast } from 'primereact/toast';
 
-import Button from "../components/button"
+import Button from "../../components/button"
 
 export default function RegisterUserPage() {
     const toast = useRef(null);
@@ -188,7 +188,7 @@ export default function RegisterUserPage() {
                     </div>
 
                     <div className="flex flex-col text-xl">
-                        <Button style={'red-hover'}>Sign up</Button>
+                        <Button btnStyle={'red-hover'}>Sign up</Button>
                     </div>
                 </form>
                 <div className="flex flex-row justify-between items-center my-8">
@@ -200,14 +200,14 @@ export default function RegisterUserPage() {
                 </div>
                 <div className="flex flex-col text-xl gap-4"> 
                     <Button 
-                        style={'red-default'}
+                        btnStyle={'red-default'}
                         redirectPath={'/register/company'}
                     >
                         Sign up as Company
                     </Button>
 
                     <Button 
-                        style={'red-default'}
+                        btnStyle={'red-default'}
                         redirectPath={'/login'}
                     >
                         Sign in

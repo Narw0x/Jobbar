@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import Button from "../components/button";
+import Button from "./../../components/button";
 import { useDispatch, useSelector } from "react-redux";
-import {  updateUser } from "../store/slices/authSlice";
-import { isValidText, isValidAddress } from "../util/validation";
+import {  updateUser } from "./../../store/slices/authSlice";
+import { isValidText, isValidAddress } from "./../../util/validation";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { Toast } from "primereact/toast";
@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom';
 
 import { Calendar } from "primereact/calendar";
 
-import Autocomplete from "../components/autocomplete";
+import Autocomplete from "./../../components/autocomplete";
 import axios from 'axios';
 
 
@@ -326,7 +326,7 @@ export default function JobOfferPage() {
                                         {index > 0 && (
                                             <div className="flex flex-col justify-center">   
                                                 <Button 
-                                                    style="red-hover" 
+                                                    btnStyle="red-hover" 
                                                     type="button" 
                                                     onClick={() => {
                                                         setJobOffer(prevState => ({
@@ -344,7 +344,7 @@ export default function JobOfferPage() {
                             </div>
                             <div className="flex flex-row justify-end mt-4">
                                 <Button
-                                    style="red-hover"
+                                    btnStyle="red-hover"
                                     type="button"
                                     onClick={addSkill}
                                 >
@@ -378,7 +378,7 @@ export default function JobOfferPage() {
                                         {index > 0 && (
                                             <div className="flex flex-col justify-center">   
                                                 <Button 
-                                                    style="red-hover" 
+                                                    btnStyle="red-hover" 
                                                     type="button" 
                                                     onClick={() => {
                                                         setJobOffer(prevState => ({
@@ -393,14 +393,10 @@ export default function JobOfferPage() {
                                         )}
                                     </div>
                                 ))}
-
-
-
-                                
                             </div>
                             <div className="flex flex-row justify-end mt-4">
                                 <Button 
-                                    style="red-hover" 
+                                    btnStyle="red-hover" 
                                     type="button" 
                                     onClick={addRequirement}
                                 >
@@ -424,9 +420,7 @@ export default function JobOfferPage() {
                                 </div>
                                 <p className='text-xl text-custom_gray'>Year</p>
                             </div>
-                            
                         </div>
-
                     </div>
                     <div className="flex flex-col flex-1 mt-[-1rem]">
                         <div className="flex flex-col justify-end flex-wrap">
@@ -444,7 +438,7 @@ export default function JobOfferPage() {
                         </div>
                         <div className="flex space-x-4 justify-end mt-4">
                             <Button 
-                                style="red-hover"
+                                btnStyle="red-hover"
                                 type="button"
                                 onClick={() => {
                                     navigate(`/profile/${authState.user._id}`);
@@ -453,7 +447,7 @@ export default function JobOfferPage() {
                                 Back
                             </Button>
                             <Button 
-                                style="red-default"
+                                btnStyle="red-default"
                                 type="submit"
                             >
                                 Save

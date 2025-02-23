@@ -3,10 +3,10 @@ import { useSelector } from "react-redux"
 import { Toast } from "primereact/toast"
 import axios from "axios"
 import { useDispatch } from "react-redux"
-import { updateUser } from "../store/slices/authSlice"
+import { updateUser } from "./../../store/slices/authSlice"
 import { useLocation } from "react-router-dom"
 
-import Button from "../components/button"
+import Button from "./../../components/button"
 import { useNavigate } from "react-router-dom"
 import { bouncy } from "ldrs"
 
@@ -38,7 +38,7 @@ export default function FavoritePage() {
             console.log(err);
             setIsLoading(false);
         });
-    }, [authState.token, authState.user.favoriteApplicants]);
+    }, [authState.token, authState.user.favoriteApplicants, authState.user._id]);
 
 
 
@@ -96,7 +96,6 @@ export default function FavoritePage() {
     return (
          <section className="bg-custom_bg_gray py-8 min-h-[61.5vh]">
             <Toast ref={toast}/>
-            
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white p-8">
                 <h2 className="lg:text-4xl text-2xl font-bold text-custom_gray mb-4">Your Favorite Users</h2>
                 {isLoading === 0 && (
@@ -105,7 +104,7 @@ export default function FavoritePage() {
                         size="45"
                         speed="1.75" 
                         color="gray" 
-                        ></l-bouncy>
+                        />
                     </div>
                 )}
                {favorites.length !== 0 && (<div>
@@ -138,12 +137,11 @@ export default function FavoritePage() {
                             </div>
                         </div>
                         <div className="flex flex-row justify-end lg:basis-1/2 w-full  gap-4">
-                            
                             <div className=" text-custom_red flex items-center">
                                 <button onClick={() => handleAddFavorite(favorite._id)} className="text-custom_blue">Remove</button>
                             </div>
                             <Button
-                                style='red-hover'
+                                btnStyle='red-hover'
                                 onClick={() => navigate(`/profile/${favorite._id}`)}
                             >
                                 View Profile

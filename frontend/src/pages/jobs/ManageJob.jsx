@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import Button from "../components/button";
+import Button from "./../../components/button";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../store/slices/authSlice";
+import { updateUser } from "./../../store/slices/authSlice";
 import { Toast } from "primereact/toast";
-import AcceptModal from "../components/acceptModal";
+import AcceptModal from "./../../components/acceptModal";
 import { bouncy } from "ldrs";
 
 export default function ManageJobPage() {
@@ -27,7 +27,7 @@ export default function ManageJobPage() {
     const location = useLocation();
     const [messageState, setMessageState] = useState(location.state || null);
 
-    const fetchApplicants = () => {
+    const fetchApplicants = useCallback(() => {
         setIsLoading(true);
         axios.get(`https://jobbar-5m8u.onrender.com/api/job/applicants/${jobId}`)
             .then(response => {
@@ -37,6 +37,7 @@ export default function ManageJobPage() {
                         if(applicant.status === 'Accepted'){
                             setAcceptedApplicant(applicant);
                         }
+                        return null;
                     });
                 }
                 setApplicants(response.data.payload.applicants);
@@ -45,11 +46,11 @@ export default function ManageJobPage() {
                 setIsLoading(false);
                 console.log(err);
             });
-    };
+    }, [jobId]);
 
     useEffect(() => {
         fetchApplicants();
-    }, [jobId]);
+    }, [jobId, fetchApplicants]);
 
 
     const handleAddFavorite = (userId) => {
@@ -79,7 +80,7 @@ export default function ManageJobPage() {
         }).catch(err => {
             console.log(err);
         });
-    }, [jobId])
+    }, [jobId, authState.token]);
 
     
 
@@ -161,7 +162,7 @@ export default function ManageJobPage() {
                                     
                                     <div className="flex gap-4 justify-end basis-1/2">
                                         <Button
-                                            style='red-default'
+                                            btnStyle='red-default'
                                             onClick={() => navigate(`/profile/${acceptedApplicant.applicant._id}`)}
                                         >
                                             View Profile
@@ -201,14 +202,14 @@ export default function ManageJobPage() {
                                 
                                 <div className="flex gap-4 justify-end basis-1/2">
                                     <Button
-                                        style='red-default'
+                                        btnStyle='red-default'
                                         onClick={() => navigate(`/profile/${applicant.applicant._id}`)}
                                     >
                                         View Profile
                                     </Button>
                                     {!acceptedApplicant && (
                                         <Button
-                                            style='red-hover'
+                                            btnStyle='red-hover'
                                             type="button"
                                             onClick={() =>
                                                 handleOpenModal(applicant.applicant.firstName, applicant.applicant.email, applicant.applicant._id, jobId)

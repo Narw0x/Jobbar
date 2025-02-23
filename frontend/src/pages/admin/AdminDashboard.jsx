@@ -29,8 +29,7 @@ export default function AdminDashboard() {
             .catch((err) => {
                 console.log(err);
             });
-    }
-    , [adminState.token]);
+    }, [adminState.adminToken]);
 
     useEffect(() => {
         document.title = "Admin Dashboard | Jobbar";

@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { logout } from "../store/slices/authSlice";
+import { logout } from "./../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Button from "../components/button";
+import Button from "./../../components/button";
 import { bouncy } from "ldrs";
 
 export default function ManageJobsPage() {
@@ -51,7 +51,7 @@ export default function ManageJobsPage() {
             
             setJobOffers([]);
         }
-    }, [authState.user, authState.token]);
+    }, [authState.user, authState.token, dispatch, navigate]);
 
     useEffect(() => {
         document.title = "Manage Jobs | Jobbar";
@@ -100,7 +100,7 @@ export default function ManageJobsPage() {
                                         <div className="flex flex-row gap-4 mt-2 justify-end">
                                             <div className="flex flex-grow">
                                                 <Button
-                                                    style="red-default"
+                                                    btnStyle="red-default"
                                                     redirectPath={`/job/manage/${job._id}`}
                                                 >
                                                     Manage

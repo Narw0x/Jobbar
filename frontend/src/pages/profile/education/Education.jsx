@@ -2,16 +2,16 @@ import { useState } from "react";
 import { Calendar } from "primereact/calendar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { updateUser } from "../store/slices/authSlice"
+import { updateUser } from "../../../store/slices/authSlice"
 
-import Button from "../components/button";
+import Button from "../../../components/button";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
-import { isValidText } from "../util/validation";
+import { isValidText } from "../../../util/validation";
 
 
 
@@ -257,7 +257,7 @@ export default function EducationPage(){
                             </div>
                             <div className="flex space-x-4 justify-end mt-4">
                                 <Button 
-                                    style="red-hover"
+                                    btnStyle="red-hover"
                                     type="button"
                                     onClick={() => {
                                         navigate(`/profile/${authState.user._id}`);
@@ -266,7 +266,7 @@ export default function EducationPage(){
                                     Back
                                 </Button>
                                 <Button 
-                                    style="red-default"
+                                    btnStyle="red-default"
                                     type="submit"
                                 >
                                     Save

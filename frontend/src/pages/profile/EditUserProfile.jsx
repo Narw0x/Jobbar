@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from "react-redux"
-import { updateUser } from "../store/slices/authSlice"
+import { updateUser } from "../../store/slices/authSlice"
 import { useState, useEffect } from "react"
 import { FileUpload } from 'primereact/fileupload';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import Autocomplete from "../components/autocomplete";
-import Button from "../components/button";
+import Autocomplete from "../../components/autocomplete";
+import Button from "../../components/button";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
-import { isValidAddress, isValidEmail, isValidPhoneNumber, isValidText } from "../util/validation";
+import { isValidAddress, isValidPhoneNumber, isValidText } from "../../util/validation";
 import { useLocation } from "react-router";
 
 export default function EditUserProfilePage() {
@@ -230,7 +230,7 @@ export default function EditUserProfilePage() {
                             onSelect={onSelectBg}
                             className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer"
                         />
-                        {bgImage !== authState.user.bgImage ? <Button type="button" onClick={() => {setBgImage(authState.user.bgImage)}} style="red-default">Delete</Button>: null}
+                        {bgImage !== authState.user.bgImage ? <Button type="button" onClick={() => {setBgImage(authState.user.bgImage)}} btnStyle="red-default">Delete</Button>: null}
                     </div>
                 </div>
                 <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Personal Information</h2>
@@ -256,6 +256,7 @@ export default function EditUserProfilePage() {
                             <Autocomplete
                                 value={userInfo.address || ''}  
                                 onChange={handleUserInfoChange} 
+                                name="address"
                             />                        
                         </div>
                         <div>
@@ -281,7 +282,7 @@ export default function EditUserProfilePage() {
                                 <Button 
                                     type="button" 
                                     onClick={() => {setAvatar(authState.user.avatar);}} 
-                                    style="red-default"
+                                    btnStyle="red-default"
                                 >
                                     Delete
                                 </Button>
@@ -295,7 +296,7 @@ export default function EditUserProfilePage() {
                 <div className="flex rounded-lg border border-black m-8 justify-between mt-4 flex-col">
                     <div className="flex md:flex-row flex-col m-8 mb-4 justify-between">
                         <div className="md:w-[30%] flex flex-col mb-4 ">
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="phone">Phone</label>
+                            <label className="text-custom_gray text-xl font-bold" htmlFor="phoneNumber">Phone</label>
                             <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg "  onChange={handleUserInfoChange}  value={userInfo.phoneNumber || ''} type="phone" name="phoneNumber" id="phoneNumber" placeholder="+421 xxxxxxxxx"/>
                         </div>
                         <div className="md:w-[65%] flex flex-col mb-4">
@@ -323,7 +324,7 @@ export default function EditUserProfilePage() {
                 <div>
                     <div className="flex justify-center m-8 gap-4">
                         <Button 
-                            style="red-hover"
+                            btnStyle="red-hover"
                             type="button"
                             onClick={() => {
                                 navigate(`/profile/${authState.user._id}`);
@@ -332,7 +333,7 @@ export default function EditUserProfilePage() {
                             Cancel
                         </Button>
                         <Button 
-                            style="red-default"
+                            btnStyle="red-default"
                             type="submit"
                         >
                             Save

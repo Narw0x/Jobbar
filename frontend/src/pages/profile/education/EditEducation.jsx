@@ -6,11 +6,11 @@ import { Calendar } from "primereact/calendar";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { updateUser } from "../store/slices/authSlice"
+import { updateUser } from "../../../store/slices/authSlice"
 import { useDispatch } from "react-redux";
 
-import Button  from "../components/button";
-import { isValidText } from "../util/validation";
+import Button  from "../../../components/button";
+import { isValidText } from "../../../util/validation";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { useLocation } from "react-router";
@@ -52,7 +52,7 @@ export default function EditEducationPage() {
             );
         }
         
-    }, [educationId]);
+    }, [educationId, authState.user.education.school, authState.user.education.certificate, authState.user.education.skill]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -238,7 +238,7 @@ export default function EditEducationPage() {
                                 )}
                                     <div>
                                         <Button 
-                                            style="red-hover"
+                                            btnStyle="red-hover"
                                             type="button"
                                             onClick={handleDelete}
                                         >
@@ -262,17 +262,16 @@ export default function EditEducationPage() {
                                     </div>
                                     <div className="flex space-x-4 justify-end mt-4">
                                         <Button 
-                                            style="red-hover"
+                                            btnStyle="red-hover"
                                             type="button"
                                             onClick={() => {
-                                                console.log(`/profile/${authState.user._id}`);
-                                                // navigate(`/profile/${authState.user._id}`);
+                                                navigate(`/profile/${authState.user._id}`);
                                             }}
                                         >
                                             Back
                                         </Button>
                                         <Button 
-                                            style="red-default"
+                                            btnStyle="red-default"
                                             type="submit"
                                         >
                                             Save

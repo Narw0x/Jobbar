@@ -33,7 +33,7 @@ export default function HomePage(){
             }
             checkVerifyToken();
         }
-    }, [token])
+    }, [token, navigate]);
 
 
 
@@ -59,7 +59,7 @@ export default function HomePage(){
                         <p className="text-custom_red text-center md:text-left">Find your dream job</p>
                         <div className="flex flex-row justify-center md:justify-start gap-4">
                             <Button
-                                style="red-default"
+                                btnStyle="red-default"
                                 redirectPath={authState.token ? "/job/search" : "/login"}
                                 >
                                 Search

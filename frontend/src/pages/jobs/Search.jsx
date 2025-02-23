@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import SearchPageSelect from '../components/searchPageSelect';
-import SearchPageConfig from '../components/searchConfig';
-import SearchJobView from '../components/searchJobView';
-import SearchBookmarksView from '../components/searchBookmarksView';
+import SearchPageSelect from '../../components/searchPageSelect';
+import SearchPageConfig from '../../components/searchConfig';
+import SearchJobView from '../../components/searchJobView';
+import SearchBookmarksView from '../../components/searchBookmarksView';
 
 
 

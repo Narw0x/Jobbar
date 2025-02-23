@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import Button from "../components/button";
+import Button from "../../../components/button";
 
 const pathExperienceImage = "../../../experienceImage.svg";
 
@@ -33,7 +33,7 @@ export default function AdminReportPage() {
             .catch((err) => {
                 console.log(err);
             })
-    }, [reportId]);
+    }, [reportId, adminState.adminToken]);
 
     useEffect(() => {
         document.title = "Report | Jobbar";
@@ -75,13 +75,13 @@ export default function AdminReportPage() {
                             </div>
                             <div className="flex flex-row gap-4 justify-start">
                                 <Button
-                                    style={'red-hover'}
+                                    btnStyle={'red-hover'}
                                     redirectPath={`/xyz/users/edit/${report.reportedEntity._id}`}
                                 >
                                     Edit Reported Profile
                                 </Button>
                                 <Button
-                                    style={'red-hover'}
+                                    btnStyle={'red-hover'}
                                     redirectPath={`/xyz/users/${report.reportedEntity._id}`}
                                 >
                                     View Reported Profile
@@ -90,19 +90,19 @@ export default function AdminReportPage() {
                         </div>
                         <div className="flex flex-row gap-4 justify-start">
                             <Button
-                                style={'red-hover'}
+                                btnStyle={'red-hover'}
                                 onClick={() => handleResponse('Approved')}
                             >
                                 Approve
                             </Button>
                             <Button
-                                style={'red-default'}
+                                btnStyle={'red-default'}
                                 onClick={() => handleResponse('Declined')}
                             >
                                 Decline
                             </Button>  
                             <Button 
-                                style="red-default"
+                                btnStyle="red-default"
                                 type="button"
                                 onClick={() => {
                                     navigate(`/xyz/reports/${reportId}`);

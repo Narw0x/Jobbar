@@ -1,17 +1,16 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import Button from "../components/button";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, updateUser } from "../store/slices/authSlice";
+import axios from 'axios';
 import { useLocation } from "react-router";
+
 import { Toast } from "primereact/toast";
-
-
 import { Calendar } from "primereact/calendar";
 
-import Autocomplete from "../components/autocomplete";
-import axios from 'axios';
-import { isValidAddress, isValidText } from '../util/validation';
+import { logout } from "../../../store/slices/authSlice";
+import Autocomplete from "../../../components/autocomplete";
+import Button from "../../../components/button";
+import { isValidAddress, isValidText } from '../../../util/validation';
 
 
 
@@ -357,7 +356,7 @@ export default function AdminJobsEditPage() {
                                         {index > 0 && (
                                             <div className="flex flex-col justify-center">   
                                                 <Button 
-                                                    style="red-hover" 
+                                                    btnStyle="red-hover" 
                                                     type="button" 
                                                     onClick={() => {
                                                         setJobOffer(prevState => ({
@@ -375,7 +374,7 @@ export default function AdminJobsEditPage() {
                             </div>
                             <div className="flex flex-row justify-end">
                                 <Button
-                                    style="red-hover"
+                                    btnStyle="red-hover"
                                     type="button"
                                     onClick={addSkill}
                                 >
@@ -411,7 +410,7 @@ export default function AdminJobsEditPage() {
                                         {index > 0 && (
                                             <div className="flex flex-col justify-center">   
                                                 <Button 
-                                                    style="red-hover" 
+                                                    btnStyle="red-hover" 
                                                     type="button" 
                                                     onClick={() => {
                                                         setJobOffer(prevState => ({
@@ -433,7 +432,7 @@ export default function AdminJobsEditPage() {
                             </div>
                             <div className="flex flex-row justify-end">
                                 <Button 
-                                    style="red-hover" 
+                                    btnStyle="red-hover" 
                                     type="button" 
                                     onClick={addRequirement}
                                 >
@@ -459,7 +458,7 @@ export default function AdminJobsEditPage() {
                             </div>
                             <div>
                                 <Button 
-                                    style="red-hover"
+                                    btnStyle="red-hover"
                                     type="button"
                                     onClick={handleDelete}
                                 >
@@ -487,7 +486,7 @@ export default function AdminJobsEditPage() {
                         </div>
                         <div className="flex space-x-4 justify-end mt-4">
                             <Button 
-                                style="red-hover"
+                                btnStyle="red-hover"
                                 type="button"
                                 onClick={() => {
                                     navigate(`/xyz/jobs`);
@@ -496,7 +495,7 @@ export default function AdminJobsEditPage() {
                                 Back
                             </Button>
                             <Button 
-                                style="red-default"
+                                btnStyle="red-default"
                                 type="submit"
                             >
                                 Save

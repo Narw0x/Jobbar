@@ -3,15 +3,15 @@ import { Calendar } from "primereact/calendar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { updateUser } from "../store/slices/authSlice";
+import { updateUser } from "../../../store/slices/authSlice";
 import { useLocation } from "react-router";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { Toast } from "primereact/toast";
 
-import { isValidText } from "../util/validation";
+import { isValidText } from "../../../util/validation";
 
-import Button from "../components/button";
+import Button from "../../../components/button";
 
 const pathExperienceImage = "../../../experienceImage.svg";
 
@@ -176,7 +176,7 @@ export default function EditExperiencePage() {
                             </div>
                             <div className="flex space-x-4 justify-end mt-4">
                                 <Button 
-                                    style="red-hover"
+                                    btnStyle="red-hover"
                                     type="button"
                                     onClick={() => {
                                         navigate(`/profile/${authState.user._id}`);
@@ -185,7 +185,7 @@ export default function EditExperiencePage() {
                                     Back
                                 </Button>
                                 <Button 
-                                    style="red-default"
+                                    btnStyle="red-default"
                                     type="submit"
                                 >
                                     Save

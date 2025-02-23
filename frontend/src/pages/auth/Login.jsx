@@ -5,11 +5,11 @@ import { useNavigate, useLocation} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Toast } from 'primereact/toast';
-import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
-import { isValidEmail, isValidPassword } from "../util/validation";
+import { loginStart, loginSuccess, loginFailure } from './../../store/slices/authSlice';
+import { isValidEmail, isValidPassword } from "./../../util/validation";
 
 
-import Button from "../components/button"
+import Button from "./../../components/button"
 
 export default function LoginPage() {
     const toast = useRef(null);
@@ -101,14 +101,14 @@ export default function LoginPage() {
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-col mb-4">
                         <label className="text-custom_gray text-2xl font-bold" htmlFor="email">Email</label>
-                        <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" type="email" name="email" id="email" value={data.email} onChange={handleChange} />
+                        <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" type="email" name="email" id="email" value={data.email} onChange={handleChange} autoComplete='on'/>
                     </div>
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="password">Password</label>
                         <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password" value={data.password} onChange={handleChange} />
                     </div>
                     <div className="flex flex-col text-xl">
-                        <Button style={'red-hover'}>Sign in</Button>
+                        <Button btnStyle={'red-hover'}>Sign in</Button>
                     </div>
                 </form>
                 <div className="flex flex-row justify-between items-center my-8">
@@ -120,13 +120,13 @@ export default function LoginPage() {
                 </div>
                 <div className="flex flex-col text-xl gap-4"> 
                     <Button 
-                        style={'red-default'}
+                        btnStyle={'red-default'}
                         redirectPath={`/register/user`}
                     >
                         Create an User Account
                     </Button>
                     <Button 
-                        style={'red-default'}
+                        btnStyle={'red-default'}
                         redirectPath={`/register/company`}
                     >
                         Create a Company Account

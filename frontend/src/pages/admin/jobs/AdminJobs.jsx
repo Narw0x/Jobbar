@@ -6,9 +6,9 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
 
-import Button from "../components/button";
+import Button from "../../../components/button";
 import { bouncy } from "ldrs";
-import { isValidEmail } from "../util/validation";
+import { isValidEmail } from "../../../util/validation";
 
 export default function AdminJobsPage() {
     const toast = useRef(null);
@@ -107,16 +107,16 @@ export default function AdminJobsPage() {
                         <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 text-lg" type="email" name="email" id="email" value={email} onChange={handleChange} />
                     </div>
                     <div className="flex flex-col text-xl basis-[10%] mt-auto "> 
-                        <Button style={'red-hover'}>Search</Button>
+                        <Button btnStyle={'red-hover'}>Search</Button>
                     </div>
                 </form>
                 {isLoading && (
                     <div className="flex justify-center p-8">
                         <l-bouncy
-                        size="45"
-                        speed="1.75" 
-                        color="gray" 
-                        ></l-bouncy>
+                            size="45"
+                            speed="1.75" 
+                            color="gray" 
+                        />
                     </div>
                 )}
                 {jobOffers.length !== 0  && (
@@ -147,7 +147,7 @@ export default function AdminJobsPage() {
                                         
                                         <div className="flex flex-grow">
                                             <Button
-                                                style="red-default"
+                                                btnStyle="red-default"
                                                 redirectPath={`/xyz/jobs/edit/${job._id}`}
                                             >
                                                 Edit
@@ -155,7 +155,7 @@ export default function AdminJobsPage() {
                                         </div>
                                         <div>
                                             <Button
-                                                style="red-hover"
+                                                btnStyle="red-hover"
                                                 redirectPath={`/xyz/jobs/${job._id}`}
                                             >
                                                 View

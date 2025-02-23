@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import Button from "../components/button";
+import Button from "./../../components/button";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, updateUser } from "../store/slices/authSlice";
+import { logout, updateUser } from "./../../store/slices/authSlice";
 
 import { Calendar } from "primereact/calendar";
 
-import Autocomplete from "../components/autocomplete";
+import Autocomplete from "./../../components/autocomplete";
 import axios from 'axios';
 import { Toast } from 'primereact/toast';
 import { useRef } from 'react';
-import { isValidAddress, isValidText } from '../util/validation';
+import { isValidAddress, isValidText } from './../../util/validation';
 import { useLocation } from 'react-router';
 
 
@@ -363,7 +363,7 @@ export default function EditJobOfferPage() {
                                         {index > 0 && (
                                             <div className="flex flex-col justify-center">   
                                                 <Button 
-                                                    style="red-hover" 
+                                                    btnStyle="red-hover" 
                                                     type="button" 
                                                     onClick={() => {
                                                         setJobOffer(prevState => ({
@@ -381,7 +381,7 @@ export default function EditJobOfferPage() {
                             </div>
                             <div className="flex flex-row justify-end mt-4">
                                 <Button
-                                    style="red-hover"
+                                    btnStyle="red-hover"
                                     type="button"
                                     onClick={addSkill}
                                 >
@@ -415,7 +415,7 @@ export default function EditJobOfferPage() {
                                         {index > 0 && (
                                             <div className="flex flex-col justify-center">   
                                                 <Button 
-                                                    style="red-hover" 
+                                                    btnStyle="red-hover" 
                                                     type="button" 
                                                     onClick={() => {
                                                         setJobOffer(prevState => ({
@@ -430,14 +430,10 @@ export default function EditJobOfferPage() {
                                         )}
                                     </div>
                                 ))}
-
-
-
-                                
                             </div>
                             <div className="flex flex-row justify-end mt-4">
                                 <Button 
-                                    style="red-hover" 
+                                    btnStyle="red-hover" 
                                     type="button" 
                                     onClick={addRequirement}
                                 >
@@ -463,17 +459,14 @@ export default function EditJobOfferPage() {
                             </div>
                             <div>
                                 <Button 
-                                    style="red-hover"
+                                    btnStyle="red-hover"
                                     type="button"
                                     onClick={handleDelete}
                                 >
                                     Delete Experience
                                 </Button>
                             </div>
-
-                            
                         </div>
-
                     </div>
                     <div className="flex flex-col flex-1 mt-[-1rem]">
                         <div className="flex flex-col justify-end flex-wrap">
@@ -491,7 +484,7 @@ export default function EditJobOfferPage() {
                         </div>
                         <div className="flex space-x-4 justify-end mt-4">
                             <Button 
-                                style="red-hover"
+                                btnStyle="red-hover"
                                 type="button"
                                 onClick={() => {
                                     navigate(`/profile/${authState.user._id}`);
@@ -500,7 +493,7 @@ export default function EditJobOfferPage() {
                                 Back
                             </Button>
                             <Button 
-                                style="red-default"
+                                btnStyle="red-default"
                                 type="submit"
                             >
                                 Save

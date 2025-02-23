@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import Button from "../components/button"
+import Button from "../../../components/button"
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -116,16 +116,16 @@ export default function AdminUsersPage() {
                         <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 text-lg" type="email" name="email" id="email" value={email} onChange={handleChange} />
                     </div>
                     <div className="flex flex-col text-xl basis-[10%] mt-auto "> 
-                        <Button style={'red-hover'}>Search</Button>
+                        <Button btnStyle={'red-hover'}>Search</Button>
                     </div>
                 </form>
                 {isLoading && (
                     <div className="flex justify-center p-8">
                         <l-bouncy
-                        size="45"
-                        speed="1.75" 
-                        color="gray" 
-                        ></l-bouncy>
+                            size="45"
+                            speed="1.75" 
+                            color="gray" 
+                        />
                     </div>
                 )}
                 {user && <div className="flex flex-col gap-4 mt-8">
@@ -139,9 +139,9 @@ export default function AdminUsersPage() {
                             <p className="text-custom_gray text-lg ">Email: <span className="text-custom_red text-sm md:text-lg">{user.email}</span></p>
                         </div>
                         <div className="flex flex-col md:flex-row basis-2/5 justify-end gap-4">
-                            <Button style={'red-default'} redirectPath={`/xyz/users/${user._id}`}>View Profile</Button>
-                            <Button style={'red-default'} redirectPath={`/xyz/users/edit/${user._id}`}>Edit</Button>
-                            <Button style={'red-hover'} onClick={() => handleDelete(user._id)}>Delete</Button>
+                            <Button btnStyle={'red-default'} redirectPath={`/xyz/users/${user._id}`}>View Profile</Button>
+                            <Button btnStyle={'red-default'} redirectPath={`/xyz/users/edit/${user._id}`}>Edit</Button>
+                            <Button btnStyle={'red-hover'} onClick={() => handleDelete(user._id)}>Delete</Button>
                         </div>
                     </div>
                 </div>

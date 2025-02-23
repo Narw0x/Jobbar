@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { FileUpload } from "primereact/fileupload";
-import Button from "../components/button";
-import Autocomplete from "../components/autocomplete";
+import Button from "../../../components/button";
+import Autocomplete from "../../../components/autocomplete";
 import { useLocation } from "react-router";
-import { isValidAddress, isValidEmail, isValidPhoneNumber, isValidText } from "../util/validation";
+import { isValidAddress, isValidEmail, isValidPhoneNumber, isValidText } from "../../../util/validation";
 import { Toast } from "primereact/toast";
 
 export default function AdminUserEditPage() {
@@ -58,7 +58,7 @@ export default function AdminUserEditPage() {
             .catch((err) => {
                 console.log(err);
             });
-    }, [userId]);
+    }, [userId, adminState.adminToken]);
 
     const handleUserInfoChange = (e) => {
         const { name, value } = e.target;
@@ -260,7 +260,7 @@ export default function AdminUserEditPage() {
                             onSelect={onSelectBg}
                             className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer"
                         />
-                        {bgPreview !== userInfo.bgImage ? <Button type="button" onClick={() => {setBgPreview(userInfo.bgImage)}} style="red-default">Delete</Button>: null}
+                        {bgPreview !== userInfo.bgImage ? <Button type="button" onClick={() => {setBgPreview(userInfo.bgImage)}} btnStyle="red-default">Delete</Button>: null}
                     </div>
                 </div>
                 <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Personal Information</h2>
@@ -315,7 +315,7 @@ export default function AdminUserEditPage() {
                                 <Button 
                                     type="button" 
                                     onClick={() => {setAvatar(userInfo.avatar);}} 
-                                    style="red-default"
+                                    btnStyle="red-default"
                                 >
                                     Delete
                                 </Button>
@@ -357,7 +357,7 @@ export default function AdminUserEditPage() {
                 <div>
                     <div className="flex justify-center m-8 gap-4">
                         <Button 
-                            style="red-hover"
+                            btnStyle="red-hover"
                             type="button"
                             onClick={() => {
                                 navigate(`/xyz/users`);
@@ -366,7 +366,7 @@ export default function AdminUserEditPage() {
                             Cancel
                         </Button>
                         <Button 
-                            style="red-default"
+                            btnStyle="red-default"
                             type="submit"
                         >
                             Save

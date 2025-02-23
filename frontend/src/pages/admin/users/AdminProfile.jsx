@@ -1,17 +1,16 @@
 import {  useParams, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
-import { logout } from "../store/slices/authSlice";
+import { logout } from "../../../store/slices/authSlice";
 import axios from "axios";
 import { Toast } from 'primereact/toast';
 import { tailspin, bouncy } from 'ldrs'
 
-import Button from "../components/button";
+import Button from "../../../components/button";
 
 
 export default function AdminProfilePage() {
     const toast = useRef(null);
-    const modal = useRef();
     const { userId } = useParams();
     const adminState = useSelector((state) => state.admin);
     const [profileData, setProfileData] = useState(null); 
@@ -87,7 +86,7 @@ export default function AdminProfilePage() {
                 }
             });
         }   
-    }, [profileData, adminState.adminToken]);
+    }, [profileData, adminState.adminToken, dispatch, navigate]);
 
 
 
@@ -256,10 +255,10 @@ export default function AdminProfilePage() {
                         {!jobOffers && (
                             <div className="flex justify-center">
                                 <l-bouncy
-                                size="45"
-                                speed="1.75" 
-                                color="gray" 
-                                ></l-bouncy>
+                                    size="45"
+                                    speed="1.75" 
+                                    color="gray" 
+                                />
                             </div>
                             
                         )}
@@ -290,7 +289,7 @@ export default function AdminProfilePage() {
                                             <div className="flex flex-row gap-4 mt-2 justify-end">
                                                 <div>
                                                     <Button
-                                                        style="red-hover"
+                                                        btnStyle="red-hover"
                                                         redirectPath={`/job/${job._id}`}
                                                     >
                                                         View

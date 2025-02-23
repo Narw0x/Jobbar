@@ -3,14 +3,11 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { Toast } from "primereact/toast";
 
-
-
-
-import Button from "../components/button"
-import { isValidPassword, isValidEmail } from "../util/validation";
+import Button from "../../components/button"
+import { isValidPassword, isValidEmail } from "../../util/validation";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { adminLoginFailure, adminLoginStart, adminLoginSuccess } from "../store/slices/adminSlice";
+import { adminLoginFailure, adminLoginStart, adminLoginSuccess } from "../../store/slices/adminSlice";
 
 
 export default function AdminLoginPage() {
@@ -30,7 +27,7 @@ export default function AdminLoginPage() {
         if(adminToken) {
             navigate('/xyz/dashboard');
         }
-    }, []);
+    }, [adminToken, navigate]);
 
 
     const handleChange = (e) => {
@@ -120,7 +117,7 @@ export default function AdminLoginPage() {
                             <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password" value={data.password} onChange={handleChange} />
                         </div>
                         <div className="flex flex-col text-xl">
-                            <Button style='red-hover'>Sign in</Button>
+                            <Button btnStyle='red-hover'>Sign in</Button>
                         </div>
                     </form>
                 </div>

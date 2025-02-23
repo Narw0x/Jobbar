@@ -3,11 +3,11 @@ import { Calendar } from "primereact/calendar";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { updateUser } from "../store/slices/authSlice"
+import { updateUser } from "../../../store/slices/authSlice"
 
 
-import Button from "../components/button";
-import { isValidText } from "../util/validation";
+import Button from "../../../components/button";
+import { isValidText } from "../../../util/validation";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { useLocation } from "react-router";
@@ -53,7 +53,7 @@ export default function EditExperiencePage() {
             navigate(`/profile/${authState.user._id}`, { state: { type: 'error', message: 'Experience not found' } });
         }
         
-    }, [experienceId, navigate, authState.user._id]);
+    }, [experienceId, navigate, authState.user._id, authState.user.experience]);
 
     const handleExprerienceChange = (e) => {
         const { name, value } = e.target;
@@ -202,7 +202,7 @@ export default function EditExperiencePage() {
                             </div>
                             <div>
                                 <Button 
-                                    style="red-hover"
+                                    btnStyle="red-hover"
                                     type="button"
                                     onClick={handleDelete}
                                 >
@@ -226,7 +226,7 @@ export default function EditExperiencePage() {
                             </div>
                             <div className="flex space-x-4 justify-end mt-4">
                                 <Button 
-                                    style="red-hover"
+                                    btnStyle="red-hover"
                                     type="button"
                                     onClick={() => {
                                         navigate(`/profile/${authState.user._id}`);
@@ -235,7 +235,7 @@ export default function EditExperiencePage() {
                                     Back
                                 </Button>
                                 <Button 
-                                    style="red-default"
+                                    btnStyle="red-default"
                                     type="submit"
                                 >
                                     Save

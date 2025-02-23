@@ -6,10 +6,10 @@ import { useEffect } from 'react';
 import { useRef } from 'react'; 
 import { Toast } from 'primereact/toast';
 
-import { isValidText, isValidEmail, isValidPassword, isValidAddress } from "../util/validation";
+import { isValidText, isValidEmail, isValidPassword, isValidAddress } from "../../util/validation";
 
-import Autocomplete from "../components/autocomplete";
-import Button from "../components/button"
+import Autocomplete from "../../components/autocomplete";
+import Button from "../../components/button"
 
 export default function RegisterCompanyPage() {
     const toast = useRef(null);
@@ -143,7 +143,7 @@ export default function RegisterCompanyPage() {
                         />
                     </div>
                     <div className="flex flex-col text-xl">
-                        <Button style={'red-hover'}>Sign up</Button>
+                        <Button btnStyle={'red-hover'}>Sign up</Button>
                     </div>
                 </form>
                 <div className="flex flex-row justify-between items-center my-8">
@@ -155,14 +155,14 @@ export default function RegisterCompanyPage() {
                 </div>
                 <div className="flex flex-col text-xl gap-4"> 
                     <Button 
-                        style={'red-default'}
+                        btnStyle={'red-default'}
                         redirectPath={`/register/user`}
                     >
                         Sign up as User
                     </Button>
 
                     <Button 
-                        style={'red-default'}
+                        btnStyle={'red-default'}
                         redirectPath={`/login`}
                     >
                         Sign in

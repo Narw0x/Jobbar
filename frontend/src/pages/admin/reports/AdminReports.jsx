@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import Button from "../components/button";
+import Button from "../../../components/button";
 import { bouncy } from "ldrs";
 
 
@@ -68,7 +68,7 @@ export default function AdminReportsPage() {
                                         </div>
                                         <div className="flex flex-row gap-2 mt-2 justify-end">
                                             {rep.reportStatus === 'Pending' && (<Button
-                                                style="red-hover"
+                                                btnStyle="red-hover"
                                                 redirectPath={`/xyz/reports/${rep._id}`}
                                             >
                                                 View
