@@ -32,7 +32,7 @@ export default function SearchJobView() {
                 setIsLoading(false);
                 console.log(err);
             });
-    }}, [authState.token, authState.user.searchConfig, page]);
+    }}, [authState.token, authState.user.searchConfig, page, authState.user.role]);
 
     
     const formatDateBetter = (dateString) => {
@@ -80,7 +80,7 @@ export default function SearchJobView() {
                                 <div className="flex flex-row gap-4 mt-2 justify-start">
                                     <div>
                                         <Button
-                                            style="red-hover"
+                                            btnStyle="red-hover"
                                             redirectPath={`/job/${job._id}`}
                                         >
                                             View
@@ -102,7 +102,7 @@ export default function SearchJobView() {
                         <div className="flex justify-between pt-4">
                             <div>
                                 {page === 1 ? null : <Button
-                                    style="gray-default"
+                                    btnStyle="gray-default"
                                     onClick={() => setPage(page - 1)}
                                 >
                                     Previous
@@ -110,7 +110,7 @@ export default function SearchJobView() {
                             </div>
                             
                             {jobs.length === 10 && <Button
-                                style="red-hover"
+                                btnStyle="red-hover"
                                 onClick={() => setPage(page + 1)}
                             >
                                 Next

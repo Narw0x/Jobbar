@@ -158,7 +158,7 @@ export default function SearchPageConfig(){
 
                 <div>
                     <Button 
-                        style="red-hover"
+                        btnStyle="red-hover"
                     >
                         Save
                     </Button>

@@ -109,7 +109,7 @@ export default function AdminHeader() {
                         </li>
                         <li>
                             <Button
-                                style="red-hover"
+                                btnStyle="red-hover"
                                 onClick={handleClick}
                             >
                                 Log out

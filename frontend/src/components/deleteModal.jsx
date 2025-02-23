@@ -87,14 +87,14 @@ const DeleteAccountModal = forwardRef(function DeleteAccountModal( _,ref) {
                 </div>
                 <div className="flex justify-end gap-4 mt-4 ml-16">
                     <Button
-                        style={"red-hover"}
+                        btnStyle={"red-hover"}
                         onClick={handleCancel}
                         type="button"
                     >
                         Cancel
                     </Button>  
                     <Button
-                        style={"red-hover"}
+                        btnStyle={"red-hover"}
                     >
                         Send
                     </Button>  

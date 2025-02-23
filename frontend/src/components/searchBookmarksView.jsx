@@ -29,7 +29,7 @@ export default function SearchBookmarksView() {
             setIsLoading(false);
             console.log(err);
         });
-    }, [authState.token, authState.user.searchConfig]);
+    }, [authState.token, authState.user.searchConfig, authState.user._id]);
 
     const formatDateBetter = (dateString) => {
         const date = new Date(dateString);
@@ -48,10 +48,10 @@ export default function SearchBookmarksView() {
                     {isLoading && (
                         <div className="flex justify-center">
                             <l-bouncy
-                            size="45"
-                            speed="1.75" 
-                            color="gray" 
-                            ></l-bouncy>
+                                size="45"
+                                speed="1.75" 
+                                color="gray" 
+                            />
                         </div>
                     )}
                     {jobs.map((job, idx) => (
@@ -76,7 +76,7 @@ export default function SearchBookmarksView() {
                                 <div className="flex flex-row gap-4 mt-2 justify-between">
                                     <div>
                                         <Button
-                                            style="red-hover"
+                                            btnStyle="red-hover"
                                             redirectPath={`/job/${job.jobOffer._id}`} 
                                         >
                                             View

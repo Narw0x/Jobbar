@@ -6,20 +6,20 @@ const Autocomplete = ({ value = undefined, onChange = undefined }) => {
   const inputRef = useRef();
   const timeoutRef = useRef();
 
-  const fetchPlaceSuggestions = async (inputValue) => {
+  const fetchPlaceSuggestions = useCallback(async (inputValue) => {
     try {
-      axios.get('https://jobbar-5m8u.onrender.com/api/autocomplete', {
+      const response = await axios.get('https://jobbar-5m8u.onrender.com/api/autocomplete', {
         params: {
           search: inputValue,
         },
-      }).then((response) => {
-        if (response.status === 200) {
-          setSuggestions(response.data.payload.suggestions );
-        }
-      })} catch (error) {
-        console.error('Error fetching place suggestions:', error);
+      });
+      if (response.status === 200) {
+        setSuggestions(response.data.payload.suggestions);
       }
-  }
+    } catch (error) {
+      console.error('Error fetching place suggestions:', error);
+    }
+  }, [setSuggestions]);
 
 
   const handleChange = useCallback(() => {
@@ -64,6 +64,8 @@ const Autocomplete = ({ value = undefined, onChange = undefined }) => {
         onChange={handleChange}
         placeholder="Enter a location"
         name='address'
+        id='address'
+        autoComplete="on"
         className="bg-white text-custom_gray focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg w-full"
       />
       <ul className="absolute z-50 mt-1 max-h-60 overflow-auto bg-white border rounded-md shadow-lg">

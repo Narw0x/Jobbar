@@ -57,14 +57,14 @@ const AcceptModal = forwardRef(function AcceptModal( { userName, userEmail, user
                 </div>
                 <div className="flex justify-end gap-4 mt-4">
                     <Button
-                        style={"red-hover"}
+                        btnStyle={"red-hover"}
                         onClick={handleCancel}
                         type="button"
                     >
                         Cancel
                     </Button>  
                     <Button
-                        style={"red-hover"}
+                        btnStyle={"red-hover"}
                     >
                         Accept
                     </Button>  

@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 
-export default function Button({ children, style, redirectPath = undefined, onClick = undefined, type = 'submit' }) {
+export default function Button({ children, btnStyle, redirectPath = undefined, onClick = undefined, type = 'submit' }) {
     const navigate = useNavigate();
     let classList = '';
-    switch (style) {
+    switch (btnStyle) {
         case 'gray-default':
             classList = 'bg-white text-custom_gray border-custom_gray hover:bg-custom_gray hover:text-white';
             break;

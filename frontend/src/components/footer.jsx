@@ -29,7 +29,6 @@ export default function Footer() {
                     </div>
                     <div className="flex flex-row gap-3 mt-6 text-custom_gray justify-center">
                         <div className="hover:text-custom_red transition-colors duration-300 cursor-pointer">
-                            {/* instagram */}
                             <Link
                                 to="https://www.instagram.com/"
                             >
@@ -41,7 +40,6 @@ export default function Footer() {
                             </Link>
                         </div>
                         <div className="hover:text-custom_red transition-colors duration-300 cursor-pointer">
-                            {/* twitter */}
                             <Link
                                 to="https://x.com"
                             >
@@ -51,7 +49,6 @@ export default function Footer() {
                             </Link>
                         </div>
                         <div className="hover:text-custom_red transition-colors duration-300 cursor-pointer">
-                            {/* youtube */}
                             <Link
                                 to="https://www.youtube.com"
                             >
@@ -62,7 +59,6 @@ export default function Footer() {
                             </Link>
                         </div>
                         <div className="hover:text-custom_red transition-colors duration-300 cursor-pointer">
-                            {/* facebook */}
                             <Link
                                 to="https://www.facebook.com/"
                             >

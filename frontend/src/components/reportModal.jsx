@@ -5,7 +5,7 @@ import { useSelector } from "react-redux"
 
 import Button from "./button"
 import axios from "axios";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { isValidText } from "../util/validation";
 
 const ReportModal = forwardRef(function ReportModal({type, setMessage} ,ref) {
@@ -82,14 +82,14 @@ const ReportModal = forwardRef(function ReportModal({type, setMessage} ,ref) {
                 </div>
                 <div className="flex justify-end gap-4 mt-4">
                     <Button
-                        style={"red-hover"}
+                        btnStyle={"red-hover"}
                         onClick={handleCancel}
                         type="button"
                     >
                         Cancel
                     </Button>  
                     <Button
-                        style={"red-hover"}
+                        btnStyle={"red-hover"}
                     >
                         Send
                     </Button>  
