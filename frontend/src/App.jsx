@@ -3,40 +3,40 @@ import { RootLayout } from './pages/Root';
 
 import HomePage from './pages/Home';
 import AboutPage from './pages/About';
-import LoginPage from './pages/Login';
-import RegisterCompanyPage from './pages/RegisterCompany';
-import RegisterUserPage from './pages/RegisterUser';
-import ProfilePage from './pages/Profile';
-import EditUserProfilePage from './pages/EditUserProfile';
-import ExperiencePage from './pages/Experience';
-import EditExperiencePage from './pages/EditExperience';
+import LoginPage from './pages/auth/Login';
+import RegisterCompanyPage from './pages/auth/RegisterCompany';
+import RegisterUserPage from './pages/auth/RegisterUser';
+import ProfilePage from './pages/profile/Profile';
+import EditUserProfilePage from './pages/profile/EditUserProfile';
+import ExperiencePage from './pages/profile/experience/Experience';
+import EditExperiencePage from './pages/profile/experience/EditExperience';
 import { checkAuthLoader, checkCompanyLoader } from './util/auth';
 
 import { PrimeReactProvider } from "primereact/api";
 import ErrorPage from './pages/Error';
-import EducationPage from './pages/Education';
-import EditEducationPage from './pages/EditEducation';
-import JobOfferPage from './pages/JobOffer';
-import EditJobOfferPage from './pages/EditJobOffer';
-import ViewJobOfferPage from './pages/ViewJobOffer';
-import SearchPage from './pages/Search';
-import ManageJobsPage from './pages/ManageJobs';
-import ManageJobPage from './pages/ManageJob';
-import FavoritePage from './pages/Favorites';
+import EducationPage from './pages/profile/education/Education';
+import EditEducationPage from './pages/profile/education/EditEducation';
+import JobOfferPage from './pages/jobs/JobOffer';
+import EditJobOfferPage from './pages/jobs/EditJobOffer';
+import ViewJobOfferPage from './pages/jobs/ViewJobOffer';
+import SearchPage from './pages/jobs/Search';
+import ManageJobsPage from './pages/jobs/ManageJobs';
+import ManageJobPage from './pages/jobs/ManageJob';
+import FavoritePage from './pages/profile/Favorites';
 
-import AdminRootLayout from './pages/AdminRoot';
-import AdminLoginPage from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminUsersPage from './pages/AdminUsers';
+import AdminRootLayout from './pages/admin/AdminRoot';
+import AdminLoginPage from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminUsersPage from './pages/admin/users/AdminUsers';
 
 import { checkAdminLoader } from './util/auth';
-import AdminUserEditPage from './pages/AdminUserEdit';
-import AdminJobsPage from './pages/AdminJobs';
-import AdminJobsEditPage from './pages/AdminJobsEdit';
-import AdminReportsPage from './pages/AdminReports';
-import AdminReportPage from './pages/AdminReport';
-import AdminProfilePage from './pages/AdminProfile';
-import AdminJobViewPage from './pages/AdminJobView';
+import AdminProfilePage from './pages/admin/users/AdminProfile';
+import AdminUserEditPage from './pages/admin/users/AdminUserEdit';
+import AdminJobsPage from './pages/admin/jobs/AdminJobs';
+import AdminJobViewPage from './pages/admin/jobs/AdminJobView';
+import AdminJobsEditPage from './pages/admin/jobs/AdminJobsEdit';
+import AdminReportsPage from './pages/admin/reports/AdminReports';
+import AdminReportPage from './pages/admin/reports/AdminReport';
 
 
 const userRoutes = {
