@@ -11,6 +11,8 @@ import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { isValidAddress, isValidPhoneNumber, isValidText } from "../../util/validation";
 import { useLocation } from "react-router";
+import ProfileEdit from "../../components/profile/profileEdit";
+import { Helmet } from "react-helmet";
 
 export default function EditUserProfilePage() {
     const navigate = useNavigate();
@@ -137,12 +139,8 @@ export default function EditUserProfilePage() {
             }
         }
 
-
-
-        // Create a FormData object for sending files
         const formData = new FormData();
         
-        // Add all userInfo fields to formData
         for (const key in userInfo) {
             if (key === 'socialMedia') {
                 for (const socialKey in userInfo[key]) {
@@ -153,15 +151,8 @@ export default function EditUserProfilePage() {
             }
         }
 
-        // Add the image files if they exist
-        if (bgImage) {
-            formData.append('bgImage', bgImage);
-            
-        }
-        if (avatar) {
-            formData.append('avatar', avatar);
-        }
-
+        if (bgImage) formData.append('bgImage', bgImage);
+        if (avatar) formData.append('avatar', avatar);
 
         axios.put(`https://jobbar-5m8u.onrender.com/api/profile/edit/${authState.user._id}`, formData, {
             headers: {
@@ -205,141 +196,15 @@ export default function EditUserProfilePage() {
         }
     }, [messageState]);
 
-    useEffect(() => {
-        document.title = "Settings | Jobbar";
-    }, []);
-    
     
     return (
         <section className="bg-custom_bg_gray py-8">
+            <Helmet>
+                <title>{`Settings | Jobbar`}</title>
+            </Helmet>
             <Toast ref={toast} />
             <form className="max-w-[1440px] 2xl:w-[60%] xl:w-[80%] w-[90%] mx-auto  border rounded-lg shadow-md bg-white" onSubmit={handleEditForm}>
-                <div>
-                    <div className="w-full object-fill flex end flex-col">
-                        <img className="w-full min-h-[150px] max-h-[250px] rounded-t" src={authState.user.bgImage === bgPreview ? `https://jobbar-5m8u.onrender.com/public/background/${userInfo?.bgImage}`:`${bgPreview}`} alt="" />
-                        <hr className="bg-black"/>
-                    </div>
-                    <div className="flex m-4 ml-auto justify-end gap-4">
-                        <FileUpload
-                            mode="basic" 
-                            name="demo[]" 
-                            accept=".png, .jpg, .jpeg" 
-                            auto = {false}
-                            maxFileSize={1000000} 
-                            unstyled={true}
-                            onSelect={onSelectBg}
-                            className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer"
-                        />
-                        {bgImage !== authState.user.bgImage ? <Button type="button" onClick={() => {setBgImage(authState.user.bgImage)}} btnStyle="red-default">Delete</Button>: null}
-                    </div>
-                </div>
-                <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Personal Information</h2>
-                <div className="flex flex-col-reverse lg:flex-row rounded-lg border border-black m-8 justify-between mt-4">
-                    <div className="md:basis-2/3 flex flex-col m-8 md:mb-8 mb-0">
-                        <div className="flex flex-col md:flex-row justify-between  mb-4">
-                            {userInfo.role === 'user' && <div className="flex flex-col md:w-[45%]">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="firstName">First Name</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.firstName || ''} onChange={handleUserInfoChange} type="text" name="firstName" id="firstName" />    
-                            </div>}
-                            {userInfo.role === 'user' && <div className="flex flex-col md:w-[45%]">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="lastName">Last Name</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.lastName || ''} onChange={handleUserInfoChange}  type="text" name="lastName" id="lastName" />
-                            </div>}
-                            {userInfo.role === 'company' && <div className="flex flex-col w-full">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="companyName">Company Name</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.companyName || ''} onChange={handleUserInfoChange}  type="text" name="companyName" id="companyName" />
-                            </div>}
-                            
-                        </div>
-                        <div className="flex flex-col mb-4">
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="address">Address</label>
-                            <Autocomplete
-                                value={userInfo.address || ''}  
-                                onChange={handleUserInfoChange} 
-                                name="address"
-                            />                        
-                        </div>
-                        <div>
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="about">About</label>
-                            <textarea className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray p-2 my-2 text-lg w-full resize-none rounded-lg"  onChange={handleUserInfoChange}  value={userInfo.about || ''} name="about" id="about"></textarea>
-                        </div>
-                    </div>
-                    <div className="md:basis-1/3 m-8 my-0 lg:mt-8 flex flex-col gap-4 pt-8">
-                        <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center" src={authState.user.avatar === avatarPreview ? `https://jobbar-5m8u.onrender.com/public/avatar/${userInfo?.avatar}`:`${avatarPreview}`} alt="" />
-                        <div className="flex justify-center gap-4 lg:mb-12">
-                            <FileUpload 
-                                mode="basic" 
-                                name="demo[]" 
-                                accept=".png, .jpg, .jpeg" 
-                                auto = {false} 
-                                maxFileSize={1000000} 
-                                unstyled={true}
-                                onSelect={onSelectPf} 
-                                className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer" 
-                            />
-                            {
-                            avatar !== authState.user.avatar ?
-                                <Button 
-                                    type="button" 
-                                    onClick={() => {setAvatar(authState.user.avatar);}} 
-                                    btnStyle="red-default"
-                                >
-                                    Delete
-                                </Button>
-                                    : 
-                                null
-                            }
-                        </div>
-                    </div>
-                </div>
-                <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Contact</h2>
-                <div className="flex rounded-lg border border-black m-8 justify-between mt-4 flex-col">
-                    <div className="flex md:flex-row flex-col m-8 mb-4 justify-between">
-                        <div className="md:w-[30%] flex flex-col mb-4 ">
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="phoneNumber">Phone</label>
-                            <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg "  onChange={handleUserInfoChange}  value={userInfo.phoneNumber || ''} type="phone" name="phoneNumber" id="phoneNumber" placeholder="+421 xxxxxxxxx"/>
-                        </div>
-                        <div className="md:w-[65%] flex flex-col mb-4">
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="website">Website</label>
-                            <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg w-full"  onChange={handleUserInfoChange} value={userInfo.website || ''} type="text" name="website" id="website" />
-                        </div>
-                    </div>
-                    <div className="flex flex-row m-8 mt-0">
-                        <div className="flex md:flex-row flex-col mb-4 w-full justify-between">
-                            <div className="md:w-[30%] flex flex-col">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="twitter">Twitter</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.twitter || ''} type="text" name="twitter" id="twitter" placeholder="username" />
-                            </div>
-                            <div className="md:w-[30%] flex flex-col">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="instagram">Instagram</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.instagram || ''} type="text" name="instagram" id="instagram" placeholder="username" />
-                            </div>
-                            <div className="md:w-[30%] flex flex-col">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="github">Github</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.github || ''} type="text" name="github" id="github" placeholder="username" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div className="flex justify-center m-8 gap-4">
-                        <Button 
-                            btnStyle="red-hover"
-                            type="button"
-                            onClick={() => {
-                                navigate(`/profile/${authState.user._id}`);
-                            }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button 
-                            btnStyle="red-default"
-                            type="submit"
-                        >
-                            Save
-                        </Button>
-                    </div>
-                </div>
+                <ProfileEdit state={authState} bgImage={bgImage} setBgImage={setBgImage} bgPreview={bgPreview} onSelectBg={onSelectBg} avatar={avatar} setAvatar={setAvatar} avatarPreview={avatarPreview} onSelectPf={onSelectPf} userInfo={userInfo} handleUserInfoChange={handleUserInfoChange} handleUserSocialChange={handleUserSocialChange} />
             </form>
         </section>
     )

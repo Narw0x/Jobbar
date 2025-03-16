@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Toast } from 'primereact/toast';
 import { tailspin, bouncy } from 'ldrs';
+import { Helmet } from 'react-helmet';
 
 import useFetchProfile from "../../hooks/useFetchProfile";
 
@@ -25,15 +26,13 @@ export default function ProfilePage() {
 
     tailspin.register();
     bouncy.register();
+  
 
     useEffect(() => {
-        if (location.state) {
+        if(location.state) {
             setMessageState(location.state);
             window.history.replaceState({}, document.title);
         }
-    }, [location.state]);
-
-    useEffect(() => {
         if (messageState) {
             const timer = setTimeout(() => {
                 switch (messageState.type) {
@@ -49,15 +48,9 @@ export default function ProfilePage() {
             }, 100);
             return () => clearTimeout(timer);
         }
-    }, [messageState]);
-
-    useEffect(() => {
-        document.title = "Profile | Jobbar";
-    }, []);
-
+    }, [messageState, location.state]);
 
     const isCurrentUser = useMemo(() => authState.user._id === id, [authState.user._id, id]);
-
     const jobsLayout = useMemo(() => {
         if (profileData && profileData.role === 'company') {
             return (
@@ -88,12 +81,17 @@ export default function ProfilePage() {
 
     return (
         <section className="bg-custom_bg_gray py-8">
+            <Helmet>
+                <title>{`Profile ${profileData ? profileData.firstName ? profileData.firstName : profileData.companyName : null} | Jobbar`}</title>
+                <meta name="description" content={profileData?.about} />
+                <meta name="keywords" content={`profile, social, ${profileData?.firstName} ${profileData?.companyName}`} />
+            </Helmet>
             <Toast ref={toast} />
             <ProfileHeader profileData={profileData} isCurrentUser={isCurrentUser} setMessageState={setMessageState} />
             <ProfileAbout aboutText={profileData.about} />
             <ProfileExperience experience={profileData.experience} isCurrentUser={isCurrentUser} />
             <ProfileEducation education={profileData.education} isCurrentUser={isCurrentUser} />
-            {jobsLayout}
+            {jobsLayout} 
             <ProfileContact contact={profileData} />
         </section>
     );
