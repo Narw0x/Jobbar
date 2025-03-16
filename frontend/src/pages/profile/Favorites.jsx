@@ -6,20 +6,16 @@ import { useDispatch } from "react-redux"
 import { updateUser } from "./../../store/slices/authSlice"
 import { useLocation } from "react-router-dom"
 
-import Button from "./../../components/button"
-import { useNavigate } from "react-router-dom"
-import { bouncy } from "ldrs"
+import Favourite from "../../components/favourite/favourite"
+import { Helmet } from "react-helmet"
 
 
 export default function FavoritePage() {
     const toast = useRef(null);
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
-    bouncy.register();
-
     const authState = useSelector(state => state.auth);
     const [favorites, setFavorites] = useState([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         setIsLoading(true);
@@ -88,68 +84,15 @@ export default function FavoritePage() {
         }
     }, [messageState]);
 
-    useEffect(() => {
-        document.title = "Favorites | Jobbar";
-    }, []);
-
-
     return (
-         <section className="bg-custom_bg_gray py-8 min-h-[61.5vh]">
+        <section className="bg-custom_bg_gray py-8 min-h-[61.5vh]">
+            <Helmet>
+                <title>Favorites | Jobbar</title>
+            </Helmet>
             <Toast ref={toast}/>
             <div className="max-w-[1440px] w-[70%] mx-auto border rounded-lg shadow-md bg-white p-8">
                 <h2 className="lg:text-4xl text-2xl font-bold text-custom_gray mb-4">Your Favorite Users</h2>
-                {isLoading === 0 && (
-                    <div className="flex justify-center">
-                        <l-bouncy
-                        size="45"
-                        speed="1.75" 
-                        color="gray" 
-                        />
-                    </div>
-                )}
-               {favorites.length !== 0 && (<div>
-                        <div className="flex flex-row gap-4 justify-between">
-                            <div  className="flex flex-row justify-between w-full lg:basis-1/2">
-                                <div className="flex lg:basis-1/2 text-left  font-bold lg:text-xl text-custom_gray">
-                                    Name
-                                </div>
-                                <div className="flex lg:basis-1/2 text-left font-bold lg:text-xl text-custom_gray">
-                                    Email
-                                </div>
-                            </div>
-                            <div className="hidden lg:flex flex-row justify-end lg:basis-1/2">
-                                <div className="  font-bold md:text-xl text-custom_gray">
-                                    Actions
-                                </div>
-                            </div>
-                        </div>
-                </div>)}
-                {favorites.length !== 0  && favorites.map((favorite) => (
-                    <div key={favorite._id} className="flex lg:flex-row flex-col items-center justify-between py-2  border-b border-gray-200">
-                        <div className="flex flex-row justify-between lg:basis-1/2 w-full items-center">
-                            <div className="flex basis-1/2 text-left">
-                                {favorite.firstName}
-                            </div>
-                            <div className="flex basis-1/2 text-left justify-end lg:justify-start max-w-24 md:max-w-full">
-                                <p className="truncate">
-                                    {favorite.email}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex flex-row justify-end lg:basis-1/2 w-full  gap-4">
-                            <div className=" text-custom_red flex items-center">
-                                <button onClick={() => handleAddFavorite(favorite._id)} className="text-custom_blue">Remove</button>
-                            </div>
-                            <Button
-                                btnStyle='red-hover'
-                                onClick={() => navigate(`/profile/${favorite._id}`)}
-                            >
-                                View Profile
-                            </Button>
-                        </div>
-                    </div>
-                ))}
-
+                <Favourite isLoading={isLoading} favorites={favorites} handleAddFavorite={handleAddFavorite} />
             </div>
         </section>
     )
