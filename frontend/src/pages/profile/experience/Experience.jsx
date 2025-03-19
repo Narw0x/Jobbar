@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Calendar } from "primereact/calendar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -11,10 +10,8 @@ import { Toast } from "primereact/toast";
 
 import { isValidText } from "../../../util/validation";
 
-import NavigationButtons from "../../../components/navigationButtons";
 import ExperienceForm from "../../../components/experience/experienceForm";
 
-const pathExperienceImage = "../../../experienceImage.svg";
 
 
 export default function EditExperiencePage() {

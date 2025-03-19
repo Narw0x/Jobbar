@@ -13,11 +13,11 @@ export default function ExperienceInputs({experience, handleExprerienceChange}) 
                 <label className="text-lg text-custom_gray">Employment Type</label>
                 <div className="flex flex-row gap-4">
                     <div>
-                        <input type="radio" id="fullTime" name="employmentType" value="Full-time" onChange={handleExprerienceChange} className="mx-1 accent-custom_gray  checked:accent-custom_red"/>
+                        <input type="radio" id="fullTime" name="employmentType" value="Full-time" onChange={handleExprerienceChange} checked={experience.employmentType === 'Full-time'} className="mx-1 accent-custom_gray  checked:accent-custom_red"/>
                         <label htmlFor="employmentType" className="text-custom_gray">Full-time</label>
                     </div>
                     <div>
-                        <input type="radio" id="partTime" name="employmentType" value="Part-time" onChange={handleExprerienceChange} className="mx-1 accent-custom_gray  checked:accent-custom_red"/>
+                        <input type="radio" id="partTime" name="employmentType" value="Part-time" onChange={handleExprerienceChange} checked={experience.employmentType === 'Part-time'} className="mx-1 accent-custom_gray  checked:accent-custom_red"/>
                         <label htmlFor="employmentType" className="text-custom_gray">Part-time</label>
                     </div>
                 </div>
