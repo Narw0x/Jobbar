@@ -2,23 +2,21 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 
-import { Calendar } from "primereact/calendar";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { updateUser } from "../../../store/slices/authSlice"
 import { useDispatch } from "react-redux";
 
-import Button  from "../../../components/button";
 import { isValidText } from "../../../util/validation";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { useLocation } from "react-router";
+import { Helmet } from "react-helmet";
+import EducationForm from "../../../components/education/educationForm";
 
-const pathEducationImage = "../../../experienceImage.svg";
 
 export default function EditEducationPage() {
-
     const [education, setEducation] = useState({});
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -174,113 +172,23 @@ export default function EditEducationPage() {
         }
     }, [messageState]);
 
-    useEffect(() => {
-        document.title = "Edit Education | Jobbar";
-    }, []);
-
-
 
 
     return (
         <section className="bg-custom_bg_gray py-8">
+            <Helmet>
+                <title>Edit Education | Jobbar</title>
+                <meta name="description" content="Edit your education on Jobbar" />
+            </Helmet>
             <Toast ref={toast} />
-                    <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto bg-white p-8 rounded-lg shadow-md">
-                        <h1 className="text-4xl text-custom_gray font-bold ">Add your Education </h1>
-                        <div>
-                            <form className="flex md:flex-row flex-col mt-4 gap-8" onSubmit={handleSubmit}>
-                                <div className="flex flex-col flex-1 mt-2">
-                                    {education.educationType === "school" && (
-                                        <>
-                                             <div className="flex flex-col">
-                                                <label htmlFor="schoolName" className="text-lg text-custom_gray">School Name</label>
-                                                <input type="text" name="schoolName" id="schoolName" value={education.schoolName}  onChange={handleChange}  className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 mt-2 text-lg text-custom_gray" />
-                                            </div>
-                                            <div className="mt-2 flex flex-col">
-                                                <label htmlFor="date" className="text-lg text-custom_gray">Years</label>
-                                                <Calendar name="date" value={education.date} onChange={handleChange} maxDate={new Date()} view="year" dateFormat="yy"  selectionMode="range" readOnlyInput hideOnRangeSelection showButtonBar/>
-                                            </div>
-                                        </>
-                                    )}
-                                    {education.educationType === "certificate" && (
-                                        <>
-                                            <div className="flex flex-col">
-                                                <label htmlFor="certificateName" className="text-lg text-custom_gray">Name of Certificate</label>
-                                                <input type="text" name="certificateName" id="certificateName" value={education.certificateName}  onChange={handleChange}   className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 mt-2 text-lg text-custom_gray" />
-                                            </div>
-                                            <div className="mt-2 flex flex-col">
-                                                <label htmlFor="company" className="text-lg text-custom_gray">Issuing Company</label>
-                                                <input type="text" name="company" id="company" value={education.company}  onChange={handleChange}  className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 mt-2 text-lg text-custom_gray"/>
-                                            </div>
-                                            <div className="mt-2 flex flex-col">
-                                                <label htmlFor="date" className="text-lg text-custom_gray">Issuing Date</label>
-                                                <Calendar name="date" value={education.date}  onChange={handleChange}  maxDate={new Date()} dateFormat="mm/dd/yy"  readOnlyInput hideOnRangeSelection showButtonBar/>
-                                                {console.log(education.date)}
-                                            </div>
-        
-                                        </>
-                                    )}
-                                    {education.educationType === "skill" && (
-                                    <>
-                                        <div className="flex flex-col">
-                                            <label htmlFor="skillName" className="text-lg text-custom_gray">Name</label>
-                                            <input type="text" name="skillName" id="skillName" value={education.skillName}  onChange={handleChange}  className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 mt-2 text-lg text-custom_gray" />
-                                        </div>
-                                        <div className="mt-2 flex flex-col">
-                                            <label htmlFor="level" className="text-lg text-custom_gray">Level</label>
-                                            <select name="level" id="level" value={education.level}  onChange={handleChange} className="border border-black p-2 bg-white rounded mb-4 text-xl my-2 text-custom_gray">
-                                                <option value="" disabled>Select skill level</option>
-                                                <option value="Begginer">Begginer</option>
-                                                <option value="Intermidient">Intermidient</option>
-                                                <option value="Expert">Expert</option>
-                                            </select>
-                                        </div>
-                                    </>
-                                )}
-                                    <div>
-                                        <Button 
-                                            btnStyle="red-hover"
-                                            type="button"
-                                            onClick={handleDelete}
-                                        >
-                                            Delete Experience
-                                        </Button>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col flex-1 mt-[-1rem]">
-                                    <div className="flex flex-col justify-end flex-wrap">
-                                        <img src={pathEducationImage} alt="" /> 
-                                        <p className="text-right mt-[-2rem]">Designed by 
-                                        <a 
-                                            href="https://www.freepik.com" 
-                                            className="text-custom_red p-2" 
-                                            target="_blank" 
-                                            rel="noopener noreferrer"
-                                        >
-                                            Freepik
-                                        </a>
-                                        </p>
-                                    </div>
-                                    <div className="flex space-x-4 justify-end mt-4">
-                                        <Button 
-                                            btnStyle="red-hover"
-                                            type="button"
-                                            onClick={() => {
-                                                navigate(`/profile/${authState.user._id}`);
-                                            }}
-                                        >
-                                            Back
-                                        </Button>
-                                        <Button 
-                                            btnStyle="red-default"
-                                            type="submit"
-                                        >
-                                            Save
-                                        </Button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </section>
+            <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto bg-white p-8 rounded-lg shadow-md">
+                <h1 className="text-4xl text-custom_gray font-bold ">Add your Education </h1>
+                <div>
+                    <form className="flex md:flex-row flex-col mt-4 gap-8" onSubmit={handleSubmit}>
+                        <EducationForm education={education} handleChange={handleChange} state={authState} editing={true} handleDelete={handleDelete} type={education.educationType} />
+                    </form>
+                </div>
+            </div>
+        </section>
     );
 }
