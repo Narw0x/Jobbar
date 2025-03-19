@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom"
 import Loading from "../loading";
 import FavouriteHeader from "./partials/favouriteHeader";
 import FavouriteItem from "./partials/favouriteItem";
