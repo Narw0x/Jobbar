@@ -1,12 +1,9 @@
 import { useDispatch, useSelector } from "react-redux"
 import { updateUser } from "../../store/slices/authSlice"
 import { useState, useEffect } from "react"
-import { FileUpload } from 'primereact/fileupload';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import Autocomplete from "../../components/autocomplete";
-import Button from "../../components/button";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { isValidAddress, isValidPhoneNumber, isValidText } from "../../util/validation";
