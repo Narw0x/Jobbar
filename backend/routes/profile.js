@@ -194,7 +194,8 @@ router.put('/profile/edit/:id', checkAuth, upload, async (req, res) => {
           fs.unlinkSync(`public/avatar/${oldAvatar}`);
         }
       }
-    }else if(bgImage === 'default_bg.png'){
+    }
+    if(bgImage === 'default_bg.png'){
       const oldBgImage = profile.bgImage;
       profile.bgImage = bgImage;
 
@@ -202,7 +203,8 @@ router.put('/profile/edit/:id', checkAuth, upload, async (req, res) => {
       if(oldBgImage && fs.existsSync(`public/background/${oldBgImage}` && oldBgImage !== 'default_bg.png')) {
         fs.unlinkSync(`public/background/${oldBgImage}`);
       }
-    }else if(avatar === 'default_profile.svg'){
+    }
+    if(avatar === 'default_profile.svg'){
       const oldAvatar = profile.avatar;
       profile.avatar = avatar;
 
