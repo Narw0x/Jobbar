@@ -4,8 +4,8 @@ import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Button from "../../../components/button";
+import Image from "../../../components/image";
 
-const pathExperienceImage = "../../../experienceImage.svg";
 
 export default function AdminReportPage() {
     const { reportId } = useParams();
@@ -105,27 +105,16 @@ export default function AdminReportPage() {
                                 btnStyle="red-default"
                                 type="button"
                                 onClick={() => {
-                                    navigate(`/xyz/reports/${reportId}`);
+                                    navigate(`/xyz/reports/`);
                                 }}
                             >
                                 Back
                             </Button>
                         </div>
-                        
                     </div>
                     <div className="flex flex-col flex-1 mt-[-1rem] basis-1/2">
                         <div className="flex flex-col justify-end flex-wrap">
-                            <img src={pathExperienceImage} alt="" /> 
-                            <p className="text-right mt-[-2rem]">Designed by 
-                            <a 
-                                href="https://www.freepik.com" 
-                                className="text-custom_red p-2" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                            >
-                                Freepik
-                            </a>
-                            </p>
+                            <Image />
                         </div>
                     </div>
                 </div>

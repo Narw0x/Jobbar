@@ -5,21 +5,20 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { FileUpload } from "primereact/fileupload";
-import Button from "../../../components/button";
-import Autocomplete from "../../../components/autocomplete";
 import { useLocation } from "react-router";
 import { isValidAddress, isValidEmail, isValidPhoneNumber, isValidText } from "../../../util/validation";
 import { Toast } from "primereact/toast";
+import { Helmet } from "react-helmet";
+import ProfileEdit from "../../../components/profile/profileEdit";
 
 export default function AdminUserEditPage() {
 
     const adminState = useSelector((state) => state.admin);
-
     const {userId} = useParams();
     const navigate = useNavigate();
     const toast = useRef(null);
-
+    const profilePicture = useRef(null);
+    const backgroundPicture = useRef(null);
     const [userInfo, setUserInfo] = useState({
         firstName: '',
         lastName: '',
@@ -40,7 +39,6 @@ export default function AdminUserEditPage() {
 
     const [bgImage, setBgImage] = useState(userInfo.bgImage);
     const [avatar, setAvatar] = useState(userInfo.avatar);
-
     const [bgPreview, setBgPreview] = useState(userInfo.bgImage);
     const [avatarPreview, setAvatarPreview] = useState(userInfo.avatar);
 
@@ -81,14 +79,14 @@ export default function AdminUserEditPage() {
 
     useEffect(() => {
         return () => {
-          if (bgPreview && bgPreview.startsWith("blob:")) {
-            URL.revokeObjectURL(bgPreview);
-          }
-          if (avatarPreview && avatarPreview.startsWith("blob:")) {
-            URL.revokeObjectURL(avatarPreview);
-          }
+            if (bgPreview && bgPreview.startsWith("blob:")) {
+                URL.revokeObjectURL(bgPreview);
+            }
+            if (avatarPreview && avatarPreview.startsWith("blob:")) {
+                URL.revokeObjectURL(avatarPreview);
+            }
         };
-      }, [bgPreview, avatarPreview]);
+    }, [bgPreview, avatarPreview]);
 
 
     const onSelectBg = (e) => {
@@ -110,13 +108,38 @@ export default function AdminUserEditPage() {
           const previewUrl = URL.createObjectURL(file);
           setAvatarPreview(previewUrl); // If you need to show a preview
         }
-      };
+    };
 
-    useEffect(() => {
-        document.title = "Edit User | Jobbar";
-    }, []);
+    const onDeleteBg = () => {
+        setBgImage(userInfo.bgImage);
+        setBgPreview(userInfo.bgImage);
+        if (backgroundPicture.current) {
+            backgroundPicture.current.clear();
+        }
+    }
+    const onDeletePf = () => {
+        setAvatar(userInfo.avatar);
+        setAvatarPreview(userInfo.avatar);
+        if (profilePicture.current) {
+            profilePicture.current.clear();
+        }
+    }
 
+    const onResetBg = () => {
+        setBgImage('default_bg.png');
+        setBgPreview('default_bg.png');
+        if (backgroundPicture.current) {
+            backgroundPicture.current.clear();
+        }
+    }
 
+    const onResetPf = () => {
+        setAvatar('default_profile.svg');
+        setAvatarPreview('default_profile.svg');
+        if (profilePicture.current) {
+            profilePicture.current.clear();
+        }
+    }
 
     const handleEditForm = (e) => {
         e.preventDefault();
@@ -243,136 +266,11 @@ export default function AdminUserEditPage() {
     return (
         <section className="flex flex-col items-center justify-center bg-custom_bg_gray">
             <Toast ref={toast} />
+            <Helmet>
+                <title>Edit User | Jobbar</title>
+            </Helmet>
             <form className="container mx-auto  border rounded-lg shadow-md bg-white my-8" onSubmit={handleEditForm}>
-                <div>
-                    <div className="w-full object-fill flex end flex-col">
-                        <img className="w-full max-h-[250px] rounded-t" src={userInfo.bgImage === bgPreview ? `https://jobbar-5m8u.onrender.com/public/background/${userInfo?.bgImage}`:`${bgPreview}`} alt="" />
-                        <hr className="bg-black"/>
-                    </div>
-                    <div className="flex m-4 ml-auto justify-end gap-4">
-                        <FileUpload
-                            mode="basic" 
-                            name="demo[]" 
-                            accept=".png, .jpg, .jpeg" 
-                            auto = {false}
-                            maxFileSize={1000000} 
-                            unstyled={true}
-                            onSelect={onSelectBg}
-                            className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer"
-                        />
-                        {bgPreview !== userInfo.bgImage ? <Button type="button" onClick={() => {setBgPreview(userInfo.bgImage)}} btnStyle="red-default">Delete</Button>: null}
-                    </div>
-                </div>
-                <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Personal Information</h2>
-                <div className="flex rounded-lg border border-black m-8 justify-between mt-4">
-                    <div className="basis-2/3 flex flex-col m-8">
-                        <div className="flex justify-between  mb-4">
-                            {userInfo.role === 'user' && <div className="flex flex-col w-[45%]">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="firstName">First Name</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.firstName || ''} onChange={handleUserInfoChange} type="text" name="firstName" id="firstName" />    
-                            </div>}
-                            {userInfo.role === 'user' && <div className="flex flex-col w-[45%]">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="lastName">Last Name</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.lastName || ''} onChange={handleUserInfoChange}  type="text" name="lastName" id="lastName" />
-                            </div>}
-                            {userInfo.role === 'company' && <div className="flex flex-col w-full">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="companyName">Company Name</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.companyName || ''} onChange={handleUserInfoChange}  type="text" name="companyName" id="companyName" />
-                            </div>}
-                            
-                        </div>
-                        <div className="flex flex-col mb-4">
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="email">Email</label>
-                            <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" value={userInfo.email || ''} onChange={handleUserInfoChange}  type="email" name="email" id="email"/>
-                        </div>
-                        <div className="flex flex-col mb-4">
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="address">Address</label>
-                            <Autocomplete
-                                value={userInfo.address || ''}  
-                                onChange={handleUserInfoChange} 
-                            />                        
-                        </div>
-                        <div>
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="about">About</label>
-                            <textarea className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray p-2 my-2 text-lg w-full resize-none rounded-lg"  onChange={handleUserInfoChange}  value={userInfo.about || ''} name="about" id="about"></textarea>
-                        </div>
-                    </div>
-                    <div className="basis-1/3 m-8 flex flex-col gap-4 pt-8">
-                        <img className="border border-black rounded-lg w-60 h-60 flex m-auto justify-center" src={userInfo.avatar === avatarPreview ? `https://jobbar-5m8u.onrender.com/public/avatar/${userInfo?.avatar}`:`${avatarPreview}`} alt="" />
-                        <div className="flex justify-center gap-4">
-                            <FileUpload 
-                                mode="basic" 
-                                name="demo[]" 
-                                accept=".png, .jpg, .jpeg" 
-                                auto = {false} 
-                                maxFileSize={1000000} 
-                                unstyled={true}
-                                onSelect={onSelectPf} 
-                                className="border-[1px] bg-custom_red text-white border-custom_red hover:bg-white hover:text-custom_red hover:border-custom_red py-2 px-4 rounded transition-all duration-300 ease-in-out cursor-pointer" 
-                            />
-                            {
-                            avatar !== userInfo.avatar ?
-                                <Button 
-                                    type="button" 
-                                    onClick={() => {setAvatar(userInfo.avatar);}} 
-                                    btnStyle="red-default"
-                                >
-                                    Delete
-                                </Button>
-                                    : 
-                                null
-                            }
-                        </div>
-                    </div>
-                </div>
-                <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Contact</h2>
-                <div className="flex rounded-lg border border-black m-8 justify-between mt-4 flex-col">
-                    <div className="flex flex-row m-8 mb-4 justify-between">
-                        <div className="w-[30%] flex flex-col mb-4 ">
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="phone">Phone</label>
-                            <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg "  onChange={handleUserInfoChange}  value={userInfo.phoneNumber || ''} type="phone" name="phoneNumber" id="phoneNumber" placeholder="+421 xxxxxxxxx"/>
-                        </div>
-                        <div className="w-[65%] flex flex-col mb-4">
-                            <label className="text-custom_gray text-xl font-bold" htmlFor="website">Website</label>
-                            <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg w-full"  onChange={handleUserInfoChange} value={userInfo.website || ''} type="text" name="website" id="website" />
-                        </div>
-                    </div>
-                    <div className="flex flex-row m-8 mt-0">
-                        <div className="flex flex-row mb-4 w-full justify-between">
-                            <div className="w-[30%] flex flex-col">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="twitter">Twitter</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.twitter || ''} type="text" name="twitter" id="twitter" placeholder="https://x.com/username" />
-                            </div>
-                            <div className="w-[30%] flex flex-col">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="instagram">Instagram</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.instagram || ''} type="text" name="instagram" id="instagram" placeholder="https://www.instagram.com/username" />
-                            </div>
-                            <div className="w-[30%] flex flex-col">
-                                <label className="text-custom_gray text-xl font-bold" htmlFor="github">Github</label>
-                                <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg" onChange={handleUserSocialChange}  value={userInfo.socialMedia.github || ''} type="text" name="github" id="github" placeholder="https://github.com/username" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div className="flex justify-center m-8 gap-4">
-                        <Button 
-                            btnStyle="red-hover"
-                            type="button"
-                            onClick={() => {
-                                navigate(`/xyz/users`);
-                            }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button 
-                            btnStyle="red-default"
-                            type="submit"
-                        >
-                            Save
-                        </Button>
-                    </div>
-                </div>
+                <ProfileEdit state={adminState} bgPreview={bgPreview} onSelectBg={onSelectBg} avatar={avatar}  avatarPreview={avatarPreview} onSelectPf={onSelectPf} userInfo={userInfo} handleUserInfoChange={handleUserInfoChange} handleUserSocialChange={handleUserSocialChange} onDeleteBg={onDeleteBg} onDeletePf={onDeletePf} profilePicture={profilePicture} backgroundPicture={backgroundPicture} onResetBg={onResetBg} onResetPf={onResetPf} />
             </form>
         </section>
     )

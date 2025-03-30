@@ -10,6 +10,7 @@ import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { useLocation } from "react-router";
 import ExperienceForm from "../../../components/experience/experienceForm";
+import { Helmet } from "react-helmet";
 
 
 
@@ -73,11 +74,6 @@ export default function EditExperiencePage() {
         });
     }
 
-    useEffect(() => {
-        document.title = "Edit Experience | Jobbar";
-    }, []);
-
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -128,39 +124,40 @@ export default function EditExperiencePage() {
         });
     }
 
-     const location = useLocation();
-        const [messageState, setMessageState] = useState(location.state || null);
-    
-        useEffect(() => {
-            if (location.state) {
-                setMessageState(location.state);
-                // Clear the location state
-                window.history.replaceState({}, document.title);
-            }
-        }, [location.state]);
-    
-        useEffect(() => {
-            if (messageState) {
-                const timer = setTimeout(() => {
-                    switch (messageState.type) {
-                        case 'success':
-                            toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
-                            break;
-                        case 'error':
-                            toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
-                            break;
-                        default:
-                            break;
-                    }
-                }, 100);
-                return () => clearTimeout(timer);
-            }
-        }, [messageState]);
+    const location = useLocation();
+    const [messageState, setMessageState] = useState(location.state || null);
 
-    console.log(experience);
+    useEffect(() => {
+        if (location.state) {
+            setMessageState(location.state);
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                switch (messageState.type) {
+                    case 'success':
+                        toast.current?.show({severity: 'success', summary: 'Success', detail: messageState.message, life: 2000});
+                        break;
+                    case 'error':
+                        toast.current?.show({severity: 'error', summary: 'Error', detail: messageState.message, life: 2000});
+                        break;
+                    default:
+                        break;
+                }
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState]);
+
 
     return (
         <section className="bg-custom_bg_gray py-8">
+            <Helmet>
+                <title>Edit Experience | Jobbar</title>
+            </Helmet>
             <Toast ref={toast} />
             <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto bg-white p-8 rounded-lg shadow-md">
                 <h1 className="text-4xl text-custom_gray font-bold ">Edit Experience</h1>

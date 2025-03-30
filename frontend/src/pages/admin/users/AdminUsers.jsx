@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import Button from "../../../components/button"
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +7,10 @@ import { useLocation } from "react-router";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { Toast } from "primereact/toast";
-import { bouncy } from "ldrs";
+import Loading from "../../../components/loading";
+import SearchUser from "../../../components/admin/search";
+import ShowUser from "../../../components/admin/showUser";
+import { Helmet } from "react-helmet";
 
 
 export default function AdminUsersPage() {
@@ -19,10 +21,8 @@ export default function AdminUsersPage() {
     const handleChange = (e) => {
         setEmail(e.target.value);
     }
-
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
-    bouncy.register();
 
     const adminState = useSelector((state) => state.admin);
     const navigate = useNavigate();
@@ -83,9 +83,6 @@ export default function AdminUsersPage() {
             }
         }, [messageState]);
 
-        useEffect(() => {
-            document.title = "Users | Jobbar";
-        }, []);
 
         const handleDelete = (id) => {
             axios.post(`https://jobbar-5m8u.onrender.com/api/admin/delete/${id}`, {},
@@ -108,45 +105,15 @@ export default function AdminUsersPage() {
     return (
         <section className=" bg-custom_bg_gray px-8 pt-8  min-h-[61.5vh]">
             <Toast ref={toast} />
+            <Helmet>
+                <title>Admin Users | Jobbar</title>
+            </Helmet>
             <div className="container border rounded-lg shadow-md bg-white m-8 p-8 mt-0 mx-auto">
-                <h1  className="text-2xl text-custom_gray font-bold">Find User</h1>
-                <form className="flex md:flex-row flex-col gap-4 mt-8 w-full" onSubmit={handleSubmit}>
-                    <div className="flex flex-col gap-2 basis-[90%]">
-                        <h2 className="text-xl text-custom_gray font-bold">Search User by Email</h2>
-                        <input className="bg-white focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 text-lg" type="email" name="email" id="email" value={email} onChange={handleChange} />
-                    </div>
-                    <div className="flex flex-col text-xl basis-[10%] mt-auto "> 
-                        <Button btnStyle={'red-hover'}>Search</Button>
-                    </div>
-                </form>
-                {isLoading && (
-                    <div className="flex justify-center p-8">
-                        <l-bouncy
-                            size="45"
-                            speed="1.75" 
-                            color="gray" 
-                        />
-                    </div>
-                )}
-                {user && <div className="flex flex-col gap-4 mt-8">
-                    <h2 className="text-xl text-custom_gray font-bold">User Information</h2>
-                    
-                    <div className="flex md:flex-row flex-col">
-                        <div className="flex basis-1/5">
-                            <p className="text-custom_gray text-lg">Name: <span className="text-custom_red text-sm md:text-lg">{user.userName}</span></p>
-                        </div>
-                        <div className="flex flex-row basis-2/5">
-                            <p className="text-custom_gray text-lg ">Email: <span className="text-custom_red text-sm md:text-lg">{user.email}</span></p>
-                        </div>
-                        <div className="flex flex-col md:flex-row basis-2/5 justify-end gap-4">
-                            <Button btnStyle={'red-default'} redirectPath={`/xyz/users/${user._id}`}>View Profile</Button>
-                            <Button btnStyle={'red-default'} redirectPath={`/xyz/users/edit/${user._id}`}>Edit</Button>
-                            <Button btnStyle={'red-hover'} onClick={() => handleDelete(user._id)}>Delete</Button>
-                        </div>
-                    </div>
+                <SearchUser handleChange={handleChange} handleSubmit={handleSubmit} email={email} searching={'User'}/>
+                <div className="mt-8">
+                    {isLoading && <Loading />}
                 </div>
-                }
-                        
+                {user && <ShowUser user={user} handleDelete={handleDelete} searching={'User'} />}
             </div>
         </section>
     )

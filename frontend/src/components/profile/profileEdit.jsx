@@ -5,14 +5,15 @@ import ProfileEditPersonal from "./partials/profileEditPersonal";
 import ProfileEditPicture from "./partials/profileEditPicture";
 import ProfileEditSocials from "./partials/profileEditSocials";
 
-export default function ProfileEdit({state, userInfo, handleUserInfoChange, handleUserSocialChange, onSelectPf, onSelectBg, avatar, setAvatar, bgImage, setBgImage, bgPreview, avatarPreview}) {
+export default function ProfileEdit({state, userInfo, handleUserInfoChange, handleUserSocialChange, onSelectPf, onSelectBg, avatar, bgPreview, avatarPreview, onDeleteBg, onDeletePf, profilePicture, backgroundPicture, onResetBg, onResetPf}) {
+    const route = state.user?._id ? `/profile/${state.user._id}` : `/xyz/users/`;
     return(
         <>
-            <ProfileEditBackground state={state} bgImage={bgImage} setBgImage={setBgImage} bgPreview={bgPreview} onSelectBg={onSelectBg} userInfo={userInfo}/>
+            <ProfileEditBackground onDeleteBg={onDeleteBg} backgroundPicture={backgroundPicture} bgPreview={bgPreview} onSelectBg={onSelectBg} userInfo={userInfo} onResetBg={onResetBg} />
             <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Personal Information</h2>
             <div className="flex flex-col-reverse lg:flex-row rounded-lg border border-black m-8 justify-between mt-4">
                 <ProfileEditPersonal userInfo={userInfo} handleUserInfoChange={handleUserInfoChange}/>
-                <ProfileEditPicture state={state} avatar={avatar} setAvatar={setAvatar} avatarPreview={avatarPreview} onSelectPf={onSelectPf} userInfo={userInfo}/> 
+                <ProfileEditPicture  avatar={avatar} profilePicture={profilePicture} onDeletePf={onDeletePf} avatarPreview={avatarPreview} onSelectPf={onSelectPf} userInfo={userInfo} onResetPf={onResetPf}/> 
             </div>
             <h2 className="text-custom_gray font-bold text-3xl m-8 mb-0">Contact</h2>
             <div className="flex rounded-lg border border-black m-8 justify-between mt-4 flex-col">
@@ -24,7 +25,7 @@ export default function ProfileEdit({state, userInfo, handleUserInfoChange, hand
                 </div>
             </div>
             <div className="flex justify-center m-8 gap-4">
-                <NavigationButtons btnText={"Cancel"} route={`/profile/${state.user._id}`}/>
+                <NavigationButtons btnText={"Cancel"} route={route}/>
             </div>
         </>
     )}

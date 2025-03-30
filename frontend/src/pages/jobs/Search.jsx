@@ -1,8 +1,12 @@
-import { useEffect, useState } from 'react';
-import SearchPageSelect from '../../components/searchPageSelect';
-import SearchPageConfig from '../../components/searchConfig';
-import SearchJobView from '../../components/searchJobView';
-import SearchBookmarksView from '../../components/searchBookmarksView';
+import { Helmet } from 'react-helmet';
+
+import { useState } from 'react';
+import SearchPageSelect from '../../components/jobs/searchPageSelect';
+import SearchPageConfig from '../../components/jobs/searchConfig';
+import SearchJobView from '../../components/jobs/searchJobView';
+import SearchBookmarksView from '../../components/jobs/searchBookmarksView';
+
+
 
 
 
@@ -10,25 +14,17 @@ import SearchBookmarksView from '../../components/searchBookmarksView';
 
 export default function SearchPage(){
     const [subPage, setSubPage] = useState('job offers');
-
-    useEffect(() => {
-        document.title = "Search | Jobbar";
-    }, []);
-
     return (
         <section className="bg-custom_bg_gray py-8 min-h-[61.5vh]">
+            <Helmet>
+                <title>Search | Jobbar</title>
+            </Helmet>
             <div className="max-w-[1440px] lg:w-[70%] w-[90%] mx-auto flex lg:flex-row flex-col-reverse gap-8">
                 <div className="lg:basis-3/4 border shadow-lg bg-white rounded-lg p-8">
                     <div className="">
-                        {subPage === 'job offers' && (
-                            <SearchJobView />
-                        )}
-                        {subPage === 'my preferencies' && (
-                            <SearchPageConfig />
-                        )}
-                        {subPage === 'my applications' && (
-                            <SearchBookmarksView />
-                        )}
+                        {subPage === 'job offers' && <SearchJobView />}
+                        {subPage === 'my preferencies' && <SearchPageConfig />}
+                        {subPage === 'my applications' && <SearchBookmarksView />}
                     </div>
 
                 </div>

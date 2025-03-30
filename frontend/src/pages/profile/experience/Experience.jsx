@@ -11,6 +11,7 @@ import { Toast } from "primereact/toast";
 import { isValidText } from "../../../util/validation";
 
 import ExperienceForm from "../../../components/experience/experienceForm";
+import { Helmet } from "react-helmet";
 
 
 
@@ -37,10 +38,6 @@ export default function EditExperiencePage() {
     const dispatch = useDispatch();
 
     const authState = useSelector((state) => state.auth);
-
-    useEffect(() => {
-        document.title = "Add Experience | Jobbar";
-    }, []);
 
 
     const handleSubmit = (e) => {
@@ -122,6 +119,9 @@ export default function EditExperiencePage() {
 
     return (
         <section className="bg-custom_bg_gray py-8">
+            <Helmet>
+                <title>Add Experience | Jobbar</title>
+            </Helmet>
             <Toast ref={toast} />
             <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto bg-white p-8 rounded-lg shadow-md">
                 <h1 className="text-4xl text-custom_gray font-bold ">Add Experience</h1>

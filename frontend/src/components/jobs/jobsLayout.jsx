@@ -4,6 +4,7 @@ import axios from "axios";
 
 import Button from "../button";
 import JobItem from "./jobItem";
+import Loading from "../loading";
 
 export default function JobsLayout({ jobs, isCurrentUser, token, id }) {
 
@@ -32,15 +33,7 @@ export default function JobsLayout({ jobs, isCurrentUser, token, id }) {
 
     return (
         <div className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto border rounded-lg shadow-md bg-white mt-4 p-8">
-            {!jobs && (
-                <div className="flex justify-center">
-                    <l-bouncy
-                        size="45"
-                        speed="1.75" 
-                        color="gray" 
-                    />
-                </div>
-            )}
+            {!jobs && <Loading />}
             {jobOffers.length !== 0  ? (
                 <>
                     <h2 className="text-lg text-custom_gray font-semibold">Job Offers</h2>

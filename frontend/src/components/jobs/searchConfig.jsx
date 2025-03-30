@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../store/slices/authSlice";
+import { updateUser } from "../../store/slices/authSlice";
 
 import { useLocation } from "react-router-dom";
-import Button from "./button";
-import Autocomplete from "./autocomplete";
+import Button from "../button";
+import Autocomplete from "../autocomplete";
 import { Toast } from "primereact/toast";
-import { isValidAddress } from "../util/validation";
+import { isValidAddress } from "../../util/validation";
 
 
 

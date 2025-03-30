@@ -2,7 +2,7 @@ import Button from "../button"
 import { formatDateBetter } from "../../util/formatDate"
 
 
-export default function JobItem({ job, isCurrentUser }) {
+export default function JobItem({ job, isCurrentUser = false, manage = false }) {
     return(
         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 ">
             <h3 className="text-md text-custom_gray font-semibold text-xl">{job.jobTitle}</h3>
@@ -33,14 +33,25 @@ export default function JobItem({ job, isCurrentUser }) {
                             </Button>
                         </div>
                     )}
-                    <div>
-                        <Button
-                            btnStyle="red-hover"
-                            redirectPath={`/job/${job._id}`}
-                        >
-                            View
-                        </Button>
-                    </div>
+                    {manage ? (
+                        <div className="flex flex-grow">
+                            <Button
+                                btnStyle="red-default"
+                                redirectPath={`/job/manage/${job._id}`}
+                            >
+                                Manage
+                            </Button>
+                        </div>
+                    ) :(
+                        <div>
+                            <Button
+                                btnStyle="red-hover"
+                                redirectPath={`/job/${job._id}`}
+                            >
+                                View
+                            </Button>
+                        </div>
+                    )}
                 </div>
                 
             </div>

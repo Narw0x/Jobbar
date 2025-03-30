@@ -15,8 +15,8 @@ export default function EditUserProfilePage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const toast = useRef(null);
-
-
+    const backgroundPicture = useRef(null);
+    const profilePicture = useRef(null);
     const authState = useSelector((state) => state.auth);
 
     const [bgImage, setBgImage] = useState(authState.user.bgImage);
@@ -95,7 +95,38 @@ export default function EditUserProfilePage() {
         }
       };
 
-    const handleEditForm = (e) => {
+    const onDeleteBg = () => {
+        setBgImage(userInfo.bgImage);
+        setBgPreview(userInfo.bgImage);
+        if (backgroundPicture.current) {
+            backgroundPicture.current.clear();
+        }
+    }
+    const onDeletePf = () => {
+        setAvatar(userInfo.avatar);
+        setAvatarPreview(userInfo.avatar);
+        if (profilePicture.current) {
+            profilePicture.current.clear();
+        }
+    }
+
+    const onResetBg = () => {
+        setBgImage('default_bg.png');
+        setBgPreview('default_bg.png');
+        if (backgroundPicture.current) {
+            backgroundPicture.current.clear();
+        }
+    }
+
+    const onResetPf = () => {
+        setAvatar('default_profile.svg');
+        setAvatarPreview('default_profile.svg');
+        if (profilePicture.current) {
+            profilePicture.current.clear();
+        }
+    }
+
+    const handleEditForm = async (e) => {
         e.preventDefault();
 
         if(userInfo.role === 'user' && (!isValidText(userInfo.firstName) || !isValidText(userInfo.lastName))){
@@ -148,10 +179,10 @@ export default function EditUserProfilePage() {
             }
         }
 
-        if (bgImage) formData.append('bgImage', bgImage);
-        if (avatar) formData.append('avatar', avatar);
+        if (bgImage){formData.set('bgImage', bgImage);}
+        if (avatar){formData.set('avatar', avatar);}
 
-        axios.put(`https://jobbar-5m8u.onrender.com/api/profile/edit/${authState.user._id}`, formData, {
+        await axios.put(`https://jobbar-5m8u.onrender.com/api/profile/edit/${authState.user._id}`, formData, {
             headers: {
                 Authorization: `Bearer ${authState.token}`,
             },
@@ -200,8 +231,8 @@ export default function EditUserProfilePage() {
                 <title>{`Settings | Jobbar`}</title>
             </Helmet>
             <Toast ref={toast} />
-            <form className="max-w-[1440px] 2xl:w-[60%] xl:w-[80%] w-[90%] mx-auto  border rounded-lg shadow-md bg-white" onSubmit={handleEditForm}>
-                <ProfileEdit state={authState} bgImage={bgImage} setBgImage={setBgImage} bgPreview={bgPreview} onSelectBg={onSelectBg} avatar={avatar} setAvatar={setAvatar} avatarPreview={avatarPreview} onSelectPf={onSelectPf} userInfo={userInfo} handleUserInfoChange={handleUserInfoChange} handleUserSocialChange={handleUserSocialChange} />
+            <form className="max-w-[1440px] md:w-[70%] w-[90%] mx-auto  border rounded-lg shadow-md bg-white" onSubmit={handleEditForm}>
+                <ProfileEdit state={authState} bgPreview={bgPreview} onSelectBg={onSelectBg} avatar={avatar}  avatarPreview={avatarPreview} onSelectPf={onSelectPf} userInfo={userInfo} handleUserInfoChange={handleUserInfoChange} handleUserSocialChange={handleUserSocialChange} onDeleteBg={onDeleteBg} onDeletePf={onDeletePf} profilePicture={profilePicture} backgroundPicture={backgroundPicture} onResetBg={onResetBg} onResetPf={onResetPf} />
             </form>
         </section>
     )

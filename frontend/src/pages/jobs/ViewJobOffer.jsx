@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 
 import Button from "../../components/button";
 import { Toast } from "primereact/toast";
+import ShowJob from "../../components/jobs/showJob";
+import { Helmet } from "react-helmet";
 
 export default function ViewJobOfferPage() {
     const toast = useRef(null);
@@ -69,15 +71,6 @@ export default function ViewJobOfferPage() {
         });
     }, [jobId, authState.token, authState.user._id]);
 
-    const formatDateBetter = (dateString) => {
-        const date = new Date(dateString);
-        return new Intl.DateTimeFormat('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: '2-digit'
-        }).format(date);
-    };
-
     const location = useLocation();
     const [messageState, setMessageState] = useState(location.state || null);
     
@@ -126,64 +119,34 @@ export default function ViewJobOfferPage() {
         );
     }
  
+    console.log(job.companyId.avatar);
+    
 
     return (
         <section className="bg-custom_bg_gray py-8  min-h-[61.5vh]">
             <Toast ref={toast} />
+            <Helmet>
+                <title>Job Offer | Jobbar</title>
+            </Helmet>
             <div className="max-w-[1440px] md:w-[70%] w-[90%] flex flex-col mx-auto border rounded-lg shadow-md bg-white">
                 <div className="flex lg:flex-row flex-col px-8 py-8">
-                    <div className="lg:basis-2/3 w-full">
-                        <h1 className="text-3xl text-custom_gray font-bold">{job.jobTitle}</h1>
-                        <p className="text-custom_red text-sm">{job.address}</p>
-                        <div className="flex flex-col justify-between mt-4 w-[80%]"> 
-                            <h3 className="text-xl text-custom_gray font-bold ">About the job</h3>
-                            <p className="text-custom_gray text-justify">{job.description}</p>
+                    <ShowJob job={job} />
+                    <div className="flex flex-col lg:basis-1/3 justify-center lg:items-center items-start">
+                        <div className="w-full aspect-square object-cover rounded">
+                            <Link to={`/profile/${job.companyId._id}`}>
+                                <img className={`w-full aspect-square object-cover rounded-2xl p-2 ${job.companyId.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`https://jobbar-5m8u.onrender.com/public/avatar/${job.companyId.avatar}`} alt="" />
+                            </Link>
                         </div>
-                        <div className="flex flex-row  justify-between mt-4 lg:w-[50%] items-c">
-                            <h3 className="text-xl text-custom_gray">Salary:</h3>
-                            <p className="text-xl text-custom_gray align-middle mt-auto">{job.salary.currency}{job.salary.amount}/year</p>
-                        </div>
-                        <div className="flex flex-row justify-between mt-1 lg:w-[50%]">
-                            <h3 className="text-xl text-custom_gray">Start Date:</h3>
-                            <p className=" text-custom_gray my-auto">{formatDateBetter(job.date)}</p>
-                        </div>
-                        <div className="flex flex-row mt-4 lg:w-[50%] justify-between">
-                            <h3 className="text-xl text-custom_gray">Employment Type:</h3>
-                            <p className="text-custom_red my-auto">{job.employmentType}</p>
-                        </div>
-                        <div className="flex flex-row mt-4 lg:w-[50%] justify-between">
-                            <h3 className="text-xl text-custom_gray">Experience:</h3>
-                            <p className="text-custom_gray my-auto">{job.experience} years</p>
-                        </div>
-                        <div className="flex flex-col mt-4 lg:w-[50%]">
-                            <h3 className="text-xl text-custom_gray">Requirements:</h3>
-                            {job.requirements.map((requirement, index) => (
-                                <p className="text-custom_gray my-auto" key={index}>{requirement.requirementName} - <span className="text-custom_red">{requirement.requirementType}</span></p>
-                            ))}
-                        </div>
-                        <div className="flex flex-col mt-4 lg:w-96">
-                            <h3 className="text-xl text-custom_gray">Desired skills:</h3>
-                            {job.skills.map((skill, index) => (
-                                <p className="text-custom_gray" key={index}>{skill.skillName} - <span className="text-custom_red">{skill.skillLevel}</span></p>
-                            ))}
+                        <div className="flex flex-col text-left mt-4 w-full p-2">
+                            <h3 className="text-xl text-custom_gray font-semibold">{job.companyId.companyName}</h3>
+                            <p className="text-custom_gray text-justify">{job.companyId.about}</p>
                         </div>
                     </div>
-                        <div className="flex flex-col lg:basis-1/3 justify-center lg:items-center items-start">
-                                <div className="w-60 aspect-square object-cover rounded">
-                                    <Link to={`/profile/${job.companyId._id}`}>
-                                        <img className={`w-full aspect-square object-cover rounded-2xl p-2 ml-[-0.5rem] ${job.companyId.avatar === 'default_profile.svg' ? 'border-[2px] border-custom-gray':null}`} src={`https://jobbar-5m8u.onrender.com/public/avatar/${job.companyId.avatar}`} alt="" />
-                                    </Link>
-                                </div>
-                                <div className="flex flex-col text-left mt-4 w-full p-2">
-                                    <h3 className="text-xl text-custom_gray font-semibold">{job.companyId.companyName}</h3>
-                                    <p className="text-custom_gray text-justify">{job.companyId.about}</p>
-                                </div>
-                        </div>
                 </div>
                 <div className="flex flex-row px-8 py-8 gap-4">
                     {(authState.user.role === 'user' && job.status === 'Open') ? (
                         <Button
-                        btnStyle="red-hover"
+                            btnStyle="red-hover"
                             onClick={handleApply}
                             disabled={applied}
                         >
