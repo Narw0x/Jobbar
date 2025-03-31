@@ -8,12 +8,19 @@ import { isValidPassword, isValidEmail } from "../../util/validation";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { adminLoginFailure, adminLoginStart, adminLoginSuccess } from "../../store/slices/adminSlice";
+import ReCAPTCHA from "react-google-recaptcha";
+import { Helmet } from "react-helmet";
 
 
 export default function AdminLoginPage() {
     const dispatch = useDispatch();
     const toast = useRef(null);
     const navigate = useNavigate();
+    const recaptchaRef = useRef(null);
+    const [captchaToken, setCaptchaToken] = useState(null);
+    const onCaptchaChange = (value) => {
+        setCaptchaToken(value);
+    }
 
     const adminToken = useSelector((state) => state.admin.adminToken);
 
@@ -51,8 +58,18 @@ export default function AdminLoginPage() {
             return;
         }
 
+        if(!captchaToken) {
+            setMessageState({type: 'error', message: 'Please verify that you are not a robot'});
+            return;
+        }
+
+        const sendData = {
+            ...data,
+            captchaToken: captchaToken
+        }
+
         dispatch(adminLoginStart());
-        axios.post('https://jobbar-5m8u.onrender.com/api/admin/login', data)
+        axios.post('https://jobbar-5m8u.onrender.com/api/admin/login', sendData)
             .then((res) => {
                 setMessageState({type: 'success', message: res.data.message});
                 dispatch(adminLoginSuccess(res.data.payload));
@@ -104,6 +121,11 @@ export default function AdminLoginPage() {
     return (
         <section className="bg-custom_bg_gray h-screen">
             <Toast ref={toast} />
+            <Helmet>
+                <title>Admin Login | Jobbar</title>
+                <meta name="description" content="Admin login page for Jobbar" />
+                <meta name="keywords" content="admin, login, jobbar" />
+            </Helmet>
             <div className="flex justify-center items-center h-full ">
                 <div className="border border-gray-300 p-8 xl:max-w-[40%] container mx-8 rounded-lg shadow-md bg-white">
                     <h1 className="text-4xl font-bold text-custom_gray text-center py-4">Admin Login</h1>
@@ -115,6 +137,13 @@ export default function AdminLoginPage() {
                         <div className="flex flex-col mb-4">
                             <label  className="text-custom_gray text-2xl font-bold" htmlFor="password">Password</label>
                             <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password" value={data.password} onChange={handleChange} />
+                        </div>
+                        <div className='flex justify-center mb-4'>
+                            <ReCAPTCHA
+                                ref={recaptchaRef}
+                                sitekey={process.env.REACT_APP_SITE_KEY}
+                                onChange={onCaptchaChange}
+                            />
                         </div>
                         <div className="flex flex-col text-xl">
                             <Button btnStyle='red-hover'>Sign in</Button>

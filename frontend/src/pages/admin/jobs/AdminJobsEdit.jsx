@@ -258,7 +258,7 @@ export default function AdminJobsEditPage() {
         <div className="max-w-[1440px] mx-auto bg-white p-8 rounded-lg shadow-md">
             <h1 className="text-4xl text-custom_gray font-bold ">Create a Job Offer</h1>
             <div>
-                <form className="flex flex-row mt-4" onSubmit={handleSubmit}>
+                <form className="flex lg:flex-row flex-col mt-4" onSubmit={handleSubmit}>
                     <JobOfferForm jobOffer={jobOffer} handleChange={handleChange} handleSkillChange={handleSkillChange} handleRequirementChange={handleRequirementChange} addSkill={addSkill} addRequirement={addRequirement} handleSalaryChange={handleSalaryChange} edit={true} handleDelete={handleDelete} setMessageState={setMessageState} setJobOffer={setJobOffer}/>
                     <div className="flex flex-col flex-1 mt-[-1rem]">
                         <div className="flex flex-col justify-end flex-wrap">

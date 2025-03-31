@@ -7,13 +7,18 @@ import { useEffect } from 'react';
 import { Toast } from 'primereact/toast';
 import { loginStart, loginSuccess, loginFailure } from './../../store/slices/authSlice';
 import { isValidEmail, isValidPassword } from "./../../util/validation";
+import ReCAPTCHA from "react-google-recaptcha";
+
 
 
 import Button from "./../../components/button"
+import { Helmet } from 'react-helmet';
 
 export default function LoginPage() {
     const toast = useRef(null);
     const navigate = useNavigate();
+    const recaptchaRef = useRef(null);
+    const [captchaToken, setCaptchaToken] = useState(null);
 
     const [data , setData] = useState({
         email: '',
@@ -77,6 +82,16 @@ export default function LoginPage() {
             return;
         }
 
+        if (!captchaToken) {
+            setMessageState({message: 'Please complete the captcha', type: 'error'});
+            return;
+        }
+
+        const sendData = {
+            ...data,
+            captchaToken
+        };
+
     
         // Send a POST request
         dispatch(loginStart());
@@ -93,9 +108,19 @@ export default function LoginPage() {
             });
     }
 
+    const onCaptchaChange = (token) => {
+        setCaptchaToken(token); // Set token when user passes CAPTCHA
+    };
+    
     return (
         <section className="bg-custom_bg_gray lg:p-16 py-16  min-h-[61.5vh]">
             <Toast ref={toast} />
+            <Helmet>
+                <title>Login | Jobbar</title>
+                <meta name="description" content="Login to your Jobbar account" />
+                <meta name="keywords" content="login, jobbar, job, account" />
+                <meta name="author" content="Jobbar" />
+            </Helmet>
             <div className="flex justify-center flex-col max-w-[1000px] md:w-[60%] w-[90%] m-auto border border-black rounded-lg bg-white md:p-16 p-8">
                 <h1 className="text-center lg:text-6xl text-4xl text-custom_gray font-bold m-8">Sign in</h1>
                 <form onSubmit={handleSubmit}>
@@ -106,6 +131,13 @@ export default function LoginPage() {
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="password">Password</label>
                         <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password" value={data.password} onChange={handleChange} />
+                    </div>
+                    <div className='flex justify-center mb-4'>
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            sitekey={process.env.REACT_APP_SITE_KEY}
+                            onChange={onCaptchaChange}
+                        />
                     </div>
                     <div className="flex flex-col text-xl">
                         <Button btnStyle={'red-hover'}>Sign in</Button>
