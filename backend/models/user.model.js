@@ -85,7 +85,8 @@ const userSchema = new mongoose.Schema({
             radius: '5',
             jobType: 'full-time',
             salary: 0,
-            experience: '0-1'
+            experience: '0-1',
+            field: 'All'
         }
     },
     isVerified: {

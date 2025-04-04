@@ -243,7 +243,7 @@ router.put('/profile/edit/:id', checkAuth, upload, async (req, res) => {
 
 router.put('/profile/config', checkAuth, async (req, res) => {
   const { id } = req.headers;
-  const { address, radius, jobType, salary, experience } = req.body;
+  const { address, radius, jobType, salary, experience, field } = req.body;
 
   try {
     let profile = await User.findById(id);
@@ -254,7 +254,8 @@ router.put('/profile/config', checkAuth, async (req, res) => {
       radius,
       jobType,
       salary,
-      experience
+      experience,
+      field
     };
 
     await profile.save();

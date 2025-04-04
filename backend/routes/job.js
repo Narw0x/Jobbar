@@ -102,7 +102,7 @@ router.post('/jobs', async (req, res) => {
         // Parse search configuration from headers
         const {searchConfig} = req.body;
         const {page} = req.body;
-        const { salary, jobType, experience, address, radius } = searchConfig;
+        const { salary, jobType, experience, address, radius, field } = searchConfig;
         
         // Convert salary to number
         const salaryAmount = Number(salary);
@@ -116,7 +116,11 @@ router.post('/jobs', async (req, res) => {
             'experience': { $regex: experience, $options: 'i' },
             'status': 'Open'
         };
-        
+
+        if (field && field !== 'All') {
+            query.field = field.trim();
+        }
+
         // If address and radius are provided, perform a geo search
         if (address && radius) {
             try {
@@ -247,7 +251,7 @@ router.get('/jobs/:userId', async (req, res) => {
 
 
 router.post('/job/create', checkAuth, async (req, res) => {
-    const { jobTitle, employmentType, date, experience, description, address, requirements, skills, salary } = req.body;
+    const { jobTitle, employmentType, date, experience, description, address, requirements, skills, salary, field } = req.body;
     const {id} = req.headers;
 
     try {
@@ -267,6 +271,7 @@ router.post('/job/create', checkAuth, async (req, res) => {
             requirements,
             skills,
             salary,
+            field,
             location: {
                 type: 'Point',
                 coordinates: [coordinates.longitude, coordinates.latitude]
@@ -332,7 +337,7 @@ router.get('/job/edit/:jobId', checkAuth, async (req, res) => {
 });
 
 router.put('/job/edit/:jobId', checkAuth, async (req, res) => {
-    const { jobTitle, companyId, employmentType, experience, date, description, address, skills, requirements, salary } = req.body;
+    const { jobTitle, companyId, employmentType, experience, date, description, address, skills, requirements, salary, field } = req.body;
     const { jobId } = req.params;
 
     try {
@@ -342,8 +347,14 @@ router.put('/job/edit/:jobId', checkAuth, async (req, res) => {
         const jobOffer = await JobOffer.findById(jobId);
         if (!jobOffer) return res.status(400).json({ message: 'Job offer not found' });
 
-        
 
+        if( address !== jobOffer.address){
+            const coordinates = await getCoordinates(address);
+            jobOffer.location = {
+                type: 'Point',
+                coordinates: [coordinates.longitude, coordinates.latitude]
+            }
+        }
         jobOffer.jobTitle = jobTitle;
         jobOffer.companyId = companyId;
         jobOffer.employmentType = employmentType;
@@ -354,6 +365,7 @@ router.put('/job/edit/:jobId', checkAuth, async (req, res) => {
         jobOffer.skills = skills;
         jobOffer.requirements = requirements;
         jobOffer.salary = salary;
+        jobOffer.field = field;
 
         await jobOffer.save();
 

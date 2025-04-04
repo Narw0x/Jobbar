@@ -59,6 +59,12 @@ const jobOfferSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    field:{
+        type: String,
+        enum: ['All','IT', 'Finance', 'Marketing', 'Sales', 'HR', 'Engineering', 'Healthcare', 'Education', 'Construction'],
+        required: true,
+        default: 'All'
+    },
     status: {
         type: String,
         enum: ['Open', 'Closed'],

@@ -5,8 +5,9 @@ const router = express.Router();
 
 router.get('/autocomplete', async (req, res) => {
     const { search } = req.query;
+    
     try {
-        const apiKey = 'AIzaSyClnoR7Wk-TekGNlucZsAwWsyF5sMRhD2s'; 
+        const apiKey = process.env.API_KEY_GOOGLE_PLACES; 
         const baseUrl = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
 
         // Make the Axios request
