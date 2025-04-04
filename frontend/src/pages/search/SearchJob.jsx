@@ -22,7 +22,7 @@ export default function SearchJobPage() {
 
     useEffect(() => {
         setIsLoading(true);
-        axios.post('http://localhost:4000/api/jobs',{searchConfig: sendConfig, page} )
+        axios.post('https://jobbar-5m8u.onrender.com/api/jobs',{searchConfig: sendConfig, page} )
         .then(response => {
             setIsLoading(false);
             setJobs(response.data.payload.jobs);

@@ -45,7 +45,7 @@ export default function ViewJobGuestPage() {
 
 
     useEffect(() => {
-        axios.get(`https://jobbar-5m8u.onrender.com/api/job/${jobId}`)
+        axios.get(`https://jobbar-5m8u.onrender.com/api/job/guest/${jobId}`)
         .then((response) => {
             const date = new Date(response.data.payload.job.date);
             setJob((prev) => ({
