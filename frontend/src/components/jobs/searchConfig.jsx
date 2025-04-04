@@ -21,7 +21,8 @@ export default function SearchPageConfig(){
         radius: '5',
         jobType: 'full-time',
         salary: '0',
-        experience: '0-1'
+        experience: '0-1',
+        field: 'All'
     });
 
     const handleChange = (e) => {
@@ -38,7 +39,8 @@ export default function SearchPageConfig(){
             radius: authState.user.searchConfig.radius,
             jobType: authState.user.searchConfig.jobType,
             salary: authState.user.searchConfig.salary,
-            experience: authState.user.searchConfig.experience
+            experience: authState.user.searchConfig.experience,
+            field: authState.user.searchConfig.field
         });
     }, [authState.user.searchConfig]);
 
@@ -155,8 +157,28 @@ export default function SearchPageConfig(){
                         <option value="5+">5+</option>
                     </select>
                 </div>
-
-                <div>
+                <div className='flex flex-col gap-2'>
+                    <label className="text-custom_gray text-xl" htmlFor="field">Field: </label>
+                <select 
+                        name="field" 
+                        id="field" 
+                        className="bg-white text-custom_gray focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 text-lg"
+                        onChange={handleChange}
+                        value={requestConfig.field}
+                    >
+                        <option value="All">All</option>
+                        <option value="IT">IT</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="HR">HR</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Education">Education</option>
+                        <option value="Healthcare">Healthcare</option>
+                    </select>
+                </div>
+                <div className='flex flex-col gap-2'>
                     <Button 
                         btnStyle="red-hover"
                     >

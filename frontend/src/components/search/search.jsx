@@ -1,47 +1,15 @@
-import { useEffect, useState } from 'react';
+import Loading from "../loading"
+import Button from "../button";
+import { formatDateBetter } from "../../util/formatDate";
 
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import Button from '../button';
-import Loading from '../loading';
-import { formatDateBetter } from '../../util/formatDate';
-
-
-
-
-export default function SearchJobView() {
-
-    const [jobs, setJobs] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [page, setPage] = useState(1);
-
-    const authState = useSelector(state => state.auth);
-
-    useEffect(() => {
-        setIsLoading(true);
-            if(authState.user.role === 'user') {
-            axios.post('https://jobbar-5m8u.onrender.com/api/jobs',{searchConfig: authState.user.searchConfig, page} ,  {
-                headers: {
-                    Authorization: `Bearer ${authState.token}`
-                }
-            })
-            .then(response => {
-                setIsLoading(false);
-                setJobs(response.data.payload.jobs);
-            }).catch(err => {
-                setIsLoading(false);
-                console.log(err);
-            });
-    }}, [authState.token, authState.user.searchConfig, page, authState.user.role]);
-
-    
-    return (
+export default function SearchJobSearch({isLoading, jobs, setPage, page}) {
+    return(
         <div>
             <h1 className="text-custom_gray text-4xl font-bold">Search</h1>
             <p className="text-custom_gray">Find your dream job</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 pt-2">
                     {isLoading && <Loading />}
-                    {jobs.map((job, idx) => (
+                    {jobs.map((job) => (
                         <div key={job._id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 ">
                             <h3 className="text-md text-custom_gray font-semibold text-xl">{job.jobTitle}</h3>
                             <div className="flex flex-col justify-between">
@@ -64,7 +32,7 @@ export default function SearchJobView() {
                                     <div>
                                         <Button
                                             btnStyle="red-hover"
-                                            redirectPath={`/job/${job._id}`}
+                                            redirectPath={`/search/job/${job._id}`}
                                         >
                                             View
                                         </Button>
@@ -74,7 +42,6 @@ export default function SearchJobView() {
                             </div>
                         </div>
                     ))}
-                    
                     {jobs.length === 0 && !isLoading && (
                         <div className="flex justify-center p-8">
                             {page === 1 && (<p className="text-custom_gray">No jobs found</p>)}

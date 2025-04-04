@@ -87,11 +87,6 @@ export default function LoginPage() {
             return;
         }
 
-        const sendData = {
-            ...data,
-            captchaToken
-        };
-
     
         // Send a POST request
         dispatch(loginStart());

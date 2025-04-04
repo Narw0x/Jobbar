@@ -8,7 +8,7 @@ const Autocomplete = ({ value = undefined, onChange = undefined }) => {
 
   const fetchPlaceSuggestions = useCallback(async (inputValue) => {
     try {
-      const response = await axios.get('https://jobbar-5m8u.onrender.com/api/autocomplete', {
+      const response = await axios.get('http://localhost:4000/api/autocomplete', {
         params: {
           search: inputValue,
         },
@@ -40,6 +40,7 @@ const Autocomplete = ({ value = undefined, onChange = undefined }) => {
     timeoutRef.current = setTimeout(() => {
       if (inputValue) {
         fetchPlaceSuggestions(inputValue);
+        console.log('Fetching suggestions for:', inputValue);
       } else {
         setSuggestions([]);
       }

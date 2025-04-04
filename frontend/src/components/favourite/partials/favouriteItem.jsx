@@ -16,7 +16,7 @@ export default function FavouriteItem({favorite, handleAddFavorite}) {
                     </p>
                 </div>
             </div>
-            <div className="flex flex-row justify-end lg:basis-1/2 w-full  gap-4">
+            <div className="flex flex-row md:justify-end justify-between lg:basis-1/2 w-full  gap-4">
                 <div className=" text-custom_red flex items-center">
                     <button onClick={() => handleAddFavorite(favorite._id)} className="text-custom_blue">Remove</button>
                 </div>

@@ -45,7 +45,8 @@ export default function JobOfferPage() {
                 currency: '€',
                 amount: 0,
         },
-        address: ''
+        address: '',
+        field: 'IT'
     });
 
     const handleChange = (e) => {

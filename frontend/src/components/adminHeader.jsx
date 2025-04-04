@@ -58,7 +58,7 @@ export default function AdminHeader() {
                     </button>
                 </div>
                 <div className={`${isMenuOpen ? 'block' : 'hidden'} md:flex md:flex-row md:items-center  w-full justify-end`}>
-                    <ul className="flex space-x-4 lg:space-x-8 items-center my-auto justify-between md:justify-end">
+                    <ul className="flex flex-col md:flex-row gap-2 md:gap-4 items-center my-auto justify-between md:justify-end ">
                         <li className="items-center">
                             <NavLink 
                                 to="/xyz/dashboard" 

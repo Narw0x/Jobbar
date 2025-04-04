@@ -62,9 +62,9 @@ export default function AdminReportPage() {
         <section className="flex flex-col items-center justify-center bg-custom_bg_gray">
             <div className="container border rounded-lg shadow-md bg-white m-8 p-8">
                 <h1 className="font-bold text-custom_gray text-2xl">Reported {report.reportedEntityType}</h1>
-                <div className="py-8 flex flex-row">
-                    <div className="flex flex-col space-y-4 basis-1/2 justify-between">
-                        <div className="flex flex-col space-y-4">
+                <div className="py-8 flex flex-col gap-4">
+                    <div className="flex flex-col  lg:flex-row space-y-4 basis-1/2 justify-between">
+                        <div className="flex flex-col space-y-4 basis-2/3">
                             <h2 className="text-lg font-bold text-custom_gray">Reported {report.reportedEntityType} name: <span className="text-custom_red font-normal">{report.reportedEntityType === 'user' ? report.reportedEntity.firstName : report.reportedEntity.companyName}</span></h2>
                             <h2 className="text-lg font-bold text-custom_gray">Reported by: <span className="text-custom_red font-normal">{report.reportedByType === 'user' ? report.reportedBy.firstName : report.reportedBy.companyName}</span></h2>
                             <div>
@@ -75,47 +75,47 @@ export default function AdminReportPage() {
                             </div>
                             <div className="flex flex-row gap-4 justify-start">
                                 <Button
-                                    btnStyle={'red-hover'}
+                                    btnStyle={'gray-hover'}
                                     redirectPath={`/xyz/users/edit/${report.reportedEntity._id}`}
                                 >
                                     Edit Reported Profile
                                 </Button>
                                 <Button
-                                    btnStyle={'red-hover'}
+                                    btnStyle={'gray-default'}
                                     redirectPath={`/xyz/users/${report.reportedEntity._id}`}
                                 >
                                     View Reported Profile
                                 </Button>  
                             </div>
                         </div>
-                        <div className="flex flex-row gap-4 justify-start">
-                            <Button
-                                btnStyle={'red-hover'}
-                                onClick={() => handleResponse('Approved')}
-                            >
-                                Approve
-                            </Button>
-                            <Button
-                                btnStyle={'red-default'}
-                                onClick={() => handleResponse('Declined')}
-                            >
-                                Decline
-                            </Button>  
-                            <Button 
-                                btnStyle="red-default"
-                                type="button"
-                                onClick={() => {
-                                    navigate(`/xyz/reports/`);
-                                }}
-                            >
-                                Back
-                            </Button>
+                        <div className="flex flex-col flex-1 basis-1/3">
+                            <div className="flex flex-col justify-end flex-wrap">
+                                <Image />
+                            </div>
                         </div>
                     </div>
-                    <div className="flex flex-col flex-1 mt-[-1rem] basis-1/2">
-                        <div className="flex flex-col justify-end flex-wrap">
-                            <Image />
-                        </div>
+                    <div className="flex flex-row gap-4 justify-start ">
+                        <Button
+                            btnStyle={'red-hover'}
+                            onClick={() => handleResponse('Approved')}
+                        >
+                            Approve
+                        </Button>
+                        <Button
+                            btnStyle={'red-default'}
+                            onClick={() => handleResponse('Declined')}
+                        >
+                            Decline
+                        </Button>  
+                        <Button 
+                            btnStyle="red-default"
+                            type="button"
+                            onClick={() => {
+                                navigate(`/xyz/reports/`);
+                            }}
+                        >
+                            Back
+                        </Button>
                     </div>
                 </div>
             </div>

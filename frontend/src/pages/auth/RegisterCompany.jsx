@@ -10,6 +10,7 @@ import { isValidText, isValidEmail, isValidPassword, isValidAddress } from "../.
 
 import Autocomplete from "../../components/autocomplete";
 import Button from "../../components/button"
+import { Helmet } from 'react-helmet';
 
 export default function RegisterCompanyPage() {
     const toast = useRef(null);
@@ -116,6 +117,12 @@ export default function RegisterCompanyPage() {
     return(
         <section className="bg-custom_bg_gray lg:p-16 py-16">
             <Toast ref={toast} />
+            <Helmet>
+                <title>Register as Company | Jobbar</title>
+                <meta name="description" content="Register as a company on Jobbar. Create your company profile and start hiring." />
+                <meta name="keywords" content="Jobbar, Register, Company, Job Platform, Hiring" />
+                <meta name="author" content="Jobbar" />
+            </Helmet>
             <div className="flex justify-center flex-col max-w-[1000px] md:w-[60%] w-[90%] m-auto border border-black rounded-lg bg-white p-16">
                 <h1 className="text-center lg:text-6xl text-4xl text-custom_gray font-bold m-8">Sign up as Company</h1>
                 <form onSubmit={handleSubmit}>

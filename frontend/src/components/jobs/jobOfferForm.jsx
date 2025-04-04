@@ -45,6 +45,27 @@ export default function JobOfferForm({jobOffer, handleChange, setJobOffer, handl
                 </select>
             </div>
             <div className="flex flex-col mt-4">
+                <label htmlFor="field" className="text-lg text-custom_gray">Field</label>
+                <select 
+                    name="field" 
+                    id="field" 
+                    className="bg-white text-custom_gray focus:bg-white focus:border-custom_gray border border-custom_gray rounded p-2 my-2 text-lg"
+                    onChange={handleChange}
+                    value={jobOffer.field}
+                >
+                    <option value="All">All</option>
+                    <option value="IT">IT</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="HR">HR</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Construction">Construction</option>
+                    <option value="Education">Education</option>
+                    <option value="Healthcare">Healthcare</option>
+                </select>
+            </div>
+            <div className="flex flex-col mt-4">
                 <label htmlFor="date" className="text-lg text-custom_gray">Starting date</label>
                 <Calendar name="date" value={jobOffer.date} onChange={handleChange} minDate={new Date()} dateFormat="mm/dd/yy"  readOnlyInput hideOnRangeSelection showButtonBar/>
             </div>

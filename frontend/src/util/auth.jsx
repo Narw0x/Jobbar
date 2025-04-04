@@ -50,15 +50,35 @@ export function getUserRole(){
 
 export function checkCompanyLoader(){
     const role = getUserRole();
-
-
     if(!role){
         return redirect('/');
     }
-    
-
     if(role === "company"){
         return redirect('/');
+    }
+
+    return null;
+}
+
+export function checkUserLoader(){
+    const role = getUserRole();
+    if(!role){
+        return redirect('/');
+    }
+    if(role === "user"){
+        return redirect('/');
+    }
+
+    return null;
+}
+
+export function checkLoginLoader(){
+    const role = getUserRole();
+    if(role === "user"){
+        return redirect('/job/search');
+    }
+    if(role === "company"){
+        return redirect('/job/manage');
     }
 
     return null;

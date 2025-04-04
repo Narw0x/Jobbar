@@ -100,10 +100,6 @@ export default function ViewJobOfferPage() {
         }
     }, [messageState]);
 
-    useEffect(() => {
-        document.title = "Job Offer | Jobbar";
-    }, []);
-
     const handleApply = () => {
         axios.post(`https://jobbar-5m8u.onrender.com/api/job/apply/${jobId}`, {}, {
             headers: {
@@ -118,9 +114,6 @@ export default function ViewJobOfferPage() {
             }
         );
     }
- 
-    console.log(job.companyId.avatar);
-    
 
     return (
         <section className="bg-custom_bg_gray py-8  min-h-[61.5vh]">

@@ -89,7 +89,7 @@ export default function AdminJobsPage() {
 
 
     return (
-        <section className=" bg-custom_bg_gray min-h-[61.5vh] pt-8">
+        <section className=" bg-custom_bg_gray px-8 min-h-[61.5vh] pt-8">
             <Toast ref={toast} />
             <Helmet>
                 <title>Admin Jobs | Jobbar</title>
@@ -97,7 +97,9 @@ export default function AdminJobsPage() {
             </Helmet>
             <div className="container border rounded-lg shadow-md bg-white m-8 p-8 mt-0 mx-auto">
                 <SearchUser handleChange={handleChange} handleSubmit={handleSubmit} email={email} searching={'Jobs'}/>
-                {isLoading && <Loading />}
+                <div className="mt-8">
+                    {isLoading && <Loading />}
+                </div>
                 {jobOffers.length !== 0  && <AdminJobLayout  jobOffers={jobOffers}/>}
             </div>
         </section>

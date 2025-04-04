@@ -10,7 +10,7 @@ import ProfilePage from './pages/profile/Profile';
 import EditUserProfilePage from './pages/profile/EditUserProfile';
 import ExperiencePage from './pages/profile/experience/Experience';
 import EditExperiencePage from './pages/profile/experience/EditExperience';
-import { checkAuthLoader, checkCompanyLoader } from './util/auth';
+import { checkAuthLoader, checkCompanyLoader, checkLoginLoader, checkUserLoader } from './util/auth';
 
 import { PrimeReactProvider } from "primereact/api";
 import ErrorPage from './pages/Error';
@@ -37,6 +37,8 @@ import AdminJobViewPage from './pages/admin/jobs/AdminJobView';
 import AdminJobsEditPage from './pages/admin/jobs/AdminJobsEdit';
 import AdminReportsPage from './pages/admin/reports/AdminReports';
 import AdminReportPage from './pages/admin/reports/AdminReport';
+import SearchJobPage from './pages/search/SearchJob';
+import ViewJobGuestPage from './pages/jobs/ViewJobGuest';
 
 
 const userRoutes = {
@@ -83,10 +85,17 @@ const userRoutes = {
         {path: 'edit/:jobId', element: <EditJobOfferPage />},
         {path: ':jobId', element: <ViewJobOfferPage />},
         {path: 'search', element: <SearchPage />, loader: checkCompanyLoader},
-        {path: 'manage', element: <ManageJobsPage />},
+        {path: 'manage', element: <ManageJobsPage />, loader: checkUserLoader},
         {path: 'manage/:jobId', element: <ManageJobPage />}
       ]
     },
+    {
+      path: 'search',
+      children: [
+        {index: true, element:<SearchJobPage />, loader: checkLoginLoader},
+        {path: 'job/:jobId', element: <ViewJobGuestPage />},
+      ],
+    }
   ]
 };
 

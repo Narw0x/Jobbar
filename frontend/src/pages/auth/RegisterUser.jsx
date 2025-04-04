@@ -8,6 +8,7 @@ import { useRef } from 'react';
 import { Toast } from 'primereact/toast';
 
 import Button from "../../components/button"
+import { Helmet } from 'react-helmet';
 
 export default function RegisterUserPage() {
     const toast = useRef(null);
@@ -112,6 +113,13 @@ export default function RegisterUserPage() {
     return(
         <section className="bg-custom_bg_gray lg:p-16 py-16">
             <Toast ref={toast} />
+            <Helmet>
+                <title>Sign up | Jobbar</title>
+                <meta name="description" content="Sign up as a user on Jobbar, the best job platform." />
+                <meta name="keywords" content="sign up, jobbar, job, user" />
+                <meta name="author" content="Jobbar" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            </Helmet>
             <div className="flex justify-center flex-col max-w-[1000px] md:w-[60%] w-[90%] m-auto border border-black rounded-lg bg-white p-16">
                 <h1 className="text-center lg:text-6xl text-4xl text-custom_gray font-bold m-8">Sign up as User</h1>
                 <form onSubmit={handleSubmit}>

@@ -113,10 +113,6 @@ export default function AdminLoginPage() {
         }
     }, [messageState]);
 
-    useEffect(() => {
-        document.title = "Admin Login | Jobbar";
-    }, []);
-
 
     return (
         <section className="bg-custom_bg_gray h-screen">

@@ -41,8 +41,8 @@ export default function EditJobOfferPage() {
         salary: {
             amount: '',
             currency: '€'
-        }
-
+        },
+        field: 'IT'
     });
 
     useEffect(() => {

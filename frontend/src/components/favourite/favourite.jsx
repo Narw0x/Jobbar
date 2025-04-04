@@ -7,8 +7,8 @@ export default function Favourite({isLoading, favorites, handleAddFavorite}) {
         <>
             {isLoading === 0 && <Loading />}
             {favorites.length !== 0 && <FavouriteHeader />}
-            {favorites.length !== 0  && favorites.map((favorite) => (
-                <FavouriteItem favorite={favorite} handleAddFavorite={handleAddFavorite} />
+            {favorites.length !== 0  && favorites.map((favorite,idx) => (
+                <FavouriteItem key={idx} favorite={favorite} handleAddFavorite={handleAddFavorite} />
             ))}
         </>
     )

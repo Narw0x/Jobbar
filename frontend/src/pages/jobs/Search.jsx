@@ -6,12 +6,6 @@ import SearchPageConfig from '../../components/jobs/searchConfig';
 import SearchJobView from '../../components/jobs/searchJobView';
 import SearchBookmarksView from '../../components/jobs/searchBookmarksView';
 
-
-
-
-
-
-
 export default function SearchPage(){
     const [subPage, setSubPage] = useState('job offers');
     return (
