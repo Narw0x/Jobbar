@@ -5,6 +5,7 @@ import SearchPageSelect from '../../components/jobs/searchPageSelect';
 import SearchPageConfig from '../../components/jobs/searchConfig';
 import SearchJobView from '../../components/jobs/searchJobView';
 import SearchBookmarksView from '../../components/jobs/searchBookmarksView';
+import SearchNotification from '../../components/jobs/searchNotification';
 
 export default function SearchPage(){
     const [subPage, setSubPage] = useState('job offers');
@@ -19,8 +20,8 @@ export default function SearchPage(){
                         {subPage === 'job offers' && <SearchJobView />}
                         {subPage === 'my preferencies' && <SearchPageConfig />}
                         {subPage === 'my applications' && <SearchBookmarksView />}
+                        {subPage === 'notifications' && <SearchNotification />}
                     </div>
-
                 </div>
                 <div className="lg:basis-1/4 border shadow-lg bg-white rounded-lg p-8">
                     <div className="flex flex-col gap-4 ">
@@ -66,6 +67,14 @@ export default function SearchPage(){
                                     <path d="m14.3 16.6 1-.4"/>
                                     <path d="m20.7 13.8 1-.4"/>
                                 </svg>
+                            }
+                        />
+                        <SearchPageSelect
+                            subPage={subPage} 
+                            setSubPage={setSubPage} 
+                            text="Notifications" 
+                            icon={
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
                             }
                         />
                     </div>
