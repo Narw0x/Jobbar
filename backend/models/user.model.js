@@ -95,7 +95,20 @@ const userSchema = new mongoose.Schema({
     },
     verificationToken: {
         type: String,
-    }
+    },
+    notifications: {
+        type: Object,
+        default: {
+            address: '',
+            radius: '5',
+            field: 'All',
+            salary: 0,
+        }
+    },
+    isNotified: {
+        type: Boolean,
+        default: false
+    },
 }, {
     timestamps: true,
     collection: 'user'

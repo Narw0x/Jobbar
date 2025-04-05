@@ -512,6 +512,53 @@ router.put('/profile/education/delete/:educationId', checkAuth, async (req, res)
   }
 });
 
+router.put('/profile/notification', checkAuth, async (req, res) => {
+  const { id } = req.headers;
+  const { address, radius, field, salary,  } = req.body;
+
+  try {
+    let profile = await User.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    profile.notifications = {
+      address,
+      radius,
+      field,
+      salary,
+    };
+
+    await profile.save();
+    res.status(200).json({
+      message: 'Profile config updated successfully',
+      payload: { user: profile }
+    });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+  }
+});
+
+router.put('/profile/notification-toggle', checkAuth, async (req, res) => {
+  const { id } = req.headers;
+  const { isNotified } = req.body;
+
+  try {
+    let profile = await User.findById(id);
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    profile.isNotified = isNotified;
+
+    await profile.save();
+    res.status(200).json({
+      message: 'Profile config updated successfully',
+      payload: { user: profile }
+    });
+  }
+  catch (error) {
+    console.error('Error fetching user profile:', error);
+    return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+  }
+});
 
 
 
