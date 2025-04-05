@@ -30,6 +30,7 @@ import Autocomplete from './routes/autocomplete.js';
 import jobRoutes from './routes/job.js';
 import adminRoutes from './routes/admin.js';
 import reportRoutes from './routes/report.js';
+import notificationRoutes from './routes/notifications.js';
 
 app.setMaxListeners(30);
 
@@ -41,6 +42,7 @@ app.use('/api', Autocomplete);
 app.use('/api', jobRoutes);
 app.use('/api', reportRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api', notificationRoutes);
 
 
 app.listen(port, () => {
