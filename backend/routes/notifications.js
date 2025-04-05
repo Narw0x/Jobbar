@@ -1,7 +1,7 @@
 import express from 'express';
 import cron from 'node-cron';
-import User from '../models/user.model';
-import JobOffer from '../models/jobOffer.model';
+import User from '../models/user.model.js';
+import JobOffer from '../models/jobOffer.model.js';
 import sendEmail from '../utils/email.js';
 import emailNotification from '../utils/emailNotifications.js';
 
