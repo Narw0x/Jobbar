@@ -109,6 +109,9 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    resetPasswordToken: {
+        type: String,
+    },
 }, {
     timestamps: true,
     collection: 'user'

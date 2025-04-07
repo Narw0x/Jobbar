@@ -10,6 +10,7 @@ import { checkAuth } from '../utils/auth.js';
 import { isValidObjectId } from 'mongoose';
 import { isValidPassword } from '../utils/auth.js';
 import { createJSONToken } from '../utils/auth.js';
+import sendEmail from '../utils/email.js';
 
 
 const router = express.Router();
@@ -559,6 +560,37 @@ router.put('/profile/notification-toggle', checkAuth, async (req, res) => {
     return res.status(500).json({ message: 'Error fetching user profile', error: error.message });
   }
 });
+
+
+router.post('/auth/reset-password', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const profile = await User.find({ email });
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    profile.resetPasswordToken = resetToken;
+
+    sendEmail({
+      email: profile.email,
+      subject: 'Password Reset Request',
+      message: 'Reset your password',
+      profile,
+      htmlCode: emailNotification,
+      resetToken
+    });
+
+    await profile.save();
+    res.status(200).json({ message: 'Reset password email sent successfully' });
+
+  } catch (error) {
+    console.error('Error sending reset password email:', error);
+    res.status(500).json({ message: 'Error sending reset password email', error: error.message });
+  }
+});
+
+
 
 
 

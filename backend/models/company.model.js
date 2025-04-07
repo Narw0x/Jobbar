@@ -67,7 +67,10 @@ const companySchema = new mongoose.Schema({
     },
     verificationToken: {
         type: String,
-    }
+    },
+    resetPasswordToken: {
+        type: String,
+    },
 }, {
     timestamps: true,
     collection: 'company'
