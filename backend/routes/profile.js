@@ -13,6 +13,7 @@ import { createJSONToken } from '../utils/auth.js';
 import sendEmail from '../utils/email.js';
 import crypto from 'crypto';
 import passwordReset from '../utils/passwordReset.js';
+import bcrypt from 'bcryptjs';
 
 
 const router = express.Router();
@@ -601,8 +602,11 @@ router.post('/auth/reset-password/confirm', async (req, res) => {
     let profile = await User.findOne({ resetPasswordToken: token });
     if (!profile) return res.status(404).json({ message: 'Profile not found' });
 
-    profile.password = password;
     profile.resetPasswordToken = null;
+
+    // Hash the new password  
+    const hashedPassword = await bcrypt.hash(password, 12);
+    profile.password = hashedPassword;
 
     await profile.save();
     console.log('Password reset successfully');
