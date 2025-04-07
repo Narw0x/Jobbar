@@ -594,7 +594,24 @@ router.post('/auth/reset-password', async (req, res) => {
   }
 });
 
+router.post('/auth/reset-password/confirm', async (req, res) => {
+  const { token, password } = req.body;
 
+  try {
+    let profile = await User.findOne({ resetPasswordToken: token });
+    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
+    profile.password = password;
+    profile.resetPasswordToken = null;
+
+    await profile.save();
+    console.log('Password reset successfully');
+    res.status(200).json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    res.status(500).json({ message: 'Error resetting password', error: error.message });
+  }
+});
 
 
 
