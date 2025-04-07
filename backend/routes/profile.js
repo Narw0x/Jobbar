@@ -11,6 +11,7 @@ import { isValidObjectId } from 'mongoose';
 import { isValidPassword } from '../utils/auth.js';
 import { createJSONToken } from '../utils/auth.js';
 import sendEmail from '../utils/email.js';
+import crypto from 'crypto';
 
 
 const router = express.Router();
