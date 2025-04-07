@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useRef } from 'react';
-import { useNavigate, useLocation} from 'react-router-dom';
+import { useNavigate, useLocation, Link} from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -126,6 +126,11 @@ export default function LoginPage() {
                     <div className="flex flex-col mb-4">
                         <label  className="text-custom_gray text-2xl font-bold" htmlFor="password">Password</label>
                         <input  className="bg-white focus:bg-white border border-custom_gray focus:border-custom_gray rounded p-2 my-2 text-lg" type="password" name="password" id="password" value={data.password} onChange={handleChange} />
+                        <Link
+                            to={`/reset`}
+                        >
+                            <p className='text-custom_red text-s'>Forgot password?</p>
+                        </Link> 
                     </div>
                     <div className='flex justify-center mb-4'>
                         <ReCAPTCHA

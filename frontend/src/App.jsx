@@ -39,6 +39,8 @@ import AdminReportsPage from './pages/admin/reports/AdminReports';
 import AdminReportPage from './pages/admin/reports/AdminReport';
 import SearchJobPage from './pages/search/SearchJob';
 import ViewJobGuestPage from './pages/jobs/ViewJobGuest';
+import Reset from './pages/auth/passwordReset';
+import EmailSendReset from './pages/auth/emailSendReset';
 
 
 const userRoutes = {
@@ -59,6 +61,13 @@ const userRoutes = {
       children: [
         {path: 'user', element: <RegisterUserPage />},
         {path: 'company', element: <RegisterCompanyPage />}
+      ]
+    },
+    {
+      path: 'reset',
+      children: [
+        {index: true, element: <EmailSendReset />},
+        {path: ':token', element: <Reset />}
       ]
     },
     {
