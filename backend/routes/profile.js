@@ -12,6 +12,7 @@ import { isValidPassword } from '../utils/auth.js';
 import { createJSONToken } from '../utils/auth.js';
 import sendEmail from '../utils/email.js';
 import crypto from 'crypto';
+import passwordReset from '../utils/passwordReset.js';
 
 
 const router = express.Router();
@@ -578,7 +579,7 @@ router.post('/auth/reset-password', async (req, res) => {
       subject: 'Password Reset Request',
       message: 'Reset your password',
       profile,
-      htmlCode: emailNotification,
+      htmlCode: passwordReset,
       resetToken
     });
 
