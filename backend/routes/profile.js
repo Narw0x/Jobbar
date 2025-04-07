@@ -565,11 +565,12 @@ router.put('/profile/notification-toggle', checkAuth, async (req, res) => {
 
 
 router.post('/auth/reset-password', async (req, res) => {
-  const { email } = req.body;
+  const { data } = req.body;
 
   try {
-    const profile = await User.find({ email });
+    let profile = await User.findOne({ email: data.email });
     if (!profile) return res.status(404).json({ message: 'Profile not found' });
+
 
     const resetToken = crypto.randomBytes(32).toString('hex');
     profile.resetPasswordToken = resetToken;
