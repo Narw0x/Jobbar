@@ -574,6 +574,8 @@ router.post('/auth/reset-password', async (req, res) => {
     const resetToken = crypto.randomBytes(32).toString('hex');
     profile.resetPasswordToken = resetToken;
 
+    await profile.save();
+
     sendEmail({
       email: profile.email,
       subject: 'Password Reset Request',
@@ -583,7 +585,6 @@ router.post('/auth/reset-password', async (req, res) => {
       resetToken
     });
 
-    await profile.save();
     res.status(200).json({ message: 'Reset password email sent successfully' });
 
   } catch (error) {
